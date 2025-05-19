@@ -1,0 +1,1 @@
+slår sammen objekter fra model og gui fra visning. Bruker også DAO som også er model

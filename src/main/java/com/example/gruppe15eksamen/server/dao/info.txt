@@ -1,0 +1,1 @@
+Inneholder dao for ulike metoder mot datbasen. F.eks. hentBrukere osv.

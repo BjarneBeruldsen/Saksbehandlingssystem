@@ -1,0 +1,2 @@
+Inneholder alle objekter med tilhørende metoder. DAO er også model.
+Inneholder for både server og klient og er derfor i en egen mappe.
