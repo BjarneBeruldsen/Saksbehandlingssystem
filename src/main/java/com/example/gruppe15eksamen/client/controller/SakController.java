@@ -50,6 +50,7 @@ public class SakController {
         //tester på send inn knapp)
         if(alleBrukere != null && !alleBrukere.isEmpty() ) {
            opprettSak();
+           tildelSak();
         }
 
         this.hovedStage = stage;

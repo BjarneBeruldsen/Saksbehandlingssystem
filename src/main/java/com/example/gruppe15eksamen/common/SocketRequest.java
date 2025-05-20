@@ -39,4 +39,20 @@ public class SocketRequest implements Serializable {
     public void setSak(Sak sak) {
         this.sak = sak;
     }
+
+    public int getBrukerID() {
+        return brukerID;
+    }
+
+    public void setBrukerID(int brukerID) {
+        this.brukerID = brukerID;
+    }
+
+    public int getSakID() {
+        return sakID;
+    }
+
+    public void setSakID(int sakID) {
+        this.sakID = sakID;
+    }
 }

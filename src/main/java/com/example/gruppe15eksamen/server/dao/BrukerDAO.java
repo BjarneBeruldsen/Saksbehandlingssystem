@@ -24,7 +24,7 @@ public class BrukerDAO {
                 String navn = rs.getString("navn");
                 int rolleId = rs.getInt("rolleId");
 
-                alleBrukere.add(new Bruker(brukerId, navn, rolleId));
+                //alleBrukere.add(new Bruker(brukerId, navn, rolleId));
             }
         } catch (SQLException | IOException e) {
             System.err.println("Feil ved henting av brukere: " + e.getMessage());

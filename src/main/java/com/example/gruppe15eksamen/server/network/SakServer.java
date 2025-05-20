@@ -87,11 +87,19 @@ public class SakServer {
                     //kaller på DAO her for å legge til sak
                     System.out.println("Sak som legges til: " + forespørsel.getSak().toString() );
                     //sender melding til klienten om det er godkjent
-                    utClient.writeObject(new SocketRespons(true, "Studenten er lagt til: " +
+                    utClient.writeObject(new SocketRespons(true, "Saken er lagt til: " +
                             forespørsel.getSak().toString()));
                     break;
 
-                default : utClient.writeObject(new SocketRespons(false, "finner ikke handling" + handling));
+                case "ADD_MOTTAKER":
+                    //kaller på DAO for å legge til sak basert på sakID og brukerID
+                    //TEST FJERN
+                    System.out.println("SakId:" + forespørsel.getSakID() + ";BrukerId:" +forespørsel.getBrukerID());
+                    //sender melding til klienten om det er godkjent
+                    utClient.writeObject(new SocketRespons(true, "Mottaker er lagt til"));
+
+                default : utClient.writeObject(new SocketRespons(false,
+                        "finner ikke handling" + handling));
                     break;
             }
 
