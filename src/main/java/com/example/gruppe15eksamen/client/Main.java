@@ -1,3 +1,8 @@
+
+/* Denne filen ...
+ * 
+ */
+
 package com.example.gruppe15eksamen.client;
 
 import com.example.gruppe15eksamen.client.controller.SakController;
@@ -11,7 +16,10 @@ import java.sql.Connection;
     public class Main extends Application {
         @Override
         public void start(Stage stage) {
-            SakController sakController = new SakController();
+
+            //Opprette Controlleren og få første scene
+            SakController sakController = new SakController(stage);
+
             String tekst;
             try (Connection conn = DatabaseUtil.getConnection()) {
                 tekst = "Database OK!";
@@ -23,13 +31,17 @@ import java.sql.Connection;
             }
 
             Label statusLabel = new Label(tekst);
-            Scene scene = new Scene(statusLabel, 300, 100);
+            Scene sceneDB = new Scene(statusLabel, 300, 100);
 
-            stage.setTitle("Database Status");
-            stage.setScene(scene);
+            
+            // Sett scene, tittel og show()
+            stage.setScene(sakController.getStartScene());
+            stage.setTitle("Saksbehandling");
             stage.show();
         }
 
+        
+        // Launch / Main-method
         public static void main(String[] args) {
             launch(args);
         }

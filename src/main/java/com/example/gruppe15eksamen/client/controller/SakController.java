@@ -1,22 +1,41 @@
-package com.example.gruppe15eksamen.client.controller;
+
+
 /*Denne filen kobler sammen SakView med sak og rolle fra common
-* mappen. Denne filen fungerer på samme måte som main*/
+ * mappen. Denne filen fungerer på samme måte som main */
+
+package com.example.gruppe15eksamen.client.controller;
+
+import java.io.IOException;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import com.example.gruppe15eksamen.client.network.NetworkClient;
+import com.example.gruppe15eksamen.client.view.SakView;
 import com.example.gruppe15eksamen.common.Bruker;
 import com.example.gruppe15eksamen.common.Rolle;
 import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 
-import java.io.IOException;
-
 public class SakController {
+    
+    private SakView sakViewVisning = new SakView();
+
     private Sak sak;
     private BrukerDAO brukerDAO = new BrukerDAO();
+
+    private BorderPane hovedPanel;
+    private Stage hovedStage;
+
     //kobler til server
     private NetworkClient nettverkKlient = new NetworkClient();
 
-    public SakController() {
+
+
+
+    public SakController(Stage stage) {
+        this.hovedStage = stage;
+        this.hovedPanel = sakViewVisning.getHovedPanel();
         kobleTilServer();
     }
 
@@ -30,9 +49,28 @@ public class SakController {
         }
     }
 
+    // LeggTilLyttere 
+    // getBtn.setOnAction
+
     private void lagTabeller() {
         BrukerDAO.lagBrukereTabell();
     }
 
+    
+    // BehandleKlikk
+    // e.getSource 
+
+    //Returnere scene(r) til main
+ 
+ 
+    // getMetoder
+    public Scene getStartScene() {
+        return new Scene(hovedPanel);
+    }
+
+    // Returnere SakView
+    public SakView getSakViewVisning() {
+        return sakViewVisning;
+    }
 
 }
