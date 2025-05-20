@@ -1,1 +1,0 @@
-inneholder metode for å hente kobling itl databasen.
