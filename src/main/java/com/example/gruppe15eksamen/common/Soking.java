@@ -8,18 +8,22 @@ public class Soking implements Serializable{
     Status status;
     Kategori kategori;
 
-    private int opprettetAr;
-    private int oppdatertAr;
+    private Integer opprettetAr;
+    private Integer oppdatertAr;
     private String tittel;
+    private String reporter;
+    private String beskrivelse;
 
     //konstruktør for søk
-    public Soking(Prioritet prioritet, Status status, Kategori kategori, int opprettetAr,int oppdatertAr, String tittel) {
+    public Soking(Prioritet prioritet, Status status, Kategori kategori, Integer opprettetAr,Integer oppdatertAr, String tittel, String reporter, String beskrivelse) {
         this.prioritet = prioritet;
         this.status = status;
         this.kategori = kategori;
         this.opprettetAr = opprettetAr;
         this.oppdatertAr = oppdatertAr;
         this.tittel = tittel;
+        this.reporter = reporter;
+        this.beskrivelse = beskrivelse;
     }
 
 
@@ -50,19 +54,19 @@ public class Soking implements Serializable{
         this.kategori = kategori;
     }
 
-    public int getOpprettetAr() {
+    public Integer getOpprettetAr() {
         return opprettetAr;
     }
 
-    public void setOpprettetAr(int opprettetAr) {
+    public void setOpprettetAr(Integer opprettetAr) {
         this.opprettetAr = opprettetAr;
     }
 
-    public int getOppdatertAr() {
+    public Integer getOppdatertAr() {
         return oppdatertAr;
     }
 
-    public void setOppdatertAr(int oppdatertAr) {
+    public void setOppdatertAr(Integer oppdatertAr) {
         this.oppdatertAr = oppdatertAr;
     }
     public String getTittel() {
@@ -71,6 +75,19 @@ public class Soking implements Serializable{
     public void setTittel(String tittel) {
         this.tittel = tittel;
     }
+    public String getReporter() {
+        return reporter;
+    }
+    public void setReporter(String reporter) {
+        this.reporter = reporter;
+    }
+    public String getBeskrivelse() {
+        return beskrivelse;
+    }
+    public void setBeskrivelse(String beskrivelse) {
+        this.beskrivelse = beskrivelse;
+    }
+
 
     
 }
