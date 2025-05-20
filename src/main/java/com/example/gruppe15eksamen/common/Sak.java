@@ -36,13 +36,17 @@ public class Sak implements Serializable {
         this.tidsstempel = tidsstempel;
         this.oppdatertTidspunkt = oppdatertTidspunkt;
     }
-
+    
     //Konstruktør for tester som oppretter sak
     public Sak(String tittel, String beskrivelse, Prioritet prioritet,
                Kategori kategori, String rapportør) {
         this(0, tittel, beskrivelse, prioritet, kategori, Status.INNSENDT,
-                rapportør, "Ikke satt", LocalDateTime.now());
+                rapportør, "Ikke satt", LocalDateTime.now(), LocalDateTime.now());
 
+    }
+
+    public Sak() {
+        
     }
 
     //Gettere og settere
