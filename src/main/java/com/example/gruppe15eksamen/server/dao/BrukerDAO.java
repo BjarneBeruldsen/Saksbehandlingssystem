@@ -24,5 +24,9 @@ public class BrukerDAO {
             e.printStackTrace();
         }
     }
+
+    //DAO for å hente alle brukere fra databasen
+
+
 }
 
