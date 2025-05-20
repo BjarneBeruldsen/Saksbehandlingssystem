@@ -4,48 +4,49 @@ import java.io.Serializable;
 
 public class Soking implements Serializable{
     
-    private String prioritet;
-    private String status;
-    private String kategori;
+    private Prioritet prioritet;
+    Status status;
+    Kategori kategori;
 
     private int opprettetAr;
     private int oppdatertAr;
+    private String tittel;
 
-
-    public Soking(String prioritet, String status, String kategori, Integer opprettetAr, Integer oppdatertAr) {
+    //konstruktør for søk
+    public Soking(Prioritet prioritet, Status status, Kategori kategori, int opprettetAr,int oppdatertAr, String tittel) {
         this.prioritet = prioritet;
         this.status = status;
         this.kategori = kategori;
         this.opprettetAr = opprettetAr;
         this.oppdatertAr = oppdatertAr;
+        this.tittel = tittel;
     }
 
 
     public Soking() {
     }
 
-
-    public String getPrioritet() {
+    //Gettere og settere
+    public Prioritet getPrioritet() {
         return prioritet;
     }
 
-    public void setPrioritet(String prioritet) {
+    public void setPrioritet(Prioritet prioritet) {
         this.prioritet = prioritet;
-    }
-
-    public String getStatus() {
+    }   
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public String getKategori() {
+    public Kategori getKategori() {
         return kategori;
     }
 
-    public void setKategori(String kategori) {
+    public void setKategori(Kategori kategori) {
         this.kategori = kategori;
     }
 
@@ -64,5 +65,12 @@ public class Soking implements Serializable{
     public void setOppdatertAr(int oppdatertAr) {
         this.oppdatertAr = oppdatertAr;
     }
+    public String getTittel() {
+        return tittel;
+    }
+    public void setTittel(String tittel) {
+        this.tittel = tittel;
+    }
+
     
 }

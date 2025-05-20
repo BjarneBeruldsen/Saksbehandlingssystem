@@ -1,5 +1,6 @@
 module com.example.gruppe15eksamen {
     requires javafx.controls;
+    requires transitive javafx.graphics;
     requires java.sql;
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;

@@ -7,6 +7,8 @@ package com.example.gruppe15eksamen.client.controller;
 
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import java.util.ArrayList;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -24,6 +26,7 @@ public class SakController {
 
     private Sak sak;
     private BrukerDAO brukerDAO = new BrukerDAO();
+    private ArrayList<Bruker> alleBrukere;  //arraylist som kan legges til i rullgardinliste
 
     private BorderPane hovedPanel;
     private Stage hovedStage;
@@ -35,16 +38,27 @@ public class SakController {
 
 
     public SakController(Stage stage) {
+        kobleTilServer();
         this.hovedStage = stage;
         this.hovedPanel = sakViewVisning.getHovedPanel();
-        kobleTilServer();
+        //BARE EN TEST FOR Å SJEKKE AT alleBrukere har hentet brukere under
+        skrivUtBrukere();
+    }
+
+    private void skrivUtBrukere() {
+        if(!(alleBrukere == null)) {
+            System.out.println("Alle brukere hentet fra datbasen");
+            for (Bruker b : alleBrukere) {
+                System.out.println(b.toString());
+            }
+        } else {
+            System.out.println("Du må starte serveren før Main for å hente brukere");
+        }
     }
 
     private void kobleTilServer() {
-        //harkoder test data.. MÅ FJERNES
-        Bruker bruker = new Bruker(1, "Bjarne", Rolle.UTVIKLER);
         try {
-            nettverkKlient.snakkMedServer(8000, bruker);
+            alleBrukere = nettverkKlient.kobleTilOgHentBrukere(8000);
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Kunne ikke koble til server");
         }
