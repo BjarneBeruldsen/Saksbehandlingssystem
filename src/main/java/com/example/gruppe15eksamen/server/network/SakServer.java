@@ -2,6 +2,7 @@ package com.example.gruppe15eksamen.server.network;
 
 import com.example.gruppe15eksamen.common.Bruker;
 import com.example.gruppe15eksamen.common.Rolle;
+import com.example.gruppe15eksamen.common.SocketRespons;
 import com.example.gruppe15eksamen.server.dao.TabellerDAO;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 import com.example.gruppe15eksamen.common.SocketRequest;
@@ -51,14 +52,26 @@ public class SakServer {
                 Socket clientSocket = serverSocket.accept();
                 logg("En Klient er koblet til");
 
-                //oppretter I/O stream til klienten
-                ObjectOutputStream utClient = new ObjectOutputStream(clientSocket.getOutputStream());
-                ObjectInputStream innClient = new ObjectInputStream(clientSocket.getInputStream());
+                  pool.execute(() -> handleClient(clientSocket));
 
-                //Motta bruker-objekt til klient
-                SocketRequest forespørsel = (SocketRequest)(innClient.readObject());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-                if(forespørsel.getHandling().toUpperCase().equals("HENT BRUKERE")) {
+    //behandler brukerdata
+    private static void handleClient(Socket socket) {
+        //I/O Stream til klienten
+        try (ObjectInputStream inClient = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream utClient = new ObjectOutputStream(socket.getOutputStream());) {
+
+            SocketRequest forespørsel = (SocketRequest)inClient.readObject();
+            String handling = forespørsel.getHandling().toUpperCase();
+
+            //switch setning som utfører operasjoner mot datbasen basert på socketrequest sin handling
+            switch(handling){
+                case "HENT BRUKERE":
                     //hent alle brukere fra DAO her (midlertidig harkodet test under)
                     ArrayList<Bruker> brukere = new ArrayList<>();
                     brukere.add(new Bruker(2, "HovedLeder", Rolle.LEDER));
@@ -68,29 +81,24 @@ public class SakServer {
                     //sender liste med alle brukere tilbake til klient
                     utClient.writeObject(brukere);
                     utClient.flush();
-                }
+                    break;
 
-//                pool.execute(() -> handleClient(clientSocket));
+                case "LAGSAK" :
+                    //kaller på DAO her for å legge til sak
+                    System.out.println("Sak som legges til: " + forespørsel.getSak().toString() );
+                    //sender melding til klienten om det er godkjent
+                    utClient.writeObject(new SocketRespons(true, "Studenten er lagt til: " +
+                            forespørsel.getSak().toString()));
+                    break;
 
+                default : utClient.writeObject(new SocketRespons(false, "finner ikke handling" + handling));
+                    break;
             }
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
-    //behandler brukerdata
-//    private static void handleClient(Socket socket) {
-//        //I/O Stream til klienten
-//        try (ObjectInputStream inClient = new ObjectInputStream(socket.getInputStream());
-//            ObjectOutputStream utClient = new ObjectOutputStream(socket.getOutputStream());) {
-//
-//            //switch setning som utfører operasjoner mot datbasen basert på socketrequest sin handling
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private static void logg(String melding) {
         System.out.println("Server: " + melding);

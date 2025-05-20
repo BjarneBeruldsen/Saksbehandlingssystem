@@ -43,6 +43,21 @@ public class Sak implements Serializable {
 
     }
 
+    @Override
+    public String toString() {
+        return "Sak{" +
+                "sakID=" + sakID +
+                ", tittel='" + tittel + '\'' +
+                ", beskrivelse='" + beskrivelse + '\'' +
+                ", prioritet=" + prioritet +
+                ", kategori=" + kategori +
+                ", status=" + status +
+                ", rapportør='" + rapportør + '\'' +
+                ", mottaker='" + mottaker + '\'' +
+                ", tidsstempel=" + tidsstempel +
+                '}';
+    }
+
     //Gettere og settere
     public int getSakID() { return sakID; }
 

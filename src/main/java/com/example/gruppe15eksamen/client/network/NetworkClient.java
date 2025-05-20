@@ -13,60 +13,63 @@ import java.util.ArrayList;
 /*Denne filen inneholde kode for å koble til server
 * og sende data til/fra serveren */
 public class NetworkClient {
-    private static Socket socket;
-    private static ObjectOutputStream ut;
-    private static ObjectInputStream inn;
     final static int PORT = 8000;
 
     public ArrayList<Bruker> hentBrukere() throws IOException, ClassNotFoundException {
-        //Opprretter et endepunkt for kommunikasjon med server
-        opprettForbindelse();
-
-        //skriver forespørsel til server
+        //skriver forespørsel som skal sendes til server
         SocketRequest forespørsel = new SocketRequest("HENT BRUKERE");
 
-        //sender bruker til/fra server
-        Object object = sendOgMotta(forespørsel);
+        //Opprretter et endepunkt for kommunikasjon med server
+        try (Socket socket = new Socket("localhost", PORT);
+             ObjectOutputStream ut = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+        ) {
+            //sender forespørsel til klienten om å hente brukere
+            ut.writeObject(forespørsel);
+            ut.flush();
 
-        //returnere brukere til SakController
-        return (ArrayList<Bruker>)object;
-    }
+            //sender bruker til/fra server
+            Object object = inn.readObject();
 
-    //metode som sender sak til server og returnere respons fra serveren (godkjent/ikke godkjent)
-    public static SocketRespons sendSak(Sak sak) {
-        try {
-            //endepunkt for kommunikasjon med server
-            opprettForbindelse();
-
-            //skriver forespørsel til server
-            SocketRequest forespørsel = new SocketRequest("CREATE", sak);
-
-            //motar respons fra server (false/true)
-            SocketRespons respons = (SocketRespons)sendOgMotta(forespørsel);
-
-            //mottar respons fra server (false/true)
-            if(respons.isGodkjent()) {
-                return respons;
-            } else {
-                return new SocketRespons(false, "Handlingen er ikke godkjent");
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            //returnere brukere til SakController
+            return (ArrayList<Bruker>) object;
         }
-        return new SocketRespons(false, ""); //FJERN ETTERPÅ
     }
 
-    //hjelpe metode som oppretter forbindelse
-    private static void opprettForbindelse() throws IOException{
-        socket = new Socket("localhost", PORT);
-        ut = new ObjectOutputStream(socket.getOutputStream());
-        inn = new ObjectInputStream(socket.getInputStream());
-    }
+        //metode som sender sak til server og returnere respons fra serveren (godkjent/ikke godkjent)
+        public static SocketRespons sendSak (Sak sak){
+            //forespørsel om å lagre gitt sak via server til database
+            SocketRequest forespørsel = new SocketRequest("LAGSAK", sak);
 
-    //hjelpemetode som sender og mottar svar fra/til db
-    private static Object sendOgMotta(SocketRequest forespørsel) throws IOException, ClassNotFoundException{
-        ut.writeObject(forespørsel);
-        ut.flush();
-        return  inn.readObject();
-    }
+            //endepunkt for kommunikasjon med server
+            try (Socket socket = new Socket("localhost", PORT);
+                 ObjectOutputStream ut = new ObjectOutputStream(socket.getOutputStream());
+                 ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+            ) {
+                //skriver forespørsel til server
+                ut.writeObject(forespørsel);
+                ut.flush();
+
+                //motar respons fra server (false/true)
+                SocketRespons respons = (SocketRespons) inn.readObject();
+
+                //sjekker om responsen er godkjent
+                if (respons.isGodkjent()) {
+                    return respons;
+                } else {
+                    return new SocketRespons(false, "Handlingen er ikke godkjent");
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                return new SocketRespons(false, "Feil med kommunikasjon med server");
+            }
+        }
+
+        //Metode som sender SakId og Utviklerens brukerid til server
+        public static SocketRespons sendSakMottaker(int brukerID, int sakID) {
+            //forespørsel som sender med brukerID sakID og operasjon som skal utføres av server
+            SocketRequest socketRequest = new SocketRequest(brukerID, sakID, "");
+
+            return new SocketRespons(false, "IKKE LAGT TIL");
+        }
 }

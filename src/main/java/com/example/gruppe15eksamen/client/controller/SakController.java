@@ -46,12 +46,19 @@ public class SakController {
 
     public SakController(Stage stage) {
         hentBrukere();
+        //Kaller opprettsak etter brukere er hentet (Dette er test og den skal egt kalles når-
+        //tester på send inn knapp)
+        if(alleBrukere != null && !alleBrukere.isEmpty() ) {
+           opprettSak();
+        }
+
         this.hovedStage = stage;
         this.hovedPanel = sakViewVisning.getHovedPanel();
 
         if (alleBrukere != null) {
             sakViewVisning.setBrukerListe(alleBrukere);
         }
+
         //BARE EN TEST FOR Å SJEKKE AT alleBrukere har hentet brukere under
         skrivUtBrukere();
         leggTilLyttere();
@@ -136,11 +143,12 @@ public class SakController {
         return sakViewVisning;
     }
 
-    //Metode for å opprette sak(Tester)
+    //Metode for å opprette sak(Tester) og sende til db
     //Kalles når tester trykker "opprett sak knapp"
     public void opprettSak() {
         //Harkoder data som egt. hentes fra textfelt her
         Bruker bruker = alleBrukere.get(0); //henter random fra brukerliste
+        System.out.println("Bruker: " + bruker.toString() + "er hentet");
         String tittel = "SakTittel";
         String beskrivelse = "Dette er en beskrivelse";
         Prioritet prioritet = Prioritet.HØY;
@@ -150,5 +158,22 @@ public class SakController {
         Sak sak = new Sak(tittel, beskrivelse, prioritet, kategori, rapportør);
 
         SocketRespons respons = NetworkClient.sendSak(sak);
+        System.out.println("respons hentet: " + respons);
+
+        if(respons.isGodkjent()) {
+            System.out.println("Sak er lagt til");
+        }
+        else {
+            System.out.println("Innsetting av sak feilet" + respons.getStatus());
+        }
+    }
+
+    //metode der ledere kan legge til utvikler som mottaker
+    public void tildelSak() {
+        //Harkoder som egt hentes fra tekstfelt her (sakID og BrukerID) FJERN
+        int brukerID = 1;
+        int sakID = 1;
+
+        nettverkKlient.sendSakMottaker(brukerID, sakID);
     }
 }

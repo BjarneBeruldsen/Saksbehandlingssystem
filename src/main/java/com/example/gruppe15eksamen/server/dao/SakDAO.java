@@ -15,13 +15,14 @@ public class SakDAO {
 
     //metode for å opprette sak
 
+    //metode som tildeler sak til utvikler
 
 
     //metode som henter sak basert på id
 
 
-    //metode som henter alle saker basert på rolle og bruker
-    //legger til i en liste
+    //metode som henter alle saker basert på rolle og bruker-
+    //og legger til i en liste
 
 
     //metode som sletter en sak basert på sakId
