@@ -45,9 +45,13 @@ public class SakController {
     }
 
     private void skrivUtBrukere() {
-        System.out.println("Alle brukere hentet fra datbasen");
-        for(Bruker b: alleBrukere) {
-            System.out.println(b.toString());
+        if(!(alleBrukere == null)) {
+            System.out.println("Alle brukere hentet fra datbasen");
+            for (Bruker b : alleBrukere) {
+                System.out.println(b.toString());
+            }
+        } else {
+            System.out.println("Du må starte serveren før Main for å hente brukere");
         }
     }
 
