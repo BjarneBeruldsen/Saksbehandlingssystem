@@ -9,7 +9,24 @@ import java.sql.Statement;
 
 public class TabellerDAO {
 
+// Kategori, prioritet, status og rolle mangler
 
+    //En metode for å opprette tabellen kategori
+    public static void lagKategoriTabell() {
+        String sql = ""
+                + "CREATE TABLE IF NOT EXISTS Kategori ("
+                + "  idKategori INT AUTO_INCREMENT PRIMARY KEY, "
+                + "  navn VARCHAR(45)"
+                + ");";
+        try (Connection conn = DatabaseUtil.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+            System.out.println("Tabellen Kategori er opprettet");
+        } catch (SQLException | IOException e) {
+            System.err.println("Kunne ikke opprette tabellen Kategori");
+            e.printStackTrace();
+        }
+    }
     //En metode for å opprette saktabelll
     public static void lagSakTabell() {
         String sql = ""
