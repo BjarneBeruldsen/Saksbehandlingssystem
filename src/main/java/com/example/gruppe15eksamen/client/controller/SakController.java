@@ -35,6 +35,8 @@ public class SakController {
     private BrukerDAO brukerDAO = new BrukerDAO();
     private ArrayList<Bruker> alleBrukere;  //arraylist som kan legges til i rullgardinliste
 
+    private ArrayList<Sak> tildelteSaker; //skal inneholde alle saker som er tildelt enn utvikler
+
     private BorderPane hovedPanel;
     private Stage hovedStage;
 
@@ -51,6 +53,11 @@ public class SakController {
         if(alleBrukere != null && !alleBrukere.isEmpty() ) {
            opprettSak();
            tildelSak();
+           tildelteSaker = hentTilDelteSaker();
+           //skriver ut tildelte saker for å teste FJERN
+            for(Sak sak: tildelteSaker) {
+                System.out.println(sak.toString());
+            }
         }
 
         this.hovedStage = stage;
@@ -175,6 +182,15 @@ public class SakController {
         int brukerID = 1;
         int sakID = 1;
 
-        nettverkKlient.sendSakMottaker(brukerID, sakID);
+        SocketRespons respons = nettverkKlient.sendSakMottaker(brukerID, sakID);
+    }
+
+    public ArrayList<Sak> hentTilDelteSaker() {
+        //harkoder data som må egt hentes fra tekstfelt FJERN
+        int brukerID = 1;
+
+        SocketRespons respons = nettverkKlient.hentTildelteSaker(brukerID);
+
+        return respons.getSaker();
     }
 }

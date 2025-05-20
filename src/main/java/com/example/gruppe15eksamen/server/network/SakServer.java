@@ -1,12 +1,10 @@
 package com.example.gruppe15eksamen.server.network;
 
-import com.example.gruppe15eksamen.common.Bruker;
-import com.example.gruppe15eksamen.common.Rolle;
+import com.example.gruppe15eksamen.common.*;
+
 import static com.example.gruppe15eksamen.server.dao.TabellerDAO.opprettAlleTabeller;
 
-import com.example.gruppe15eksamen.common.SocketRespons;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
-import com.example.gruppe15eksamen.common.SocketRequest;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -16,6 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -97,6 +96,28 @@ public class SakServer {
                     System.out.println("SakId:" + forespørsel.getSakID() + ";BrukerId:" +forespørsel.getBrukerID());
                     //sender melding til klienten om det er godkjent
                     utClient.writeObject(new SocketRespons(true, "Mottaker er lagt til"));
+                    break;
+
+                case "HENT_TILDELTE":
+                    //harkoder saker for testdata FJERN
+                    ArrayList<Sak> tildelteSaker = new ArrayList<>();
+
+                    tildelteSaker.add(new Sak(
+                            1,
+                            "Feil i påloggingssystem",
+                            "Brukere får feilmelding ved pålogging med BankID.",
+                            Prioritet.HØY,
+                            Kategori.BACKEND_FEIL,
+                            Status.INNSENDT,
+                            "Ola Nordmann",
+                            "Kari Nordmann",
+                            LocalDateTime.of(2025, 5, 1, 10, 30),
+                            LocalDateTime.of(2025, 5, 2, 14, 15)
+                    ));
+
+                    System.out.println("BrukerId:" +forespørsel.getBrukerID());
+
+                    utClient.writeObject(new SocketRespons("Hentet tildelte saker", tildelteSaker, true));
 
                 default : utClient.writeObject(new SocketRespons(false,
                         "finner ikke handling" + handling));

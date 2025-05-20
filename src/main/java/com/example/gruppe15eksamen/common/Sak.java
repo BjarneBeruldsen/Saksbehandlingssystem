@@ -89,4 +89,20 @@ public class Sak implements Serializable {
     public LocalDateTime getOppdatertTidspunkt() { return oppdatertTidspunkt; }
 
     public void setOppdatertTidspunkt(LocalDateTime oppdatertTidspunkt) { this.oppdatertTidspunkt = oppdatertTidspunkt; }
+
+    @Override
+    public String toString() {
+        return "Sak{" +
+                "sakID=" + sakID +
+                ", tittel='" + tittel + '\'' +
+                ", beskrivelse='" + beskrivelse + '\'' +
+                ", prioritet=" + prioritet +
+                ", kategori=" + kategori +
+                ", status=" + status +
+                ", rapportør='" + rapportør + '\'' +
+                ", mottaker='" + mottaker + '\'' +
+                ", tidsstempel=" + tidsstempel +
+                ", oppdatertTidspunkt=" + oppdatertTidspunkt +
+                '}';
+    }
 }

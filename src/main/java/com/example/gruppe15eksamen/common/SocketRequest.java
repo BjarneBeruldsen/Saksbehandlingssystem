@@ -19,6 +19,11 @@ public class SocketRequest implements Serializable {
         this.sakID = sakID;
     }
 
+    public SocketRequest(int brukerID, String handling) {
+        this.brukerID = brukerID;
+        this.handling = handling;
+    }
+
     //for requests uten sak
     public SocketRequest(String handling) {
         this(handling, null);

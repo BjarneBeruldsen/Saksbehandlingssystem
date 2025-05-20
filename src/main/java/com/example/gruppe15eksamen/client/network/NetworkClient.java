@@ -68,7 +68,7 @@ public class NetworkClient {
         //Metode som sender SakId og Utviklerens brukerid til server
         public static SocketRespons sendSakMottaker(int brukerID, int sakID) {
             //forespørsel som sender med brukerID sakID og operasjon som skal utføres av server
-            SocketRequest forespørsel = new SocketRequest("ADD_MOTTAKER");
+            SocketRequest forespørsel = new SocketRequest("ADD_MOTTAKER", brukerID, sakID);
 
             //endepunkt for kommunikasjon med server
             try (Socket socket = new Socket("localhost", PORT);
@@ -83,10 +83,47 @@ public class NetworkClient {
                 SocketRespons respons = (SocketRespons) inn.readObject();
                 System.out.println("respons: " + respons.getStatus());
 
+                //sjekker om responsen er godkjent
+                if (respons.isGodkjent()) {
+                    return respons;
+                } else {
+                    return new SocketRespons(false, "Handlingen er ikke godkjent");
+                }
+
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                return new SocketRespons(false, "Feil med tildeling av sak til utvikler");
             }
-
-            return new SocketRespons(false, "IKKE LAGT TIL");
         }
+
+        //sender bruker id til server og returnerer alle saker som er tildelt bruker
+        public static SocketRespons hentTildelteSaker(int brukerId) {
+            SocketRequest forespørsel = new SocketRequest(brukerId, "HENT_TILDELTE");
+
+            //endepunkt for kommunikasjon med server
+            try (Socket socket = new Socket("localhost", PORT);
+                 ObjectOutputStream ut = new ObjectOutputStream(socket.getOutputStream());
+                 ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+            ) {
+                //skriver forespørsel til server
+                ut.writeObject(forespørsel);
+                ut.flush();
+
+                //mottar respons fra server (false/true)
+                SocketRespons respons = (SocketRespons) inn.readObject();
+                System.out.println("respons: " + respons.getStatus());
+
+                //sjekker om responsen er godkjent
+                if (respons.isGodkjent()) {
+                    return respons;
+                } else {
+                    return new SocketRespons(false, "Handlingen er ikke godkjent");
+                }
+            }
+            catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                return new SocketRespons(false, "Feil med henting av tildelte saker");
+            }
+        }
+
 }

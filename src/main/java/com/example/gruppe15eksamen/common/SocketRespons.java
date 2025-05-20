@@ -1,14 +1,23 @@
 package com.example.gruppe15eksamen.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SocketRespons implements Serializable {
     private boolean godkjent;
     private String status;
+    private ArrayList<Sak> saker;
 
     public SocketRespons(boolean godkjent, String status) {
         this.godkjent = godkjent;
         this.status = status;
+    }
+
+    public SocketRespons(String status, ArrayList<Sak> saker, boolean godkjent) {
+        this.status = status;
+        this.saker = saker;
+        this.godkjent = godkjent;
     }
 
     public boolean isGodkjent() {
@@ -25,6 +34,10 @@ public class SocketRespons implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public ArrayList<Sak> getSaker() {
+        return saker;
     }
 
     @Override
