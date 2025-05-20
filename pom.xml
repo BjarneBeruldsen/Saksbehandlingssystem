@@ -100,7 +100,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.example.gruppe15eksamen.client.Launcher</mainClass>
+                    <mainClass>com.example.gruppe15eksamen.client/com.example.gruppe15eksamen.client.Main</mainClass>
                     <runtimePathOption>CLASSPATH</runtimePathOption>
                 </configuration>
             </plugin>
