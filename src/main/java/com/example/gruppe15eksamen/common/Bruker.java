@@ -6,12 +6,14 @@ import java.io.Serializable;
 * og abstrakte metoder som hver enkelt bruker må ha */
 public class Bruker implements Serializable {
     //instansvariabler
+    private int brukerID;
     private String brukernavn;
     private Rolle rolle;
 
-    public Bruker(String brukernavn, Rolle rolle) {
+    public Bruker(int brukerID, String brukernavn, Rolle rolle) {
         setBrukernavn(brukernavn); //LEGG TIL VALIDERING
         setRolle(rolle);
+        this.brukerID = brukerID;
     }
 
     public void setBrukernavn(String brukernavn) {
@@ -27,10 +29,7 @@ public class Bruker implements Serializable {
 
     @Override
     public String toString() {
-        return "Bruker{" +
-                "brukernavn='" + brukernavn + '\'' +
-                ", rolle=" + rolle +
-                '}';
+        return "bruker:"+brukerID+";"+brukernavn+";"+rolle;
     }
 
     public String getBrukernavn() {

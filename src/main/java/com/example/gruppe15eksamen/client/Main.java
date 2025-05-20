@@ -1,5 +1,6 @@
 package com.example.gruppe15eksamen.client;
 
+import com.example.gruppe15eksamen.client.controller.SakController;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import java.sql.Connection;
     public class Main extends Application {
         @Override
         public void start(Stage stage) {
+            SakController sakController = new SakController();
             String tekst;
             try (Connection conn = DatabaseUtil.getConnection()) {
                 tekst = "Database OK!";

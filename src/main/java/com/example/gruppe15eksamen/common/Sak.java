@@ -1,6 +1,7 @@
 package com.example.gruppe15eksamen.common;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class Sak implements Serializable {
     //Viktig siden vi bruker sockets
@@ -9,18 +10,19 @@ public class Sak implements Serializable {
     protected int sakID;
     private String tittel;
     private String beskrivelse;
-    private String prioritet;
-    private String kategori;
-    private String status;
+    private Prioritet prioritet;
+    private Kategori kategori;
+    private Status status;
     private String rapportør;
     private String mottaker;
-    private String tidsstempel; //Usikker på hva slags datatype, regner med string går fint?
+    private LocalDateTime tidsstempel; //Bjarne endret til localdatetime (usikker på om det er riktig)
 
     //Deserialisering (standardkonstruktør)
     public Sak() { }
 
     //Konstruktør
-    public Sak(int sakID, String tittel, String beskrivelse, String prioritet, String kategori, String status, String rapportør, String mottaker,  String tidsstempel)
+    public Sak(int sakID, String tittel, String beskrivelse, Prioritet prioritet, Kategori kategori, Status status,
+               String rapportør, String mottaker,  LocalDateTime tidsstempel)
     {
         this.sakID       = sakID;
         this.tittel      = tittel;
@@ -46,17 +48,17 @@ public class Sak implements Serializable {
 
     public void setBeskrivelse(String beskrivelse) { this.beskrivelse = beskrivelse; }
 
-    public String getPrioritet() { return prioritet; }
+    public Prioritet getPrioritet() { return prioritet; }
 
-    public void setPrioritet(String prioritet) { this.prioritet = prioritet; }
+    public void setPrioritet(Prioritet prioritet) { this.prioritet = prioritet; }
 
-    public String getKategori() { return kategori; }
+    public Kategori getKategori() { return kategori; }
 
-    public void setKategori(String kategori) { this.kategori = kategori; }
+    public void setKategori(Kategori kategori) { this.kategori = kategori; }
 
-    public String getStatus() { return status; }
+    public Status getStatus() { return status; }
 
-    public void setStatus(String status) { this.status = status; }
+    public void setStatus(Status status) { this.status = status; }
 
     public String getRapportør() { return rapportør; }
 
@@ -66,7 +68,7 @@ public class Sak implements Serializable {
 
     public void setMottaker(String mottaker) { this.mottaker = mottaker; }
 
-    public String getTiddsstempel() { return tidsstempel; }
+    public LocalDateTime getTiddsstempel() { return tidsstempel; }
 
-    public void setTidsstempel(String tidsstempel) { this.tidsstempel = tidsstempel; }
+    public void setTidsstempel(LocalDateTime tidsstempel) { this.tidsstempel = tidsstempel; }
 }

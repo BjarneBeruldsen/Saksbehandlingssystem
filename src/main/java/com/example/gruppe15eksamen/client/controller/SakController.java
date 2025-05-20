@@ -17,13 +17,12 @@ public class SakController {
     private NetworkClient nettverkKlient = new NetworkClient();
 
     public SakController() {
-        lagTabeller();
         kobleTilServer();
     }
 
     private void kobleTilServer() {
         //harkoder test data.. MÅ FJERNES
-        Bruker bruker = new Bruker("Bjarne", Rolle.UTVIKLER);
+        Bruker bruker = new Bruker(1, "Bjarne", Rolle.UTVIKLER);
         try {
             nettverkKlient.snakkMedServer(8000, bruker);
         } catch (IOException | ClassNotFoundException e) {
