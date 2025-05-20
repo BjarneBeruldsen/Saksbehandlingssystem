@@ -28,5 +28,8 @@ public class BrukerDAO {
     //DAO for å hente alle brukere fra databasen
 
 
+    //DAO for å hente en spesifikk bruker basert på brukernavn
+
+
 }
 
