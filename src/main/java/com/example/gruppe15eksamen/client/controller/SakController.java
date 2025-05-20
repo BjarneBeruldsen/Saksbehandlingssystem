@@ -6,6 +6,7 @@
 package com.example.gruppe15eksamen.client.controller;
 
 import java.io.IOException;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -50,18 +51,32 @@ public class SakController {
     }
 
     // LeggTilLyttere 
-    // getBtn.setOnAction
-
-    private void lagTabeller() {
-        BrukerDAO.lagBrukereTabell();
+    public void leggTilLyttere() {
+        // Legger til lytter for brukerListe (ComboBox)
+        sakViewVisning.getBrukerListe().setOnAction(e -> behandleKlikk(e));
     }
 
     
+     /* // lagTabeller
+    private void lagTabeller() {
+        BrukerDAO.lagBrukereTabell();
+    } 
+    */
+
+    
     // BehandleKlikk
-    // e.getSource 
+    public void behandleKlikk(ActionEvent e) {
+        if (e.getSource() == sakViewVisning.getBrukerListe()) {
+            Bruker valgt = sakViewVisning.getBrukerListe().getValue();
+            if (valgt != null)
+            sakViewVisning.setValgtBruker(valgt.getBrukernavn());
+        }
+    }
+
 
     //Returnere scene(r) til main
  
+
  
     // getMetoder
     public Scene getStartScene() {
