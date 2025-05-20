@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 
 import com.example.gruppe15eksamen.client.network.NetworkClient;
 import com.example.gruppe15eksamen.client.view.SakView;
+import com.example.gruppe15eksamen.client.view.TesterView;
+import com.example.gruppe15eksamen.client.view.UtviklerView;
+import com.example.gruppe15eksamen.client.view.LederView;
 import com.example.gruppe15eksamen.common.Bruker;
 import com.example.gruppe15eksamen.common.Rolle;
 import com.example.gruppe15eksamen.common.Sak;
@@ -23,6 +26,9 @@ import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 public class SakController {
     
     private SakView sakViewVisning = new SakView();
+    private TesterView testerViewVisning = new TesterView();
+    private UtviklerView utviklerViewVisning = new UtviklerView();
+    private LederView lederViewvVisning = new LederView();
 
     private Sak sak;
     private BrukerDAO brukerDAO = new BrukerDAO();
@@ -41,8 +47,13 @@ public class SakController {
         kobleTilServer();
         this.hovedStage = stage;
         this.hovedPanel = sakViewVisning.getHovedPanel();
+
+        if (alleBrukere != null) {
+            sakViewVisning.setBrukerListe(alleBrukere);
+        }
         //BARE EN TEST FOR Å SJEKKE AT alleBrukere har hentet brukere under
         skrivUtBrukere();
+        leggTilLyttere();
     }
 
     private void skrivUtBrukere() {
@@ -68,6 +79,7 @@ public class SakController {
     public void leggTilLyttere() {
         // Legger til lytter for brukerListe (ComboBox)
         sakViewVisning.getBrukerListe().setOnAction(e -> behandleKlikk(e));
+        sakViewVisning.getBekreftBrukerBtn().setOnAction(e -> behandleKlikk(e));
     }
 
     
@@ -77,19 +89,40 @@ public class SakController {
     } 
     */
 
+    // variabel som tar vare på rollen til valgt bruker.
+    // Brukes til å endre/oppdatere view
+    String rolleView = "";
     
     // BehandleKlikk
     public void behandleKlikk(ActionEvent e) {
+
+        // Behandle valg av bruker
         if (e.getSource() == sakViewVisning.getBrukerListe()) {
-            Bruker valgt = sakViewVisning.getBrukerListe().getValue();
-            if (valgt != null)
-            sakViewVisning.setValgtBruker(valgt.getBrukernavn());
+            Bruker valgtBruker = sakViewVisning.getBrukerListe().getValue();
+            Rolle rolle = valgtBruker.getRolle();
+
+            // Sette rolleView-variabel til valgt bruker sin rolle
+            if (rolle.equals(Rolle.TESTER)) {
+                rolleView = "TESTER";
+            } else if (rolle.equals(Rolle.UTVIKLER)) {
+                rolleView = "UTVIKLER";
+            } else if (rolle.equals(Rolle.LEDER)) {
+                rolleView = "LEDER";
+            }
+        }
+
+        // Behandle / oppdatere view basert på brukerens rolle
+        if (e.getSource() == sakViewVisning.getBekreftBrukerBtn()) {
+            if (rolleView.equals("TESTER")) {
+                sakViewVisning.visPanel(testerViewVisning.visTesterPanel());
+            } else if (rolleView.equals("UTVIKLER")) {
+                sakViewVisning.visPanel(utviklerViewVisning.visUtviklerPanel());
+            } else if (rolleView.equals("LEDER")) {
+                sakViewVisning.visPanel(lederViewvVisning.visLederPanel());
+            }
         }
     }
 
-
-    //Returnere scene(r) til main
- 
 
  
     // getMetoder

@@ -5,6 +5,7 @@
 
 package com.example.gruppe15eksamen.client.view;
 
+import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -27,11 +28,10 @@ public class SakView {
     GridPane loggInnPanel;
     BorderPane hjemPanel;
     TextField tittel;
-    TextField valgtBruker = new TextField("");
     ComboBox<Bruker> brukerListe = new ComboBox<>();
     Label lblOverskrift = new Label("");
     Label lblStatus = new Label("");
-    Button bekreftBrukerBtn = new Button("OK!");
+    Button bekreftBrukerBtn = new Button("Bekreft");
 
     // Konstruktør
     public SakView() {
@@ -42,7 +42,7 @@ public class SakView {
         hovedPanel.setPrefWidth(VINDU_BREDDE);
 
         // Default/start (CENTER = Innloggingspanel)
-        visLoggInnPanel();
+        visPanel(visLoggInnPanel());
     }
 
 
@@ -61,8 +61,7 @@ public class SakView {
         loggInnPanel.setStyle("-fx-background-color:rgb(18, 207, 43)");
         loggInnPanel.add(new Label("Velg bruker: "), 1,1);
         loggInnPanel.add(brukerListe, 1, 2);
-        loggInnPanel.add(valgtBruker, 1, 3);
-        loggInnPanel.add(bekreftBrukerBtn, 1, 4);
+        loggInnPanel.add(bekreftBrukerBtn, 1, 3);
         loggInnPanel.setPrefHeight(VINDU_HØYDE/2);
         loggInnPanel.setPrefWidth(VINDU_BREDDE/2);
         loggInnPanel.setAlignment(Pos.CENTER);
@@ -110,31 +109,42 @@ public class SakView {
 
 
     // Diverse metoder
-    public void visLoggInnPanel() {
-        hovedPanel.setCenter(lagHjemPanel());
+
+    // metode som bytter CENTER-panel
+    public void visPanel(Node panel) {
+        hovedPanel.setCenter(panel);
     }
+
+    // metode for å vise LoggInn-panel (default/start)
+    public Node visLoggInnPanel() {
+        return lagHjemPanel();
+    }
+
+
+
 
 
     // getMetoder
 
-    // Returner hovdPanel
+    // Returner hovedPanel
     public BorderPane getHovedPanel() { return hovedPanel; }
 
     // Returner brukerListe
     public ComboBox<Bruker> getBrukerListe() { return brukerListe; }
 
-
-
+    // Returnerer bekreftBrukerBtn ("Bekreft"/valg av bruker) 
+    public Button getBekreftBrukerBtn() { return bekreftBrukerBtn; }
 
     // setMetoder
 
 
+    // setMetode for brukerListe (ComboBox)
+    public void setBrukerListe(ArrayList<Bruker> brukere) {
+        brukerListe.getItems().clear();
+        brukerListe.getItems().addAll(brukere);
+    }
 
-    // setMetode for valgtBruker
-    public void setValgtBruker(String bruker) {
-        valgtBruker.setText(bruker);
-     }
-
+   
     // setMetode for overskrift
     public void setLblOverskrift(String tekst) { lblOverskrift.setText(tekst); }
 
