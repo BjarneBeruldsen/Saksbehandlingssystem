@@ -2,6 +2,8 @@ package com.example.gruppe15eksamen.server.network;
 
 import com.example.gruppe15eksamen.common.Bruker;
 import com.example.gruppe15eksamen.common.Rolle;
+import com.example.gruppe15eksamen.server.dao.TabellerDAO;
+import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -9,6 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,6 +24,15 @@ public class SakServer {
     private static final int PORT = 8000;
 
     public static void main(String[] args) {
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            System.out.println("Database opprettet og tilkoblet");
+        } catch (SQLException | IOException e) {
+            System.err.println("Feil ved opprettelse eller tilkobling til database");
+            e.printStackTrace();
+            return;
+        }
+        TabellerDAO.lagSakTabell();
+        TabellerDAO.lagBrukereTabell();
         snakkMedKlienter();
     }
 
