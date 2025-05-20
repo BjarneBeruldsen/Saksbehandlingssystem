@@ -2,7 +2,7 @@ package com.example.gruppe15eksamen.server.network;
 
 import com.example.gruppe15eksamen.common.Bruker;
 import com.example.gruppe15eksamen.common.Rolle;
-import com.example.gruppe15eksamen.server.dao.TabellerDAO;
+import static com.example.gruppe15eksamen.server.dao.TabellerDAO.opprettAlleTabeller;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 import com.example.gruppe15eksamen.common.SocketRequest;
 
@@ -32,10 +32,9 @@ public class SakServer {
             e.printStackTrace();
             return;
         }
-        TabellerDAO.lagSakTabell();
-        TabellerDAO.lagBrukereTabell();
+        opprettAlleTabeller();
+        System.out.println("Alle tabeller er nå opprettet");
         snakkMedKlienter();
-
     }
 
     private static void snakkMedKlienter() {

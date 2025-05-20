@@ -15,7 +15,7 @@ public class Sak implements Serializable {
     private Status status;
     private String rapportør;
     private String mottaker;
-    private LocalDateTime tidsstempel; //Bjarne endret til localdatetime (usikker på om det er riktig)
+    private LocalDateTime tidsstempel; 
     private LocalDateTime oppdatertTidspunkt;
 
 
