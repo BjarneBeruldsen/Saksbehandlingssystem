@@ -28,7 +28,13 @@ public class Bruker implements Serializable {
     }
 
     @Override
+    // Viser kun brukernavn, pga. da vises kun brukernavn i ComboBox (velg Bruker)
     public String toString() {
+        return brukernavn;
+    }
+
+    // Tidligere versjon/full versjon av toString
+    public String toStringAll() {
         return "bruker:"+brukerID+";"+brukernavn+";"+rolle;
     }
 
