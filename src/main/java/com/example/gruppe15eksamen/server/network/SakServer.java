@@ -2,6 +2,7 @@ package com.example.gruppe15eksamen.server.network;
 
 import com.example.gruppe15eksamen.common.Bruker;
 import com.example.gruppe15eksamen.common.Rolle;
+import com.example.gruppe15eksamen.common.SocketRequest;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -21,6 +22,7 @@ public class SakServer {
 
     public static void main(String[] args) {
         snakkMedKlienter();
+
     }
 
     private static void snakkMedKlienter() {
@@ -38,13 +40,12 @@ public class SakServer {
 
                 //oppretter I/O stream til klienten
                 ObjectOutputStream utClient = new ObjectOutputStream(clientSocket.getOutputStream());
-                utClient.flush();
                 ObjectInputStream innClient = new ObjectInputStream(clientSocket.getInputStream());
 
                 //Motta bruker-objekt til klient
-                String handling = (String)innClient.readObject();
+                SocketRequest forespørsel = (SocketRequest)(innClient.readObject());
 
-                if(handling.equals("HENT BRUKERE")) {
+                if(forespørsel.getHandling().toUpperCase().equals("HENT BRUKERE")) {
                     //hent alle brukere fra DAO her (midlertidig harkodet test under)
                     ArrayList<Bruker> brukere = new ArrayList<>();
                     brukere.add(new Bruker(2, "HovedLeder", Rolle.LEDER));
@@ -56,7 +57,7 @@ public class SakServer {
                     utClient.flush();
                 }
 
-                pool.execute(() -> handleClient(clientSocket));
+//                pool.execute(() -> handleClient(clientSocket));
 
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -65,17 +66,18 @@ public class SakServer {
     }
 
     //behandler brukerdata
-    private static void handleClient(Socket socket) {
-        //I/O Stream til klienten
-        try {
-            ObjectInputStream inClient = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream utClient = new ObjectOutputStream(socket.getOutputStream());
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private static void handleClient(Socket socket) {
+//        //I/O Stream til klienten
+//        try (ObjectInputStream inClient = new ObjectInputStream(socket.getInputStream());
+//            ObjectOutputStream utClient = new ObjectOutputStream(socket.getOutputStream());) {
+//
+//            //switch setning som utfører operasjoner mot datbasen basert på socketrequest sin handling
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private static void logg(String melding) {
         System.out.println("Server: " + melding);

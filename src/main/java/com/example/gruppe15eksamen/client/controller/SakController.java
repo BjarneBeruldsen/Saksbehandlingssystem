@@ -8,15 +8,13 @@ package com.example.gruppe15eksamen.client.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.example.gruppe15eksamen.common.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import com.example.gruppe15eksamen.client.network.NetworkClient;
 import com.example.gruppe15eksamen.client.view.SakView;
-import com.example.gruppe15eksamen.common.Bruker;
-import com.example.gruppe15eksamen.common.Rolle;
-import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 
 public class SakController {
@@ -37,7 +35,7 @@ public class SakController {
 
 
     public SakController(Stage stage) {
-        kobleTilServer();
+        hentBrukere();
         this.hovedStage = stage;
         this.hovedPanel = sakViewVisning.getHovedPanel();
         //BARE EN TEST FOR Å SJEKKE AT alleBrukere har hentet brukere under
@@ -55,9 +53,9 @@ public class SakController {
         }
     }
 
-    private void kobleTilServer() {
+    private void hentBrukere() {
         try {
-            alleBrukere = nettverkKlient.kobleTilOgHentBrukere(8000);
+            alleBrukere = nettverkKlient.hentBrukere();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Kunne ikke koble til server");
         }
@@ -87,4 +85,19 @@ public class SakController {
         return sakViewVisning;
     }
 
+    //Metode for å opprette sak(Tester)
+    //Kalles når tester trykker "opprett sak knapp"
+    public void opprettSak() {
+        //Harkoder data som egt. hentes fra textfelt her
+        Bruker bruker = alleBrukere.get(0); //henter random fra brukerliste
+        String tittel = "SakTittel";
+        String beskrivelse = "Dette er en beskrivelse";
+        Prioritet prioritet = Prioritet.HØY;
+        Kategori kategori = Kategori.BACKEND_FEIL;
+        String rapportør = bruker.getBrukernavn();
+
+        Sak sak = new Sak(tittel, beskrivelse, prioritet, kategori, rapportør);
+
+        SocketRespons respons = NetworkClient.sendSak(sak);
+    }
 }

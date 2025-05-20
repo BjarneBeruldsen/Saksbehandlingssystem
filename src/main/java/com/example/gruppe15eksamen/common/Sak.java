@@ -17,13 +17,13 @@ public class Sak implements Serializable {
     private String mottaker;
     private LocalDateTime tidsstempel; //Bjarne endret til localdatetime (usikker på om det er riktig)
 
-    //Deserialisering (standardkonstruktør)
-    public Sak() { }
+
 
     //Konstruktør
     public Sak(int sakID, String tittel, String beskrivelse, Prioritet prioritet, Kategori kategori, Status status,
                String rapportør, String mottaker,  LocalDateTime tidsstempel)
     {
+        //MÅ LEGGE TIL VALIDERING HER ETTERHVERT
         this.sakID       = sakID;
         this.tittel      = tittel;
         this.beskrivelse = beskrivelse;
@@ -33,6 +33,14 @@ public class Sak implements Serializable {
         this.rapportør   = rapportør;
         this.mottaker    = mottaker;
         this.tidsstempel = tidsstempel;
+    }
+
+    //Konstruktør for tester som oppretter sak
+    public Sak(String tittel, String beskrivelse, Prioritet prioritet,
+               Kategori kategori, String rapportør) {
+        this(0, tittel, beskrivelse, prioritet, kategori, Status.INNSENDT,
+                rapportør, "Ikke satt", LocalDateTime.now());
+
     }
 
     //Gettere og settere
