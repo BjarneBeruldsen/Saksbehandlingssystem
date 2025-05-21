@@ -15,16 +15,33 @@ import com.example.gruppe15eksamen.common.Status;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
 
-//Opprette saker og diverse
+//Opprette metoder for saker og diverse
 public class SakDAO {
-
 
     //metode for å opprette sak
 
+    //metode som henter alle saker basert på rolle og bruker-
+    //og legger til i en liste
 
-
-
-//    //metode for å opprette sak
+    //metode som tildeler sak til utvikler
+    public static int tildelSak(int sakId, String brukernavn) {
+        String sql = """
+            UPDATE sak
+            SET mottaker = ?
+            WHERE sakID = ?
+            """;
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, brukernavn);
+            ps.setInt(2, sakId);
+            return ps.executeUpdate();
+        } catch (SQLException | IOException e) {
+            System.err.printf("Kunne ikke tildele sak til" + sakId, brukernavn, e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    //metode for å opprette sak
 //    public static void insertStudent(Sak sak) {
 //        String query = """
 //                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
@@ -43,7 +60,7 @@ public class SakDAO {
     //metode for å opprette sak
     public static int insertSak(Sak sak) throws SQLException, IOException{
         String query = """
-                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
+                INSERT INTO sak (tittel, beskrivelse, rapportørBrukerId, prioritetId, statusId,
                 kategoriId, tidsstempel, oppdatertTidspunkt)
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?)
                 """;
@@ -73,14 +90,7 @@ public class SakDAO {
         }
 
     }
-
-
-    //metode som tildeler sak til utvikler
-
-
     //metode som henter sak basert på id
-
-
     public List<Sak> hentSaker(int sakID){
         List<Sak> saker = new ArrayList<>();
 
@@ -114,15 +124,7 @@ public class SakDAO {
         return saker;
 
     }
-
-
-
-    //metode som henter alle saker basert på rolle og bruker-
-    //og legger til i en liste
-
-
-
-
+    //Metode for slett sak
     public void slettSak(int sakID){
 
     String sql = "DELETE FROM sak WHERE sakID = ?";
@@ -147,7 +149,7 @@ public class SakDAO {
    }
 
     }
-
+    //Metode for søking
     public List<Sak> sokSaker(Soking soking) {
     List<Sak> resultater = new ArrayList<>();
 
