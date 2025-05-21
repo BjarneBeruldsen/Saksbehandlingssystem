@@ -94,11 +94,17 @@ public class InnsendteSakerView {
         tidsstempelKolonne.setMinWidth(150);
         tidsstempelKolonne.setCellValueFactory(new PropertyValueFactory<>("tidsstempel"));
 
+        // tidsstempel-kolonne (sist endret)
+        TableColumn<Sak, String> tidsEndringKolonne = new TableColumn<>("sist endret");
+        tidsEndringKolonne.setMinWidth(150);
+        tidsEndringKolonne.setCellValueFactory(new PropertyValueFactory<>("oppdatertTidspunkt"));
+
         saksTabell = new TableView<>();
         saksTabell.setItems(getSaker());
         saksTabell.getColumns().addAll(idKolonne, tittelKolonne, beskrivelseKolonne,
                                        prioritetKolonne, kategoriKolonne, statusKolonne, 
-                                       rapportørKolonne, mottakerKolonne, tidsstempelKolonne);
+                                       rapportørKolonne, mottakerKolonne, tidsstempelKolonne, 
+                                       tidsEndringKolonne);
 
         innsendteSaker = new VBox();
         innsendteSaker.getChildren().add(saksTabell);
