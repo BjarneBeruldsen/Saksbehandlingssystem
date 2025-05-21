@@ -6,16 +6,23 @@
 
 
 /* --------------------------------------------------------------
- * KILDE: (YouTube: thenewboston)
+ * KILDE1: (YouTube: thenewboston)
  *   url: https://www.youtube.com/watch?v=mtdlX2NMy4M 
  * 
  * KOMMENTAR:
  *   Brukte videoen til å lære om TableViews, hjelp med å
  *   skrive pseudokode/struktur og for inspirasjon.
  * 
+ * KILDE2: stackoverflow
+ *   url: https://stackoverflow.com/questions/44017673/javafx-tableview-get-selected-item-column-values-string-into-textfields
+ * 
+ * KOMMENTAR:
+ *   Brukte denne som hjelp/guide for hvordan håndtere/registrere 
+ *   hvilken rad som er valgt i tabellen.
+ * 
  * --------------------------------------------------------------
  * NB! UtviklerSakerView.java og LederSakerView.java er begge
- * basert på denne filen, (dvs. bygger indirekte på samme kilde)
+ * basert på denne filen, (dvs. bygger indirekte på samme kilder)
  * --------------------------------------------------------------
  */
 
@@ -41,11 +48,21 @@ import java.time.LocalDateTime;
 import com.example.gruppe15eksamen.common.Kategori;
 import com.example.gruppe15eksamen.common.Prioritet;
 import com.example.gruppe15eksamen.common.Sak;
+import com.example.gruppe15eksamen.common.Status;
 
 public class InnsendteSakerView {
 
     TableView<Sak> saksTabell;
     VBox innsendteSaker;
+    Label lblSakIdOverskrift;
+    Label lblSakIdValg;
+    ComboBox<Status> status;
+    TextField searchField;
+    Button searchBtn;
+    Button btnSetStatus;
+    Sak valgtSak;
+    GridPane searchPane;
+    GridPane statusPane;
 
     public InnsendteSakerView() {
     
@@ -94,14 +111,52 @@ public class InnsendteSakerView {
         tidsstempelKolonne.setMinWidth(150);
         tidsstempelKolonne.setCellValueFactory(new PropertyValueFactory<>("tidsstempel"));
 
+        // tidsstempel-kolonne (sist endret)
+        TableColumn<Sak, String> tidsEndringKolonne = new TableColumn<>("sist endret");
+        tidsEndringKolonne.setMinWidth(150);
+        tidsEndringKolonne.setCellValueFactory(new PropertyValueFactory<>("oppdatertTidspunkt"));
+
         saksTabell = new TableView<>();
         saksTabell.setItems(getSaker());
         saksTabell.getColumns().addAll(idKolonne, tittelKolonne, beskrivelseKolonne,
                                        prioritetKolonne, kategoriKolonne, statusKolonne, 
-                                       rapportørKolonne, mottakerKolonne, tidsstempelKolonne);
+                                       rapportørKolonne, mottakerKolonne, tidsstempelKolonne, 
+                                       tidsEndringKolonne);
+
+        // Panel som inneholder nødvendige element for å søke
+        searchPane = new GridPane();
+        searchField = new TextField();
+        searchField.setPromptText("oppgi informasjon ");
+        searchBtn = new Button("Søk");
+        searchPane.add(searchField, 1, 0);
+        searchPane.add(searchBtn, 2, 0);
+        searchPane.setAlignment(Pos.CENTER_RIGHT);
+
+        // Panel som inneholder nødvendig element for å endre Status til sak
+        statusPane = new GridPane();
+        lblSakIdOverskrift = new Label("Sak: ");
+        lblSakIdOverskrift.getStyleClass().add("valgtSak-tabell");
+        lblSakIdValg = new Label("");
+        status = new ComboBox<>();
+        status.getItems().addAll(Status.values());
+        btnSetStatus = new Button("Oppdater status");
+        statusPane.add(lblSakIdOverskrift, 0, 0);
+        statusPane.add(lblSakIdValg, 0, 1);
+        statusPane.add(status, 1, 0);
+        statusPane.add(btnSetStatus, 2, 0);
+
+        // Lytter for å 
+        // JavaFX krevde tre parameter, kunne ikke ha kun selectedSak.
+        // ( oIIB = observable som ikke er i bruk | oVIIB = oldValue som ikke er i bruk )
+        saksTabell.getSelectionModel().selectedItemProperty().addListener((oIU, oVIU, selectedSak) -> {
+            if (selectedSak != null) {
+                valgtSak = selectedSak;
+                lblSakIdValg.setText("" + valgtSak.getSakID());
+            }
+        });
 
         innsendteSaker = new VBox();
-        innsendteSaker.getChildren().add(saksTabell);
+        innsendteSaker.getChildren().addAll(searchPane, saksTabell, statusPane);
 
     }
 

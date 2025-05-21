@@ -82,8 +82,8 @@ public class SakView {
         hjemPanel.setBottom(bunn);
 
         hjemPanel.setCenter(lagLoggInnPanel());
-        hjemPanel.setStyle("-fx-background-color:rgb(199, 199, 199)");
-        setLblOverskrift("MAIN PANEL");
+        hjemPanel.setStyle("-fx-background-color:rgb(236, 236, 236)");
+        setLblOverskrift("Saksbehandling");
         setLblStatus("");
         return hjemPanel;
     }
@@ -135,16 +135,15 @@ public class SakView {
     private Node lagTopPanel() {
         // Opprette panel og legge til styling
         HBox topPanel = new HBox();
-        topPanel.setStyle("-fx-background-color: rgb(87, 87, 87); -fx-border-width: 2px; -fx-border-color: black");
+        topPanel.setStyle("-fx-background-color: rgb(6, 67, 0); -fx-border-width: 2px; -fx-border-color: black");
         topPanel.setSpacing(10);
         topPanel.setPadding(new Insets(1, 1, 1, 1));
         topPanel.setAlignment(Pos.CENTER);
         topPanel.setMinHeight(50);
         topPanel.setPrefHeight(50);
 
-        // Endrer størrelse på label og legger til status (ikke gjort/ferdig enda)
-        Font fonten = Font.font("ARIAL, 24");
-        lblOverskrift.setFont(fonten);
+        // Legge til Style for lblOverskrift, samt legge til i topPanel
+        lblOverskrift.getStyleClass().add("overskrift-label");
         topPanel.getChildren().add(lblOverskrift);
 
         return topPanel;

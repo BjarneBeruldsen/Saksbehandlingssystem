@@ -4,6 +4,16 @@
 
 
 
+/* ----- MISC./diverse ----- */
+/* styling til topPanel  */
+.overskrift-label {
+    -fx-font-size: 24px;
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+
 /* Styling tilhørende LoggInn-siden */
 .logginn-menyboks {
     -fx-background-color: white;
@@ -107,4 +117,15 @@
 
 .knapp-avbryt:hover {
     -fx-background-color: rgb(140, 0, 0);
+}
+
+
+
+/* Styling tilhørende sakstabellen(e) */
+.valgtSak-tabell {
+    -fx-font-size: 15px;
+    -fx-text-fill: #000000;
+    -fx-padding: 0 16px 0 0;
+    -fx-border-color: #b3b3b3;
+    -fx-border-width: 1.5px;
 }

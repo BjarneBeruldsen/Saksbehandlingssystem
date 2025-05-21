@@ -16,17 +16,16 @@ public class Soking implements Serializable{
 
     //konstruktør for søk
     public Soking(Prioritet prioritet, Status status, Kategori kategori, Integer opprettetAr,Integer oppdatertAr, String tittel, String reporterNavn, String beskrivelse) {
-        this.prioritet = prioritet;
-        this.status = status;
-        this.kategori = kategori;
-        this.opprettetAr = opprettetAr;
-        this.oppdatertAr = oppdatertAr;
-        this.tittel = tittel;
-        this.reporterNavn = reporterNavn;
-        this.beskrivelse = beskrivelse;
+        setPrioritet(prioritet);
+        setStatus(status);
+        setKategori(kategori);
+        setOpprettetAr(opprettetAr);
+        setOppdatertAr(oppdatertAr);
+        setTittel(tittel);
+        setReporterNavn(reporterNavn);
+        setBeskrivelse(beskrivelse);
+
     }
-
-
     public Soking() {
     }
 

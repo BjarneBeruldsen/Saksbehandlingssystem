@@ -106,9 +106,6 @@ public class SakController {
 
         // Legge til lyttere for knapper i venstremenyen
         venstreMenyVisning.getBtnHjem().setOnAction(e -> behandleKlikk(e));
-        // Spurte KI om tips for å håndtere enkelte av meny-knappene, siden de
-        // ikke opprettes før en av leggTil(ROLLE)knapper() kjøres. 
-        // KI foreslo å bare legge til en '!= null' sjekk.
         if (venstreMenyVisning.getBtnTesterOpprettSak() != null) {
             venstreMenyVisning.getBtnTesterOpprettSak().setOnAction(e -> behandleKlikk(e));
         }
@@ -127,12 +124,6 @@ public class SakController {
     }
 
 
-
-     /* // lagTabeller
-    private void lagTabeller() {
-        BrukerDAO.lagBrukereTabell();
-    }
-    */
 
     // variabel som tar vare på rollen til valgt bruker.
     // Brukes til å endre/oppdatere view
@@ -162,12 +153,15 @@ public class SakController {
         if (e.getSource() == sakViewVisning.getBekreftBrukerBtn()) {
             if (rolleView.equals("TESTER")) {
                 sakViewVisning.visPanel(testerViewVisning.visTesterPanel());
+                sakViewVisning.setLblOverskrift("Tester");
                 venstreMenyVisning.leggTilTesterKnapper();
             } else if (rolleView.equals("UTVIKLER")) {
                 sakViewVisning.visPanel(utviklerViewVisning.visUtviklerPanel());
+                sakViewVisning.setLblOverskrift("Utvikler");
                 venstreMenyVisning.leggTilUtviklerKnapper();
             } else if (rolleView.equals("LEDER")) {
                 sakViewVisning.visPanel(lederViewvVisning.visLederPanel());
+                sakViewVisning.setLblOverskrift("Leder");
                 venstreMenyVisning.leggTilLederKnapper();
             }
 
