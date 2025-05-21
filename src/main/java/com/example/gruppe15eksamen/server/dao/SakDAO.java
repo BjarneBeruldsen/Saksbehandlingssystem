@@ -248,7 +248,7 @@ public class SakDAO {
                     sak.setTidsstempel(rs.getTimestamp("tidsstempel").toLocalDateTime());
                     sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatertTidspunkt").toLocalDateTime());
 
-                    sak.setRapportør(rs.getString("rapportorNavn"));
+                    sak.setRapportør(rs.getString("rapportørNavn"));
 
                     String mottakerNavn = rs.getString("mottakerNavn");
                     if (mottakerNavn != null) {
