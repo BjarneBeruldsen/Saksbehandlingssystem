@@ -29,7 +29,7 @@ public class LederView {
 
     private Node lederPanel() {
         mainPanel = new BorderPane();
-        mainPanel.setStyle("-fx-background-color:rgb(199, 199, 199)");;
+        mainPanel.setStyle("-fx-background-color:rgb(255, 255, 255)");;
         
         return mainPanel;
     }
