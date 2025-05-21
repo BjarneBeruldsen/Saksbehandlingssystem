@@ -9,6 +9,7 @@ import static com.example.gruppe15eksamen.server.dao.TabellerDAO.opprettAlleTabe
 import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 import com.example.gruppe15eksamen.server.dao.SakDAO;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -111,11 +112,14 @@ public class SakServer {
                     break;
 
                 case "ADD_MOTTAKER":
-                    //kaller på DAO for å legge til sak basert på sakID og brukerID
-                    //TEST FJERN
-                    System.out.println("SakId:" + forespørsel.getSakID() + ";BrukerId:" +forespørsel.getBrukerID());
-                    //sender melding til klienten om det er godkjent
-                    utClient.writeObject(new SocketRespons(true, "Mottaker er lagt til"));
+                    //kaller på DAO for å legge mottaker til sak
+                    int rader = SakDAO.tildelSak(forespørsel.getSakID(), forespørsel.getBrukernavn());
+
+                    if(rader > 0) {
+                        utClient.writeObject(new SocketRespons(true, "Mottaker er lagt til sak"));
+                    } else {
+                        utClient.writeObject(new SocketRespons(false, "Kunne ikke legge mottaker til sak"));
+                    }
                     break;
 
                 case "HENT_TILDELTE":

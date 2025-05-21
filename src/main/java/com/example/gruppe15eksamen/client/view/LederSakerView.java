@@ -17,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,6 +34,7 @@ public class LederSakerView {
     VBox alleSaker;
     //combobox for valg av mottaker med utviklers brukernavn
     ComboBox<String> cbUtviklere = new ComboBox<>();
+    Button btLeggTilMottaker = new Button("Legg til");
 
     public LederSakerView() {
 
@@ -82,24 +84,31 @@ public class LederSakerView {
         tidsstempelKolonne.setCellValueFactory(new PropertyValueFactory<>("tidsstempel"));
 
         saksTabell = new TableView<>();
-        saksTabell.setItems(getSaker());
+//        saksTabell.setItems(getSaker());
         saksTabell.getColumns().addAll(idKolonne, tittelKolonne, beskrivelseKolonne,
                                        prioritetKolonne, kategoriKolonne, statusKolonne, 
                                        rapportørKolonne, mottakerKolonne, tidsstempelKolonne);
 
         alleSaker = new VBox();
-        alleSaker.getChildren().addAll(saksTabell, cbUtviklere);
+        alleSaker.getChildren().addAll(saksTabell, cbUtviklere, btLeggTilMottaker);
         alleSaker.setAlignment(Pos.CENTER);
     }    
 
     // HARDKODET TEMP-liste med saker
-    public ObservableList<Sak> getSaker() {
-        ObservableList<Sak> saker = FXCollections.observableArrayList();
-        saker.add(new Sak("sak1", "Beskrivelse1", Prioritet.HØY, Kategori.UI_FEIL,  ""));
-        saker.add(new Sak ("sak2", "beskrivelse2", Prioritet.HØY, Kategori.UI_FEIL, ""));
-        saker.add(new Sak ("sak3", "beskrivelse3", Prioritet.HØY, Kategori.UI_FEIL, ""));
-        
-        return saker;
+//    public ObservableList<Sak> getSaker() {
+//        ObservableList<Sak> saker = FXCollections.observableArrayList();
+//        saker.add(new Sak("sak1", "Beskrivelse1", Prioritet.HØY, Kategori.UI_FEIL,  ""));
+//        saker.add(new Sak ("sak2", "beskrivelse2", Prioritet.HØY, Kategori.UI_FEIL, ""));
+//        saker.add(new Sak ("sak3", "beskrivelse3", Prioritet.HØY, Kategori.UI_FEIL, ""));
+//
+//        return saker;
+//    }
+
+    //metode som returnerer sakstabellen
+
+
+    public TableView<Sak> getSaksTabell() {
+        return saksTabell;
     }
 
     // get-metode som returnerer tabell/oversikt over alle saker
@@ -108,5 +117,9 @@ public class LederSakerView {
     //get metode for å hente utvikler combobox
     public ComboBox<String> getCbUtviklere() {
         return cbUtviklere;
+    }
+
+    public Button getBtLeggTilMottaker() {
+        return btLeggTilMottaker;
     }
 }

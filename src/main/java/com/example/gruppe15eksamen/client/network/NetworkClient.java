@@ -1,13 +1,13 @@
 package com.example.gruppe15eksamen.client.network;
 
 import com.example.gruppe15eksamen.common.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /*Denne filen inneholde kode for å koble til server
@@ -65,10 +65,10 @@ public class NetworkClient {
             }
         }
 
-        //Metode som sender SakId og Utviklerens brukerid til server
-        public static SocketRespons sendSakMottaker(int brukerID, int sakID) {
+        //Metode som sender SakId og Utviklerens brukernavn til server
+        public static SocketRespons sendSakMottaker(String brukernavn, int sakID) {
             //forespørsel som sender med brukerID sakID og operasjon som skal utføres av server
-            SocketRequest forespørsel = new SocketRequest("ADD_MOTTAKER", brukerID, sakID);
+            SocketRequest forespørsel = new SocketRequest("ADD_MOTTAKER", brukernavn, sakID);
 
             //endepunkt for kommunikasjon med server
             try (Socket socket = new Socket("localhost", PORT);
@@ -81,7 +81,6 @@ public class NetworkClient {
 
                 //mottar respons fra server (false/true)
                 SocketRespons respons = (SocketRespons) inn.readObject();
-                System.out.println("respons: " + respons.getStatus());
 
                 //sjekker om responsen er godkjent
                 if (respons.isGodkjent()) {
@@ -147,7 +146,7 @@ public class NetworkClient {
         return null;
     }
 
-    public ArrayList<Sak> hentSaker() {
+    public ObservableList<Sak> hentSaker() {
         SocketRequest forespørsel = new SocketRequest("HENT_SAKER");
         //Opprretter et endepunkt for kommunikasjon med server
         try (Socket socket = new Socket("localhost", PORT);
@@ -158,8 +157,10 @@ public class NetworkClient {
             ut.writeObject(forespørsel);
             ut.flush();
 
+            ArrayList<Sak> saker= (ArrayList<Sak>) inn.readObject();
+
             //returnere brukere til SakController
-            return (ArrayList<Sak>) inn.readObject();
+            return FXCollections.observableArrayList(saker);
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

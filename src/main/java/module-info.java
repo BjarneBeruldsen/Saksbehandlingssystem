@@ -4,6 +4,7 @@ module com.example.gruppe15eksamen {
     requires java.sql;
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
+    requires jdk.net;
 
     exports com.example.gruppe15eksamen.client;
     exports com.example.gruppe15eksamen.common;

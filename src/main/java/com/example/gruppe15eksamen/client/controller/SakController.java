@@ -6,6 +6,8 @@
 package com.example.gruppe15eksamen.client.controller;
 
 import java.io.IOException;
+
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ import com.example.gruppe15eksamen.client.view.LederView;
 import com.example.gruppe15eksamen.client.view.VenstreMenyView;
 import com.example.gruppe15eksamen.client.view.SaksSkjema;
 import com.example.gruppe15eksamen.server.dao.BrukerDAO;
+import jdk.net.Sockets;
 
 public class SakController {
     
@@ -43,7 +46,7 @@ public class SakController {
     private BrukerDAO brukerDAO = new BrukerDAO();
     private ArrayList<Bruker> alleBrukere;  //arraylist som kan legges til i rullgardinliste
     private ArrayList<String> alleUtviklere; //arrayList for brukernavn til rullgardinliste i Leder
-    private ArrayList<Sak> alleSaker; //arrayList som tar bare på alle saker
+    private ObservableList<Sak> alleSaker; //arrayList som tar bare på alle saker
 
     private ArrayList<Sak> tildelteSaker; //skal inneholde alle saker som er tildelt enn utvikler
 
@@ -62,7 +65,6 @@ public class SakController {
         //Kaller opprettsak etter brukere er hentet (Dette er test og den skal egt kalles når-
         //tester på send inn knapp)
         if(alleBrukere != null && !alleBrukere.isEmpty() ) {
-           tildelSak();
            tildelteSaker = hentTilDelteSaker();
            //skriver ut tildelte saker for å teste FJERN
             for(Sak sak: tildelteSaker) {
@@ -84,7 +86,6 @@ public class SakController {
     //metode som henter alle saker
     private void hentSaker() {
         alleSaker = nettverkKlient.hentSaker();
-        System.out.println("Kunne ikke koble til server");
     }
 
     //metode som henter alle brukere
@@ -120,7 +121,12 @@ public class SakController {
         if (venstreMenyVisning.getBtnLederSeAlleSaker() != null) {
             venstreMenyVisning.getBtnLederSeAlleSaker().setOnAction(e -> behandleKlikk(e));
         }
+        if(alleSakerLeder.getBtLeggTilMottaker() != null) {
+            alleSakerLeder.getBtLeggTilMottaker().setOnAction(e -> behandleKlikk(e));
+        }
     }
+
+
 
      /* // lagTabeller
     private void lagTabeller() {
@@ -201,13 +207,42 @@ public class SakController {
             alleSakerLeder.getCbUtviklere().getItems().clear();
             alleSakerLeder.getCbUtviklere().getItems().addAll(alleUtviklere);
             alleSakerLeder.getCbUtviklere().setPromptText("Velg");
+            alleSakerLeder.getSaksTabell().setItems(alleSaker);
             sakViewVisning.visPanel(alleSakerLeder.getAlleSaker());
         }
         if(e.getSource() == saksSkjema.getBtnOpprett()) {
             opprettSak();
         }
 
+        if(e.getSource() == alleSakerLeder.getBtLeggTilMottaker()) {
+            leggTilMottaker();
+        }
+
     }
+
+    private void leggTilMottaker() {
+        //henter sakId og brukernavn fra GUI-komponenter
+        Sak valgtSak = alleSakerLeder.getSaksTabell().getSelectionModel().getSelectedItem();
+        String valgtBrukernavn = alleSakerLeder.getCbUtviklere().getValue();
+
+        if(valgtSak != null && valgtBrukernavn != null) {
+            int sakID = valgtSak.getSakID();
+
+            //sender til server
+            SocketRespons respons = nettverkKlient.sendSakMottaker(valgtBrukernavn, sakID);
+
+            if(respons.isGodkjent()) {
+                sakViewVisning.setGodkjenning(respons.getStatus());
+            }
+            else {
+                sakViewVisning.setFeilmelding(respons.getStatus());
+            }
+
+        } else {
+            sakViewVisning.setFeilmelding("Du må velge sak og mottaker");
+        }
+    }
+
     //metode som henter alle utviklere
     private void hentUtviklere() {
         alleUtviklere = nettverkKlient.hentUtviklere();
@@ -245,14 +280,7 @@ public class SakController {
         }
     }
 
-    //metode der ledere kan legge til utvikler som mottaker
-    public void tildelSak() {
-        //Harkoder som egt hentes fra tekstfelt her (sakID og BrukerID) FJERN
-        int brukerID = 1;
-        int sakID = 1;
 
-        SocketRespons respons = nettverkKlient.sendSakMottaker(brukerID, sakID);
-    }
 
     public ArrayList<Sak> hentTilDelteSaker() {
         //harkoder data som må egt hentes fra tekstfelt FJERN

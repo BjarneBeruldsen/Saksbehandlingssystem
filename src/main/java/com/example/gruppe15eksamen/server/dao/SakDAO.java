@@ -13,6 +13,8 @@ import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.common.Soking;
 import com.example.gruppe15eksamen.common.Status;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 //Opprette metoder for saker og diverse
@@ -26,10 +28,13 @@ public class SakDAO {
 
     //metode som tildeler sak til utvikler
     public static int tildelSak(int sakId, String brukernavn) {
+        System.out.println("sakID:" + sakId + "brukernavn" + brukernavn);
         String sql = """
             UPDATE sak
-            SET mottaker = ?
-            WHERE sakID = ?
+            SET mottakerBrukerId = (
+                SELECT brukerId FROM brukere WHERE navn = ?
+            )
+            WHERE sakId = ?
             """;
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -46,7 +51,7 @@ public class SakDAO {
     //metode for å opprette sak
     public static int insertSak(Sak sak) throws SQLException, IOException{
         String query = """
-                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
+                INSERT INTO sak (tittel, beskrivelse, rapportørBrukerId, prioritetId, statusId,
                 kategoriId, tidsstempel, oppdatertTidspunkt)
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?)
                 """;

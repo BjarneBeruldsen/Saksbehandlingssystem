@@ -6,6 +6,7 @@ public class SocketRequest implements Serializable {
     private String handling;
     private Sak sak;
     private int brukerID;
+    private String brukernavn;
     private int sakID;
 
     public SocketRequest(String handling, Sak sak) {
@@ -13,9 +14,9 @@ public class SocketRequest implements Serializable {
         this.sak = sak;
     }
 
-    public SocketRequest(String handling, int brukerID, int sakID) {
+    public SocketRequest(String handling, String brukernavn, int sakID) {
         this.handling = handling;
-        this.brukerID = brukerID;
+        this.brukernavn = brukernavn;
         this.sakID = sakID;
     }
 
@@ -47,6 +48,10 @@ public class SocketRequest implements Serializable {
 
     public int getBrukerID() {
         return brukerID;
+    }
+
+    public String getBrukernavn() {
+        return brukernavn;
     }
 
     public void setBrukerID(int brukerID) {
