@@ -38,15 +38,8 @@ public class Bruker implements Serializable {
         return "bruker:"+brukerID+";"+brukernavn+";"+rolle;
     }
 
-    public String getBrukernavn() {
-        return brukernavn;
-    }
-
-    public Rolle getRolle() {
-        return rolle;
-    }
-
-    public int getBrukerID() {
-        return brukerID;
-    }
+    // get-metoder
+    public int getBrukerID() { return brukerID; }
+    public String getBrukernavn() { return brukernavn; }
+    public Rolle getRolle() { return rolle; }
 }
