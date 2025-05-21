@@ -57,7 +57,7 @@ public class SakDAO {
 
 
 
-    public Sak slettSak(Sak sak){
+    public void slettSak(int sakID){
 
     String sql = "DELETE FROM sak WHERE sakID = ?";
 
@@ -65,14 +65,13 @@ public class SakDAO {
         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             
-        stmt.setInt(1, sak.getSakID());
+        stmt.setInt(1, sakID);
         int slettetRader = stmt.executeUpdate();
 
         if (slettetRader > 0) {
-            System.out.println("Sak med ID " + sak.getSakID() + " ble slettet.");
-            return sak;
+            System.out.println("Sak med ID " + sakID + " ble slettet.");
         } else {
-            System.out.println("Ingen sak ble slettet med ID " + sak.getSakID());
+            System.out.println("Ingen sak ble slettet med ID " + sakID);
 
         }
 
@@ -80,7 +79,7 @@ public class SakDAO {
         e.printStackTrace();
     
    }
-        return null;
+
     }
 
     public List<Sak> sokSaker(Soking soking) {
