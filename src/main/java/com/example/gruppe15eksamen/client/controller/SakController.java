@@ -18,8 +18,10 @@ import javafx.stage.Stage;
 import com.example.gruppe15eksamen.client.network.NetworkClient;
 import com.example.gruppe15eksamen.client.view.SakView;
 import com.example.gruppe15eksamen.client.view.TesterView;
+import com.example.gruppe15eksamen.client.view.UtviklerSakerView;
 import com.example.gruppe15eksamen.client.view.UtviklerView;
 import com.example.gruppe15eksamen.client.view.InnsendteSakerView;
+import com.example.gruppe15eksamen.client.view.LederSakerView;
 import com.example.gruppe15eksamen.client.view.LederView;
 import com.example.gruppe15eksamen.client.view.VenstreMenyView;
 import com.example.gruppe15eksamen.client.view.SaksSkjema;
@@ -37,6 +39,8 @@ public class SakController {
     private VenstreMenyView venstreMenyVisning = new VenstreMenyView();
     private SaksSkjema saksSkjema = new SaksSkjema();
     private InnsendteSakerView innsendteSakerTabell = new InnsendteSakerView();
+    private UtviklerSakerView tilordnedeSaker = new UtviklerSakerView();
+    private LederSakerView alleSakerLeder = new LederSakerView();
 
     private Bruker valgtBruker;
     private Sak sak;
@@ -186,10 +190,10 @@ public class SakController {
             sakViewVisning.visPanel(innsendteSakerTabell.getInnsendteSaker());
         }
         if (e.getSource() == venstreMenyVisning.getBtnUtviklerMineSaker()) {
-
+            sakViewVisning.visPanel(tilordnedeSaker.getTilordnedeSaker());
         }
         if (e.getSource() == venstreMenyVisning.getBtnLederSeAlleSaker()) {
-
+            sakViewVisning.visPanel(alleSakerLeder.getAlleSaker());
         }
 
     }

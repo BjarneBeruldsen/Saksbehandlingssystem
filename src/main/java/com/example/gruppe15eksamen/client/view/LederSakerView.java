@@ -1,55 +1,38 @@
 // Author: Severin Waller Sørensen
 
-/* Denne filen
+/* Denne filen ...
  * 
- */
-
-
-/* --------------------------------------------------------------
- * KILDE: (YouTube: thenewboston)
- *   url: https://www.youtube.com/watch?v=mtdlX2NMy4M 
  * 
- * KOMMENTAR:
- *   Brukte videoen til å lære om TableViews, hjelp med å
- *   skrive pseudokode/struktur og for inspirasjon.
- * 
- * --------------------------------------------------------------
- * NB! UtviklerSakerView.java og LederSakerView.java er begge
- * basert på denne filen, (dvs. bygger indirekte på samme kilde)
- * --------------------------------------------------------------
+ * -- NB! lagde InnsendteSakerView.java først! --
+ * Den er basert på kilder som er linket i den klassen.
+ * Denne filen (LederSakerView.java) og UtviklerSakerView.java
+ * er begge basert på InnsendteSakerView.java.
+ * (dvs. disse to filene er indirekte basert på kildene
+ *  som er oppgitt i InnsendteSakerView.java)
  */
 
 package com.example.gruppe15eksamen.client.view;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import java.time.LocalDateTime;
 
 import com.example.gruppe15eksamen.common.Kategori;
 import com.example.gruppe15eksamen.common.Prioritet;
 import com.example.gruppe15eksamen.common.Sak;
 
-public class InnsendteSakerView {
+public class LederSakerView {
 
     TableView<Sak> saksTabell;
-    VBox innsendteSaker;
+    VBox alleSaker;
 
-    public InnsendteSakerView() {
-    
-        // ID-kolonne
+    public LederSakerView() {
+
+         // ID-kolonne
         TableColumn<Sak, String> idKolonne = new TableColumn<>("ID_");
         idKolonne.setMinWidth(60);
         idKolonne.setCellValueFactory(new PropertyValueFactory<>("sakID"));
@@ -100,11 +83,10 @@ public class InnsendteSakerView {
                                        prioritetKolonne, kategoriKolonne, statusKolonne, 
                                        rapportørKolonne, mottakerKolonne, tidsstempelKolonne);
 
-        innsendteSaker = new VBox();
-        innsendteSaker.getChildren().add(saksTabell);
+        alleSaker = new VBox();
+        alleSaker.getChildren().add(saksTabell);
 
-    }
-
+    }    
 
     // HARDKODET TEMP-liste med saker
     public ObservableList<Sak> getSaker() {
@@ -116,7 +98,7 @@ public class InnsendteSakerView {
         return saker;
     }
 
-    // get-metode for tabell over innsendte saker ("hovedpanel")
-    public Node getInnsendteSaker() { return innsendteSaker; }
-    
+    // get-metode som returnerer tabell/oversikt over alle saker
+    public Node getAlleSaker() { return alleSaker; }
+   
 }
