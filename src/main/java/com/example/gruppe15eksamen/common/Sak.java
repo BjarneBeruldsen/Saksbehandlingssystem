@@ -22,7 +22,7 @@ public class Sak implements Serializable {
 
     //Konstruktør
     public Sak(int sakID, String tittel, String beskrivelse, Prioritet prioritet, Kategori kategori, Status status,
-               String rapportør, String mottaker,  LocalDateTime tidsstempel, LocalDateTime OppdatertTidspunkt)
+               String rapportør, String mottaker,  LocalDateTime tidsstempel, LocalDateTime oppdatertTidspunkt)
     {
         //MÅ LEGGE TIL VALIDERING HER ETTERHVERT
         this.sakID       = sakID;
@@ -82,7 +82,7 @@ public class Sak implements Serializable {
 
     public void setMottaker(String mottaker) { this.mottaker = mottaker; }
 
-    public LocalDateTime getTiddsstempel() { return tidsstempel; }
+    public LocalDateTime getTidsstempel() { return tidsstempel; }
 
     public void setTidsstempel(LocalDateTime tidsstempel) { this.tidsstempel = tidsstempel; }
 

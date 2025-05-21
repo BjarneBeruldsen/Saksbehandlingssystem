@@ -3,10 +3,7 @@ package com.example.gruppe15eksamen.server.dao;
 * gjelder sak-håndtering*/
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +15,34 @@ import com.example.gruppe15eksamen.common.Status;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
 
-//Opprette saker og diverse
+//Opprette metoder for saker og diverse
 public class SakDAO {
 
+    //Metode for å oppdatere status til sak
 
+
+
+
+
+    //metode som tildeler sak til utvikler
+    public static int tildelSak(int sakId, String brukernavn) {
+        String sql = """
+            UPDATE sak
+            SET mottaker = ?
+            WHERE sakID = ?
+            """;
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, brukernavn);
+            ps.setInt(2, sakId);
+            return ps.executeUpdate();
+        } catch (SQLException | IOException e) {
+            System.err.printf("Kunne ikke tildele sak til" + sakId, brukernavn, e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
     //metode for å opprette sak
-
-
-
-    
-//    //metode for å opprette sak
 //    public static void insertStudent(Sak sak) {
 //        String query = """
 //                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
@@ -43,20 +58,74 @@ public class SakDAO {
 //        }
 //
 //    }
-    
+    //metode for å opprette sak
+    public static int insertSak(Sak sak) throws SQLException, IOException{
+        String query = """
+                INSERT INTO sak (tittel, beskrivelse, rapportørBrukerId, prioritetId, statusId,
+                kategoriId, tidsstempel, oppdatertTidspunkt)
+                VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+                """;
+        try(Connection conn = DatabaseUtil.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(query);
 
-    //metode som tildeler sak til utvikler
+            //henter rapportørens id basert på brukernavn
+
+            int rapportørId = BrukerDAO.hentBrukerIdFraNavn(sak.getRapportør());
+
+            pstmt.setString(1, sak.getTittel());
+            pstmt.setString(2, sak.getBeskrivelse());
+            pstmt.setInt(3, rapportørId);
+            pstmt.setInt(4, sak.getPrioritet().getId());
+            pstmt.setInt(5, sak.getStatus().getId());
+            pstmt.setInt(6, sak.getKategori().getId());
+            pstmt.setTimestamp(7, Timestamp.valueOf(sak.getTidsstempel()));
+            pstmt.setTimestamp(8, Timestamp.valueOf(sak.getOppdatertTidspunkt()));
+
+            //antall rader som er oppdatert
+            return pstmt.executeUpdate();
 
 
+        } catch (SQLException | IOException e) {
+           e.printStackTrace();
+           return 0;
+        }
+
+    }
     //metode som henter sak basert på id
+    public List<Sak> hentSaker(int sakID){
+        List<Sak> saker = new ArrayList<>();
 
+        String sql = "SELECT* FROM sak WHERE sakID =?";
 
-    //metode som henter alle saker basert på rolle og bruker-
-    //og legger til i en liste
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            stmt.setInt(1, sakID);
+            ResultSet rs = stmt.executeQuery();
 
+            while (rs.next()) {
+                Sak sak = new Sak();
+                sak.setSakID(rs.getInt("sakID"));
+                sak.setTittel(rs.getString("tittel"));
+                sak.setBeskrivelse(rs.getString("beskrivelse"));
+                sak.setPrioritet(Prioritet.valueOf(rs.getString("prioritet")));
+                sak.setKategori(Kategori.valueOf(rs.getString("kategori")));
+                sak.setStatus(Status.valueOf(rs.getString("status")));
+                sak.setRapportør(rs.getString("rapportør"));
+                sak.setMottaker(rs.getString("mottaker"));
+                sak.setTidsstempel(rs.getTimestamp("opprettet_tidspunkt").toLocalDateTime());
+                sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatert_tidspunkt").toLocalDateTime());
 
+                saker.add(sak);
+            }
 
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+        return saker;
+
+    }
+    //Metode for slett sak
     public void slettSak(int sakID){
 
     String sql = "DELETE FROM sak WHERE sakID = ?";
@@ -64,7 +133,7 @@ public class SakDAO {
     try (Connection conn = DatabaseUtil.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            
+
         stmt.setInt(1, sakID);
         int slettetRader = stmt.executeUpdate();
 
@@ -77,11 +146,11 @@ public class SakDAO {
 
     } catch (SQLException | IOException e) {
         e.printStackTrace();
-    
+
    }
 
     }
-
+    //Metode for søking
     public List<Sak> sokSaker(Soking soking) {
     List<Sak> resultater = new ArrayList<>();
 

@@ -143,7 +143,7 @@ public class TabellerDAO {
               sakId              INT AUTO_INCREMENT PRIMARY KEY,
               tittel             VARCHAR(100) NOT NULL,
               beskrivelse        TEXT,
-              rapportorBrukerId  INT NOT NULL,
+              rapportørBrukerId  INT NOT NULL,
               mottakerBrukerId   INT,
               prioritetId        INT NOT NULL,
               statusId           INT NOT NULL,
@@ -152,7 +152,7 @@ public class TabellerDAO {
               oppdatertTidspunkt DATETIME
                 DEFAULT CURRENT_TIMESTAMP
                 ON UPDATE CURRENT_TIMESTAMP,
-              FOREIGN KEY (rapportorBrukerId) REFERENCES Brukere(brukerId),
+              FOREIGN KEY (rapportørBrukerId) REFERENCES Brukere(brukerId),
               FOREIGN KEY (mottakerBrukerId)  REFERENCES Brukere(brukerId),
               FOREIGN KEY (prioritetId)        REFERENCES Prioritet(prioritetId),
               FOREIGN KEY (statusId)           REFERENCES Status(statusId),

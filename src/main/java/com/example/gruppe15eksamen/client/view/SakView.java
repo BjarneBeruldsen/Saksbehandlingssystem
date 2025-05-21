@@ -30,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
@@ -83,7 +84,7 @@ public class SakView {
         hjemPanel.setCenter(lagLoggInnPanel());
         hjemPanel.setStyle("-fx-background-color:rgb(199, 199, 199)");
         setLblOverskrift("MAIN PANEL");
-        setLblStatus("TBC");
+        setLblStatus("");
         return hjemPanel;
     }
 
@@ -217,5 +218,24 @@ public class SakView {
     // setMetode for status
     public void setLblStatus(String tekst) { lblStatus.setText(tekst); }
 
+    //metode for å sette feilmelding
+    public void setFeilmelding(String feilmelding) {
+        lblStatus.setTextFill(Color.RED);
+        lblStatus.setText(feilmelding);
+    }
+    //metode for å sette godkjenningsmelding
+    public void setGodkjenning(String melding) {
+        lblStatus.setTextFill(Color.WHITE);
+        lblStatus.setText(melding);
+    }
 
+    //metode for å tømme loggen
+    public void tømStatusMelding() {
+        lblStatus.setText("");
+        lblStatus.setTextFill(Color.WHITE);
+    }
+
+    public Label getLblStatus() {
+        return lblStatus;
+    }
 }
