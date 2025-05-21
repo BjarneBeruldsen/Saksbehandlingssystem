@@ -149,13 +149,9 @@ public class Sak implements Serializable {
 
     /**
      * Setter rapportør for saken
-     * Validering. Rapportør kan ikke være tom
      */
     public void setRapportør(String rapportør) {
-        if (rapportør == null || rapportør.trim().isEmpty()) {
-            throw new IllegalArgumentException("Rapportør kan ikke være tom.");
-        }
-        this.rapportør = rapportør.trim();
+        this.rapportør = rapportør;
     }
 
     /**
