@@ -13,11 +13,15 @@ public class Bruker implements Serializable {
     public Bruker(int brukerID, String brukernavn, Rolle rolle) {
         setBrukernavn(brukernavn); //LEGG TIL VALIDERING
         setRolle(rolle);
-        this.brukerID = brukerID;
+        setBrukerID(brukerID);
     }
 
     public void setBrukernavn(String brukernavn) {
         this.brukernavn = brukernavn;
+    }
+
+    public void setBrukerID(int brukerID) {
+        this.brukerID = brukerID;
     }
 
     public void setRolle(Rolle rolle) {

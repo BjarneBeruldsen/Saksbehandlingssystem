@@ -43,6 +43,7 @@ public class SakController {
     private BrukerDAO brukerDAO = new BrukerDAO();
     private ArrayList<Bruker> alleBrukere;  //arraylist som kan legges til i rullgardinliste
     private ArrayList<String> alleUtviklere; //arrayList for brukernavn til rullgardinliste i Leder
+    private ArrayList<Sak> alleSaker; //arrayList som tar bare på alle saker
 
     private ArrayList<Sak> tildelteSaker; //skal inneholde alle saker som er tildelt enn utvikler
 
@@ -57,6 +58,7 @@ public class SakController {
 
     public SakController(Stage stage) {
         hentBrukere();
+        hentSaker(); 
         //Kaller opprettsak etter brukere er hentet (Dette er test og den skal egt kalles når-
         //tester på send inn knapp)
         if(alleBrukere != null && !alleBrukere.isEmpty() ) {
@@ -77,6 +79,12 @@ public class SakController {
 
         //BARE EN TEST FOR Å SJEKKE AT alleBrukere har hentet brukere under
         leggTilLyttere();
+    }
+
+    //metode som henter alle saker
+    private void hentSaker() {
+        alleSaker = nettverkKlient.hentSaker();
+        System.out.println("Kunne ikke koble til server");
     }
 
     //metode som henter alle brukere

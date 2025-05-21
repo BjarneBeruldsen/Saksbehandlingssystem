@@ -138,11 +138,28 @@ public class NetworkClient {
             ut.writeObject(forespørsel);
             ut.flush();
 
-            //henter tabell
-            ArrayList<String> utviklere = new ArrayList<>();
-
             //returnere brukere til SakController
             return (ArrayList<String>) inn.readObject();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<Sak> hentSaker() {
+        SocketRequest forespørsel = new SocketRequest("HENT_SAKER");
+        //Opprretter et endepunkt for kommunikasjon med server
+        try (Socket socket = new Socket("localhost", PORT);
+             ObjectOutputStream ut = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+        ) {
+            //skriver forespørsel til server
+            ut.writeObject(forespørsel);
+            ut.flush();
+
+            //returnere brukere til SakController
+            return (ArrayList<Sak>) inn.readObject();
         }
         catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

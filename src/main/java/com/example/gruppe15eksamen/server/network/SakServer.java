@@ -97,8 +97,16 @@ public class SakServer {
                 case "HENT_UTVIKLERE" :
                     //henter utviklere via DAO
                     ArrayList<String> utviklere = BrukerDAO.hentAlleUtviklere();
-                    //sender melding til klienten
+                    //sender utviklere til klienten
                     utClient.writeObject(utviklere);
+                    utClient.flush();
+                    break;
+
+                case "HENT_SAKER" :
+                    //henter alle saker via DAO
+                    ArrayList<Sak> saker = SakDAO.hentAlleSaker();
+                    //sender alle saker til klienten
+                    utClient.writeObject(saker);
                     utClient.flush();
                     break;
 
@@ -129,7 +137,8 @@ public class SakServer {
 
                     System.out.println("BrukerId:" +forespørsel.getBrukerID());
 
-                    utClient.writeObject(new SocketRespons("Hentet tildelte saker", tildelteSaker, true));
+                    utClient.writeObject(new SocketRespons("Hentet tildelte saker",
+                            tildelteSaker, true));
 
                 default : utClient.writeObject(new SocketRespons(false,
                         "finner ikke handling" + handling));
