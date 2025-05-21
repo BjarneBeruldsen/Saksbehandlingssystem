@@ -16,12 +16,14 @@ package com.example.gruppe15eksamen.client.view;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -37,9 +39,12 @@ public class UtviklerSakerView {
     Label lblSakIdOverskrift;
     Label lblSakIdValg;
     ComboBox<Status> status;
+    TextField searchField;
+    Button searchBtn;
     Button btnSetStatus;
     VBox tilordnedeSaker;
     Sak valgtSak;
+    GridPane searchPane;
     GridPane statusPane;
 
     public UtviklerSakerView() {
@@ -101,6 +106,15 @@ public class UtviklerSakerView {
                                        rapportørKolonne, mottakerKolonne, tidsstempelKolonne,
                                        tidsEndringKolonne);
 
+        // Panel som inneholder nødvendige element for å søke
+        searchPane = new GridPane();
+        searchField = new TextField();
+        searchField.setPromptText("oppgi informasjon ");
+        searchBtn = new Button("Søk");
+        searchPane.add(searchField, 1, 0);
+        searchPane.add(searchBtn, 2, 0);
+        searchPane.setAlignment(Pos.CENTER_RIGHT);
+
         // Panel som inneholder nødvendig element for å endre Status til sak
         statusPane = new GridPane();
         lblSakIdOverskrift = new Label("Sak: ");
@@ -125,7 +139,7 @@ public class UtviklerSakerView {
         });
 
         tilordnedeSaker = new VBox();
-        tilordnedeSaker.getChildren().addAll(saksTabell, statusPane);
+        tilordnedeSaker.getChildren().addAll(searchPane, saksTabell, statusPane);
     }
 
     // HARDKODET TEMP-liste med saker
