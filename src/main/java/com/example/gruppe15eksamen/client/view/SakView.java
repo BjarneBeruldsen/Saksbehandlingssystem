@@ -1,3 +1,4 @@
+// Author: Severin Waller Sørensen
 
 /*Inneholder UI/GUI i javax for visning av brukergrensesnitt
  * for de ulike brukerne.. En metode får egenspesifiserte GUI for
@@ -16,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
@@ -52,6 +54,8 @@ public class SakView {
         hjemPanel = new BorderPane();
         hjemPanel.setCenter(lagLoggInnPanel());
         hjemPanel.setStyle("-fx-background-color:rgb(207, 18, 18)");
+        setLblOverskrift("MAIN PANEL");
+        setLblStatus("TBC");
         return hjemPanel;
     }
 
@@ -120,7 +124,15 @@ public class SakView {
         return lagHjemPanel();
     }
 
+    // metode for å vise VenstreMeny
+    public void visVenstreMeny(VBox venstreMeny) {
+        hovedPanel.setLeft(venstreMeny);
+    }
 
+    // metode for å skjule VenstreMeny (f.eks. bruker trykker på "hjem")
+    public void skjulVenstreMeny() {
+        hovedPanel.setLeft(null);
+    }
 
 
 

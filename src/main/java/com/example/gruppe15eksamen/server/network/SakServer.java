@@ -1,3 +1,5 @@
+// Author: Severin Waller Sørensen
+
 package com.example.gruppe15eksamen.server.network;
 
 import com.example.gruppe15eksamen.common.Bruker;

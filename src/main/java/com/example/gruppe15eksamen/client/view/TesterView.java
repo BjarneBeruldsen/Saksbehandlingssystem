@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 
 import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
 import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_HØYDE;
+import com.example.gruppe15eksamen.client.view.SakView;
 import com.example.gruppe15eksamen.common.Bruker;
 
 public class TesterView {
@@ -30,7 +31,6 @@ public class TesterView {
     private Node testerPanel() {
         mainPanel = new BorderPane();
         mainPanel.setStyle("-fx-background-color:rgb(182, 18, 207)");;
-        
         return mainPanel;
     }
 

@@ -1,3 +1,4 @@
+// Authors: Bjarne Beruldsen, Laurent Zogaj & Severin Waller Sørensen
 
 /* Denne filen ...
  * 
@@ -33,7 +34,7 @@ import java.sql.Connection;
             Label statusLabel = new Label(tekst);
             Scene sceneDB = new Scene(statusLabel, 300, 100);
 
-            
+
             // Sett scene, tittel og show()
             stage.setScene(sakController.getStartScene());
             stage.setTitle("Saksbehandling");
