@@ -2,7 +2,10 @@ package com.example.gruppe15eksamen.server.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class DatabaseUtil {
@@ -18,13 +21,13 @@ public class DatabaseUtil {
         }
 
         //Henter verdier fra properties
-        String baseUrl  = props.getProperty("db.url");
+        String url  = props.getProperty("db.url");
         String user     = props.getProperty("db.username");
         String password = props.getProperty("db.password");
         String dbName   = props.getProperty("db.name");
 
         //Oppretter database hvis den ikke finnes
-        try (Connection conn = DriverManager.getConnection(baseUrl, user, password);
+        try (Connection conn = DriverManager.getConnection(url, user, password);
              Statement stmt     = conn.createStatement()) {
             stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + dbName);
         } catch (SQLException e) {
@@ -32,7 +35,7 @@ public class DatabaseUtil {
         }
         //Oppkobling mot databasen
         try {
-            return DriverManager.getConnection(baseUrl + dbName, user, password);
+            return DriverManager.getConnection(url + dbName, user, password);
         } catch (SQLException e) {
             throw new SQLException("Kunne ikke koble til database '" + dbName + "'", e);
         }

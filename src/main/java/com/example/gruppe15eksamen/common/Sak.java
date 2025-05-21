@@ -15,15 +15,16 @@ public class Sak implements Serializable {
     private Status status;
     private String rapportør;
     private String mottaker;
-    private LocalDateTime tidsstempel; //Bjarne endret til localdatetime (usikker på om det er riktig)
+    private LocalDateTime tidsstempel;
+    private LocalDateTime oppdatertTidspunkt;
 
-    //Deserialisering (standardkonstruktør)
-    public Sak() { }
+
 
     //Konstruktør
     public Sak(int sakID, String tittel, String beskrivelse, Prioritet prioritet, Kategori kategori, Status status,
-               String rapportør, String mottaker,  LocalDateTime tidsstempel)
+               String rapportør, String mottaker,  LocalDateTime tidsstempel, LocalDateTime OppdatertTidspunkt)
     {
+        //MÅ LEGGE TIL VALIDERING HER ETTERHVERT
         this.sakID       = sakID;
         this.tittel      = tittel;
         this.beskrivelse = beskrivelse;
@@ -33,6 +34,19 @@ public class Sak implements Serializable {
         this.rapportør   = rapportør;
         this.mottaker    = mottaker;
         this.tidsstempel = tidsstempel;
+        this.oppdatertTidspunkt = oppdatertTidspunkt;
+    }
+
+    //Konstruktør for tester som oppretter sak
+    public Sak(String tittel, String beskrivelse, Prioritet prioritet,
+               Kategori kategori, String rapportør) {
+        this(0, tittel, beskrivelse, prioritet, kategori, Status.INNSENDT,
+                rapportør, "Ikke satt", LocalDateTime.now(), LocalDateTime.now());
+
+    }
+
+    public Sak() {
+
     }
 
     //Gettere og settere
@@ -71,4 +85,24 @@ public class Sak implements Serializable {
     public LocalDateTime getTiddsstempel() { return tidsstempel; }
 
     public void setTidsstempel(LocalDateTime tidsstempel) { this.tidsstempel = tidsstempel; }
+
+    public LocalDateTime getOppdatertTidspunkt() { return oppdatertTidspunkt; }
+
+    public void setOppdatertTidspunkt(LocalDateTime oppdatertTidspunkt) { this.oppdatertTidspunkt = oppdatertTidspunkt; }
+
+    @Override
+    public String toString() {
+        return "Sak{" +
+                "sakID=" + sakID +
+                ", tittel='" + tittel + '\'' +
+                ", beskrivelse='" + beskrivelse + '\'' +
+                ", prioritet=" + prioritet +
+                ", kategori=" + kategori +
+                ", status=" + status +
+                ", rapportør='" + rapportør + '\'' +
+                ", mottaker='" + mottaker + '\'' +
+                ", tidsstempel=" + tidsstempel +
+                ", oppdatertTidspunkt=" + oppdatertTidspunkt +
+                '}';
+    }
 }

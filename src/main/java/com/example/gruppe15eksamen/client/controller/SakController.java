@@ -9,6 +9,7 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import java.util.ArrayList;
 
+import com.example.gruppe15eksamen.common.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -42,6 +43,8 @@ public class SakController {
     private BrukerDAO brukerDAO = new BrukerDAO();
     private ArrayList<Bruker> alleBrukere;  //arraylist som kan legges til i rullgardinliste
 
+    private ArrayList<Sak> tildelteSaker; //skal inneholde alle saker som er tildelt enn utvikler
+
     private BorderPane hovedPanel;
     private Stage hovedStage;
 
@@ -52,13 +55,26 @@ public class SakController {
 
 
     public SakController(Stage stage) {
-        kobleTilServer();
+        hentBrukere();
+        //Kaller opprettsak etter brukere er hentet (Dette er test og den skal egt kalles når-
+        //tester på send inn knapp)
+        if(alleBrukere != null && !alleBrukere.isEmpty() ) {
+           opprettSak();
+           tildelSak();
+           tildelteSaker = hentTilDelteSaker();
+           //skriver ut tildelte saker for å teste FJERN
+            for(Sak sak: tildelteSaker) {
+                System.out.println(sak.toString());
+            }
+        }
+
         this.hovedStage = stage;
         this.hovedPanel = sakViewVisning.getHovedPanel();
 
         if (alleBrukere != null) {
             sakViewVisning.setBrukerListe(alleBrukere);
         }
+
         //BARE EN TEST FOR Å SJEKKE AT alleBrukere har hentet brukere under
         skrivUtBrukere();
         leggTilLyttere();
@@ -75,9 +91,9 @@ public class SakController {
         }
     }
 
-    private void kobleTilServer() {
+    private void hentBrukere() {
         try {
-            alleBrukere = nettverkKlient.kobleTilOgHentBrukere(8000);
+            alleBrukere = nettverkKlient.hentBrukere();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Kunne ikke koble til server");
         }
@@ -108,17 +124,17 @@ public class SakController {
         }
     }
 
-    
+
      /* // lagTabeller
     private void lagTabeller() {
         BrukerDAO.lagBrukereTabell();
-    } 
+    }
     */
 
     // variabel som tar vare på rollen til valgt bruker.
     // Brukes til å endre/oppdatere view
     String rolleView = "";
-    
+
     // BehandleKlikk
     public void behandleKlikk(ActionEvent e) {
 
@@ -188,4 +204,46 @@ public class SakController {
         return sakViewVisning;
     }
 
+    //Metode for å opprette sak(Tester) og sende til db
+    //Kalles når tester trykker "opprett sak knapp"
+    public void opprettSak() {
+        //Harkoder data som egt. hentes fra textfelt her
+        Bruker bruker = alleBrukere.get(0); //henter random fra brukerliste
+        System.out.println("Bruker: " + bruker.toString() + "er hentet");
+        String tittel = "SakTittel";
+        String beskrivelse = "Dette er en beskrivelse";
+        Prioritet prioritet = Prioritet.HØY;
+        Kategori kategori = Kategori.BACKEND_FEIL;
+        String rapportør = bruker.getBrukernavn();
+
+        Sak sak = new Sak(tittel, beskrivelse, prioritet, kategori, rapportør);
+
+        SocketRespons respons = NetworkClient.sendSak(sak);
+        System.out.println("respons hentet: " + respons);
+
+        if(respons.isGodkjent()) {
+            System.out.println("Sak er lagt til");
+        }
+        else {
+            System.out.println("Innsetting av sak feilet" + respons.getStatus());
+        }
+    }
+
+    //metode der ledere kan legge til utvikler som mottaker
+    public void tildelSak() {
+        //Harkoder som egt hentes fra tekstfelt her (sakID og BrukerID) FJERN
+        int brukerID = 1;
+        int sakID = 1;
+
+        SocketRespons respons = nettverkKlient.sendSakMottaker(brukerID, sakID);
+    }
+
+    public ArrayList<Sak> hentTilDelteSaker() {
+        //harkoder data som må egt hentes fra tekstfelt FJERN
+        int brukerID = 1;
+
+        SocketRespons respons = nettverkKlient.hentTildelteSaker(brukerID);
+
+        return respons.getSaker();
+    }
 }
