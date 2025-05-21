@@ -103,9 +103,9 @@ public class InnsendteSakerView {
     // HARDKODET TEMP-liste med saker
     public ObservableList<Sak> getSaker() {
         ObservableList<Sak> saker = FXCollections.observableArrayList();
-        saker.add(new Sak (1, "sak1", "beskrivelse1", Prioritet.HØY, Kategori.UI_FEIL, null, null, null, null));
-        saker.add(new Sak (2, "sak2", "beskrivelse2", Prioritet.HØY, Kategori.UI_FEIL, null, null, null, null));
-        saker.add(new Sak (3, "sak3", "beskrivelse3", Prioritet.HØY, Kategori.UI_FEIL, null, null, null, null));
+        saker.add(new Sak("sak1", "Beskrivelse1", Prioritet.HØY, Kategori.UI_FEIL,  ""));
+        saker.add(new Sak ("sak2", "beskrivelse2", Prioritet.HØY, Kategori.UI_FEIL, ""));
+        saker.add(new Sak ("sak3", "beskrivelse3", Prioritet.HØY, Kategori.UI_FEIL, ""));
         
         return saker;
     }
