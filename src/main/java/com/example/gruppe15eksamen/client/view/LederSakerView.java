@@ -138,9 +138,9 @@ public class LederSakerView {
         });
 
         alleSaker = new VBox();
-        alleSaker.getChildren().addAll(saksTabell, cbUtviklere, btLeggTilMottaker);
         alleSaker.setAlignment(Pos.CENTER);
-        alleSaker.getChildren().addAll(searchPane, saksTabell, velgUtviklerPane);
+        alleSaker.getChildren().addAll(searchPane, saksTabell, velgUtviklerPane,
+                btLeggTilMottaker, cbUtviklere);
     }
 
     // HARDKODET TEMP-liste med saker
