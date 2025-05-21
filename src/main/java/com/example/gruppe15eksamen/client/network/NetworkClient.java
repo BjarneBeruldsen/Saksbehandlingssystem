@@ -126,4 +126,27 @@ public class NetworkClient {
             }
         }
 
+    public ArrayList<String> hentUtviklere() {
+        SocketRequest forespørsel = new SocketRequest("HENT_UTVIKLERE");
+
+        //Opprretter et endepunkt for kommunikasjon med server
+        try (Socket socket = new Socket("localhost", PORT);
+             ObjectOutputStream ut = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+        ) {
+            //skriver forespørsel til server
+            ut.writeObject(forespørsel);
+            ut.flush();
+
+            //henter tabell
+            ArrayList<String> utviklere = new ArrayList<>();
+
+            //returnere brukere til SakController
+            return (ArrayList<String>) inn.readObject();
+        }
+        catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

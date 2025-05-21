@@ -2,7 +2,6 @@ package com.example.gruppe15eksamen.common;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SocketRespons implements Serializable {
     private boolean godkjent;
@@ -39,6 +38,7 @@ public class SocketRespons implements Serializable {
     public ArrayList<Sak> getSaker() {
         return saker;
     }
+
 
     @Override
     public String toString() {

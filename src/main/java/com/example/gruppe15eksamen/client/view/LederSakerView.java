@@ -15,7 +15,9 @@ package com.example.gruppe15eksamen.client.view;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -29,6 +31,8 @@ public class LederSakerView {
 
     TableView<Sak> saksTabell;
     VBox alleSaker;
+    //combobox for valg av mottaker med utviklers brukernavn
+    ComboBox<String> cbUtviklere = new ComboBox<>();
 
     public LederSakerView() {
 
@@ -84,8 +88,8 @@ public class LederSakerView {
                                        rapportørKolonne, mottakerKolonne, tidsstempelKolonne);
 
         alleSaker = new VBox();
-        alleSaker.getChildren().add(saksTabell);
-
+        alleSaker.getChildren().addAll(saksTabell, cbUtviklere);
+        alleSaker.setAlignment(Pos.CENTER);
     }    
 
     // HARDKODET TEMP-liste med saker
@@ -100,5 +104,9 @@ public class LederSakerView {
 
     // get-metode som returnerer tabell/oversikt over alle saker
     public Node getAlleSaker() { return alleSaker; }
-   
+
+    //get metode for å hente utvikler combobox
+    public ComboBox<String> getCbUtviklere() {
+        return cbUtviklere;
+    }
 }

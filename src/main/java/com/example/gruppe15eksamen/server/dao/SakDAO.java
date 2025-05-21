@@ -41,26 +41,11 @@ public class SakDAO {
             return 0;
         }
     }
-    //metode for å opprette sak
-//    public static void insertStudent(Sak sak) {
-//        String query = """
-//                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
-//                kategoriId, tidsstempel, oppdatertTidspunkt)
-//                VALUES(?, ?, ?, ?, ?, ?, ?, ?)
-//                """;
-//        try(Connection conn = DatabaseUtil.getConnection()) {
-//            PreparedStatement pstmt = conn.prepareStatement(query);
-//            pstmt.setString(1, sak.getTittel());
-//            pstmt.setString(2, sak.getBeskrivelse());
-//        } catch (SQLException | IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+
     //metode for å opprette sak
     public static int insertSak(Sak sak) throws SQLException, IOException{
         String query = """
-                INSERT INTO sak (tittel, beskrivelse, rapportørBrukerId, prioritetId, statusId,
+                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
                 kategoriId, tidsstempel, oppdatertTidspunkt)
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?)
                 """;
@@ -129,26 +114,23 @@ public class SakDAO {
 
     String sql = "DELETE FROM sak WHERE sakID = ?";
 
-    try (Connection conn = DatabaseUtil.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, sakID);
+            int slettetRader = stmt.executeUpdate();
 
-
-        stmt.setInt(1, sakID);
-        int slettetRader = stmt.executeUpdate();
-
-        if (slettetRader > 0) {
-            System.out.println("Sak med ID " + sakID + " ble slettet.");
-        } else {
-            System.out.println("Ingen sak ble slettet med ID " + sakID);
-
+            if (slettetRader > 0) {
+                System.out.println("Sak med ID " + sakID + " ble slettet.");
+            } else {
+                System.out.println("Ingen sak ble slettet med ID " + sakID);
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
-
-    } catch (SQLException | IOException e) {
-        e.printStackTrace();
-
-   }
-
     }
+
+
+
     //Metode for søking
     public List<Sak> sokSaker(Soking soking) {
     List<Sak> resultater = new ArrayList<>();

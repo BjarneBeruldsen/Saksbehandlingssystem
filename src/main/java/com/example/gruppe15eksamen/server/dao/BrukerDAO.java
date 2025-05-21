@@ -84,4 +84,28 @@ public class BrukerDAO {
         }
         return null;
     }
+
+    //metode som henter ut alle utviklere
+    public static ArrayList<String> hentAlleUtviklere() {
+        String query = """
+            SELECT b.navn 
+            FROM Brukere b
+            JOIN rolle r ON b.rolleId = r.rolleId
+            WHERE r.rolleNavn = 'UTVIKLER'
+            """;
+        ArrayList<String> alleUtviklere = new ArrayList<>();
+
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                alleUtviklere.add(rs.getString("navn"));
+            }
+        } catch (SQLException | IOException e) {
+            System.err.println("Feil ved henting av brukere: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return alleUtviklere;
+    }
 }

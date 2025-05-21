@@ -45,6 +45,7 @@ public class SakController {
     private Sak sak;
     private BrukerDAO brukerDAO = new BrukerDAO();
     private ArrayList<Bruker> alleBrukere;  //arraylist som kan legges til i rullgardinliste
+    private ArrayList<String> alleUtviklere; //arrayList for brukernavn til rullgardinliste i Leder
 
     private ArrayList<Sak> tildelteSaker; //skal inneholde alle saker som er tildelt enn utvikler
 
@@ -78,21 +79,10 @@ public class SakController {
         }
 
         //BARE EN TEST FOR Å SJEKKE AT alleBrukere har hentet brukere under
-        skrivUtBrukere();
         leggTilLyttere();
     }
 
-    private void skrivUtBrukere() {
-        if(!(alleBrukere == null)) {
-            System.out.println("Alle brukere hentet fra datbasen");
-            for (Bruker b : alleBrukere) {
-                System.out.println(b.toString());
-            }
-        } else {
-            System.out.println("Du må starte serveren før Main for å hente brukere");
-        }
-    }
-
+    //metode som henter alle brukere
     private void hentBrukere() {
         try {
             alleBrukere = nettverkKlient.hentBrukere();
@@ -122,11 +112,10 @@ public class SakController {
         if (venstreMenyVisning.getBtnUtviklerMineSaker() != null) {
             venstreMenyVisning.getBtnUtviklerMineSaker().setOnAction(e -> behandleKlikk(e));
         }
-        if (venstreMenyVisning.getBtnLederSeAlleSaker() != null ) {
+        if (venstreMenyVisning.getBtnLederSeAlleSaker() != null) {
             venstreMenyVisning.getBtnLederSeAlleSaker().setOnAction(e -> behandleKlikk(e));
         }
     }
-
 
      /* // lagTabeller
     private void lagTabeller() {
@@ -198,12 +187,22 @@ public class SakController {
             sakViewVisning.visPanel(tilordnedeSaker.getTilordnedeSaker());
         }
         if (e.getSource() == venstreMenyVisning.getBtnLederSeAlleSaker()) {
+            //Kall på hentUtviklere her
+            hentUtviklere();
+            //setter nedtrekksliste til å ha brukernavn til utviklere
+            alleSakerLeder.getCbUtviklere().getItems().clear();
+            alleSakerLeder.getCbUtviklere().getItems().addAll(alleUtviklere);
+            alleSakerLeder.getCbUtviklere().setPromptText("Velg");
             sakViewVisning.visPanel(alleSakerLeder.getAlleSaker());
         }
         if(e.getSource() == saksSkjema.getBtnOpprett()) {
             opprettSak();
         }
 
+    }
+    //metode som henter alle utviklere
+    private void hentUtviklere() {
+        alleUtviklere = nettverkKlient.hentUtviklere();
     }
  
     // get-metode for å hente hovedPanel

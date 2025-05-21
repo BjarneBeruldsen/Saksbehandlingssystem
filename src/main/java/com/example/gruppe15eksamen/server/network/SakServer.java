@@ -94,6 +94,13 @@ public class SakServer {
                         utClient.writeObject(new SocketRespons(false, "Saken kunne ikke lagres i databasen"));
                     }
                     break;
+                case "HENT_UTVIKLERE" :
+                    //henter utviklere via DAO
+                    ArrayList<String> utviklere = BrukerDAO.hentAlleUtviklere();
+                    //sender melding til klienten
+                    utClient.writeObject(utviklere);
+                    utClient.flush();
+                    break;
 
                 case "ADD_MOTTAKER":
                     //kaller på DAO for å legge til sak basert på sakID og brukerID
