@@ -1,15 +1,11 @@
-// Authors: Bjarne Beruldsen, Laurent Zogaj & Severin Waller Sørensen
-
-/* Denne filen ...
+/* Authors: Bjarne Beruldsen, Laurent Zogaj, Severin Waller Sørensen & Abdinasir Ali
  * 
  */
 
 package com.example.gruppe15eksamen.client;
 
-import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
-import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_HØYDE;
-
 import com.example.gruppe15eksamen.client.controller.SakController;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

@@ -1,3 +1,6 @@
+/**
+ * Author: Laurent Zogaj
+ */
 package com.example.gruppe15eksamen.server.dao;
 
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;

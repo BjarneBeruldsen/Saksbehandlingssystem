@@ -1,11 +1,14 @@
+/**
+ * Author: Laurent Zogaj, Bjarne Beruldsen & Abdinasir Ali
+ */
 package com.example.gruppe15eksamen.common;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Sak implements Serializable {
-    //Viktig siden vi bruker sockets
     private static final long serialVersionUID = 1L;
+
     //Instansvariabler
     protected int sakID;
     private String tittel;
@@ -18,9 +21,9 @@ public class Sak implements Serializable {
     private LocalDateTime tidsstempel;
     private LocalDateTime oppdatertTidspunkt;
 
-
-
-    //Konstruktør
+/**
+ * Konstruktør for å lage en komplett sak
+ */
     public Sak(int sakID, String tittel, String beskrivelse, Prioritet prioritet, Kategori kategori, Status status,
                String rapportør, String mottaker, LocalDateTime tidsstempel, LocalDateTime oppdatertTidspunkt)
     {
@@ -36,59 +39,154 @@ public class Sak implements Serializable {
         setOppdatertTidspunkt(oppdatertTidspunkt);
     }
 
-    //Konstruktør for tester som oppretter sak
+    /**
+     * Konstruktør for å lage en ny sak
+     */
     public Sak(String tittel, String beskrivelse, Prioritet prioritet,
                Kategori kategori, String rapportør) {
         this(0, tittel, beskrivelse, prioritet, kategori, Status.INNSENDT,
                 rapportør, "Ikke satt", LocalDateTime.now(), LocalDateTime.now());
-
     }
-
     public Sak() {
-
     }
 
-    //Gettere og settere
+    /**
+     * Henter saks-ID.
+     */
     public int getSakID() { return sakID; }
 
-    public void setSakID(int sakID) { this.sakID = sakID; }
+    /**
+     * Setter sakId, samtidig som vi sjekker at den ikke er negativ
+     */
+    public void setSakID(int sakID) {
+        if (sakID < 0) {
+            throw new IllegalArgumentException("SakID kan ikke være negativ.");
+        }
+        this.sakID = sakID;
+    }
 
+    /**
+     * Henter tittel for saken
+     */
     public String getTittel() { return tittel; }
 
-    public void setTittel(String tittel) { this.tittel = tittel; }
+    /**
+     * Setter tittel for saken
+     * Samtidig som vi validerer for å sikre data
+     */
+    public void setTittel(String tittel) {
+        if (tittel == null || tittel.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tittel kan ikke være tom.");
+        }
+        if (tittel.length() > 100) {
+            throw new IllegalArgumentException("Tittel kan ikke være lengre enn 100 tegn.");
+        }
+        this.tittel = tittel.trim();
+    }
 
+    /**
+     * Henter beskrivelse
+     */
     public String getBeskrivelse() { return beskrivelse; }
 
-    public void setBeskrivelse(String beskrivelse) { this.beskrivelse = beskrivelse; }
+    /**
+     * Setter beskrivelse for saken
+     * Samtidig som vi validerer for å sikre data
+     */
+    public void setBeskrivelse(String beskrivelse) {
+        if (beskrivelse == null || beskrivelse.trim().isEmpty()) {
+            throw new IllegalArgumentException("Beskrivelse kan ikke være tom.");
+        }
+        this.beskrivelse = beskrivelse.trim();
+    }
 
+    /**
+     * Henter prioritet i saken
+     */
     public Prioritet getPrioritet() { return prioritet; }
 
-    public void setPrioritet(Prioritet prioritet) { this.prioritet = prioritet; }
+    /**
+     * Setter prioritet for saken
+     * Samtidig som vi validerer for å sikre data
+     */
+    public void setPrioritet(Prioritet prioritet) {
+        if (prioritet == null) {
+            throw new IllegalArgumentException("Prioritet må settes.");
+        }
+        this.prioritet = prioritet;
+    }
 
+    /**
+     * Henter Kategori for saken
+     */
     public Kategori getKategori() { return kategori; }
 
+    /**
+     * Setter kategori for saken
+     */
     public void setKategori(Kategori kategori) { this.kategori = kategori; }
 
+    /**
+     * Henter status for saken
+     */
     public Status getStatus() { return status; }
 
-    public void setStatus(Status status) { this.status = status; }
+    /**
+     * Setter status for saken
+     * Validering, status kan ikke være null.
+     */
+    public void setStatus(Status status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status kan ikke være null.");
+        }
+        this.status = status;
+    }
 
+    /**
+     * Henter rapportør
+     */
     public String getRapportør() { return rapportør; }
 
-    public void setRapportør(String rapportør) { this.rapportør = rapportør; }
+    /**
+     * Setter rapportør for saken
+     */
+    public void setRapportør(String rapportør) {
+        this.rapportør = rapportør;
+    }
 
+    /**
+     * Henter mottaker for saken.
+     */
     public String getMottaker() { return mottaker; }
 
+    /**
+     * Setter mottaker
+     */
     public void setMottaker(String mottaker) { this.mottaker = mottaker; }
 
+    /**
+     * Henter dato og tid for sak
+     */
     public LocalDateTime getTidsstempel() { return tidsstempel; }
 
+    /**
+     * Setter dato og tid for sak
+     */
     public void setTidsstempel(LocalDateTime tidsstempel) { this.tidsstempel = tidsstempel; }
 
+    /**
+     * Henter oppdatert dato og tid
+     */
     public LocalDateTime getOppdatertTidspunkt() { return oppdatertTidspunkt; }
 
+    /**
+     * Setter oppdatert dato og tid
+     */
     public void setOppdatertTidspunkt(LocalDateTime oppdatertTidspunkt) { this.oppdatertTidspunkt = oppdatertTidspunkt; }
 
+    /**
+     * toString metode
+     */
     @Override
     public String toString() {
         return "Sak{" +

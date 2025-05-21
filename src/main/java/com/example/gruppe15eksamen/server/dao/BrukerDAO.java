@@ -1,3 +1,6 @@
+/**
+ * Author: Laurent Zogaj og Bjarne Beruldsen
+ */
 package com.example.gruppe15eksamen.server.dao;
 
 import java.io.IOException;
