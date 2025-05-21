@@ -3,7 +3,11 @@ package com.example.gruppe15eksamen.server.dao;
 * gjelder sak-håndtering*/
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +22,13 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 //Opprette metoder for saker og diverse
 public class SakDAO {
 
-    //Metode for å oppdatere status til sak
+   //Metode for å oppdatere status til sak
 
 
 
 
 
-    //metode som tildeler sak til utvikler
+        //metode som tildeler sak til utvikler
     public static int tildelSak(int sakId, String brukernavn) {
         String sql = """
             UPDATE sak
@@ -79,7 +83,21 @@ public class SakDAO {
     public List<Sak> hentSaker(int sakID){
         List<Sak> saker = new ArrayList<>();
 
-        String sql = "SELECT* FROM sak WHERE sakID =?";
+           String sql = """
+        SELECT s.*, 
+            br.navn AS rapportørNavn, 
+            mo.navn AS mottakerNavn,
+            p.prioritetNavn, 
+            k.kategoriNavn, 
+            st.statusNavn
+        FROM sak s
+        INNER JOIN brukere br ON s.rapportørBrukerId = br.brukerId
+        INNER JOIN brukere mo ON s.mottakerBrukerId = mo.brukerId
+        INNER JOIN prioritet p ON s.prioritetId = p.prioritetId
+        INNER JOIN kategori k ON s.kategoriId = k.kategoriId
+        INNER JOIN status st ON s.statusId = st.statusId
+        WHERE s.sakID = ?
+        """;
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -97,8 +115,6 @@ public class SakDAO {
                 sak.setStatus(Status.valueOf(rs.getString("status")));
                 sak.setRapportør(rs.getString("rapportør"));
                 sak.setMottaker(rs.getString("mottaker"));
-                sak.setTidsstempel(rs.getTimestamp("opprettet_tidspunkt").toLocalDateTime());
-                sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatert_tidspunkt").toLocalDateTime());
 
                 saker.add(sak);
             }
@@ -228,7 +244,7 @@ public class SakDAO {
     }
    
     if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
-        sql.append(" AND rapportør LIKE ?");
+        sql.append(" AND rapportorBrukerid IN (SELECT brukerid FROM brukere WHERE navn LIKE ?)");
         parametere.add("%" + soking.getReporterNavn() + "%");
     }
 
