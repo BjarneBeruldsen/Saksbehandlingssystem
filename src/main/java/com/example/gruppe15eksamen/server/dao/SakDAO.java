@@ -22,6 +22,11 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 public class SakDAO {
 
 
+    //metode for å opprette sak
+
+
+
+    
 //    //metode for å opprette sak
 //    public static void insertStudent(Sak sak) {
 //        String query = """
@@ -51,9 +56,32 @@ public class SakDAO {
 
 
 
-    //metode som sletter en sak basert på sakId
 
+    public Sak slettSak(Sak sak){
 
+    String sql = "DELETE FROM sak WHERE sakID = ?";
+
+    try (Connection conn = DatabaseUtil.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            
+        stmt.setInt(1, sak.getSakID());
+        int slettetRader = stmt.executeUpdate();
+
+        if (slettetRader > 0) {
+            System.out.println("Sak med ID " + sak.getSakID() + " ble slettet.");
+            return sak;
+        } else {
+            System.out.println("Ingen sak ble slettet med ID " + sak.getSakID());
+
+        }
+
+    } catch (SQLException | IOException e) {
+        e.printStackTrace();
+    
+   }
+        return null;
+    }
 
     public List<Sak> sokSaker(Soking soking) {
     List<Sak> resultater = new ArrayList<>();
@@ -136,4 +164,5 @@ public class SakDAO {
 
 
 }
+
 
