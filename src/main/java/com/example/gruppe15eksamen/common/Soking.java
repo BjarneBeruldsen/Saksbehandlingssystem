@@ -1,9 +1,13 @@
+/**
+ * Author: Abdinasir Ali
+ */
+
 package com.example.gruppe15eksamen.common;
 
 import java.io.Serializable;
 
 public class Soking implements Serializable{
-    
+    private static final long serialVersionUID = 1L;
     private Prioritet prioritet;
     Status status;
     Kategori kategori;

@@ -1,3 +1,6 @@
+/**
+ * Author: Bjarne Beruldsen, Laurent Zogaj & Abdinasir Ali
+ */
 package com.example.gruppe15eksamen.server.dao;
 /* inneholder metode for operasjoner mot databasen som
 * gjelder sak-håndtering*/
@@ -17,19 +20,28 @@ import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.common.Soking;
 import com.example.gruppe15eksamen.common.Status;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 
 //Opprette metoder for saker og diverse
 public class SakDAO {
 
    //Metode for å oppdatere status til sak
-
-
-
-
-
+    public static int oppdaterStatus(int sakId, Status nyStatus) {
+        String sql = """
+        UPDATE sak
+        SET statusId = ?
+        WHERE sakID = ?
+        """;
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, nyStatus.getId());
+            ps.setInt(2, sakId);
+            return ps.executeUpdate();
+        } catch (SQLException | IOException e) {
+            System.err.println("Kunne ikke oppdatere status på sak " + sakId + ": " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
         //metode som tildeler sak til utvikler
     public static int tildelSak(int sakId, String brukernavn) {
         System.out.println("sakID:" + sakId + "brukernavn" + brukernavn);

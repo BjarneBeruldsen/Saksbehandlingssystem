@@ -1,3 +1,6 @@
+/**
+ * Author: Laurent Zogaj
+ */
 package com.example.gruppe15eksamen.server.util;
 
 import java.io.FileInputStream;
