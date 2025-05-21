@@ -30,7 +30,7 @@ public class TesterView {
 
     private Node testerPanel() {
         mainPanel = new BorderPane();
-        mainPanel.setStyle("-fx-background-color:rgb(182, 18, 207)");;
+        mainPanel.setStyle("-fx-background-color:rgb(199, 199, 199)");;
         return mainPanel;
     }
 

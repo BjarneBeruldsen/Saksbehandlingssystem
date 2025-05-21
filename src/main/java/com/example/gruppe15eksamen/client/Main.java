@@ -6,25 +6,29 @@
 
 package com.example.gruppe15eksamen.client;
 
+import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
+import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_HØYDE;
+
 import com.example.gruppe15eksamen.client.controller.SakController;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-    public class Main extends Application {
-        @Override
-        public void start(Stage stage) {
+public class Main extends Application {
+    @Override
+    public void start(Stage stage) {
 
-            //Opprette Controlleren og få første scene
-            SakController sakController = new SakController(stage);
+        //Opprette Controlleren og få første scene
+        SakController sakController = new SakController(stage);
 
-            // Sett scene, tittel og show()
-            stage.setScene(sakController.getStartScene());
-            stage.setTitle("Saksbehandling");
-            stage.show();
-        }
-
-        // Launch / Main-method
-        public static void main(String[] args) {
-            launch(args);
-        }
+        // Sett scene, tittel og show()
+        stage.setScene(sakController.getStartScene());
+        stage.setTitle("Saksbehandling");
+        stage.show();
     }
+
+    // Launch / Main-method
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

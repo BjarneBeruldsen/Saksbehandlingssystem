@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import com.example.gruppe15eksamen.common.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import com.example.gruppe15eksamen.client.network.NetworkClient;
@@ -146,6 +145,8 @@ public class SakController {
         if (e.getSource() == sakViewVisning.getBrukerListe()) {
             valgtBruker = sakViewVisning.getBrukerListe().getValue();
             Rolle rolle = valgtBruker.getRolle();
+            venstreMenyVisning.setLoggetInnBrukerId(valgtBruker.getBrukerID());
+            venstreMenyVisning.setLoggetInnBrukernavn(valgtBruker.getBrukernavn());
 
             // Sette rolleView-variabel til valgt bruker sin rolle
             if (rolle.equals(Rolle.TESTER)) {
@@ -170,9 +171,12 @@ public class SakController {
                 venstreMenyVisning.leggTilLederKnapper();
             }
 
-            sakViewVisning.visVenstreMeny(venstreMenyVisning.getVenstreMeny());
-
-            leggTilLyttere();
+            // Sikre at bruker må ha valgt rolle før en trykker bekreft
+            // Med andre ord: 'Bekreft' gjør ikke noe om en ikke har valgt bruker
+            if (valgtBruker != null) {
+                sakViewVisning.visVenstreMeny(venstreMenyVisning.getVenstreMeny());
+                leggTilLyttere();
+            }
         }
 
         // Behandleklikk for venstremenyen
@@ -180,7 +184,8 @@ public class SakController {
             sakViewVisning.visPanel(sakViewVisning.visLoggInnPanel());
             sakViewVisning.skjulVenstreMeny();
             venstreMenyVisning.nullstillKnapper();
-            rolleView = "";
+            valgtBruker = null; // Nullstill valgtBruker
+            rolleView = "";     // Nullstill rolleView
         }
         if (e.getSource() == venstreMenyVisning.getBtnTesterOpprettSak()) {
             saksSkjema.getRapportørFelt().setPromptText(valgtBruker.getBrukernavn());

@@ -29,7 +29,7 @@ public class UtviklerView {
 
     private Node utviklerPanel() {
         mainPanel = new BorderPane();
-        mainPanel.setStyle("-fx-background-color:rgb(207, 194, 18)");;
+        mainPanel.setStyle("-fx-background-color:rgb(199, 199, 199)");;
         
         return mainPanel;
     }
