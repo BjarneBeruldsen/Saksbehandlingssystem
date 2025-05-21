@@ -124,22 +124,7 @@ public class SakServer {
 
                 case "HENT_TILDELTE":
                     //harkoder saker for testdata FJERN
-                    ArrayList<Sak> tildelteSaker = new ArrayList<>();
-
-                    tildelteSaker.add(new Sak(
-                            1,
-                            "Feil i påloggingssystem",
-                            "Brukere får feilmelding ved pålogging med BankID.",
-                            Prioritet.HØY,
-                            Kategori.BACKEND_FEIL,
-                            Status.INNSENDT,
-                            "Knut",
-                            "Kari Nordmann",
-                            LocalDateTime.of(2025, 5, 1, 10, 30),
-                            LocalDateTime.of(2025, 5, 2, 14, 15)
-                    ));
-
-                    System.out.println("BrukerId:" +forespørsel.getBrukerID());
+                    ArrayList<Sak> tildelteSaker = SakDAO.hentSakerTildeltUtvikler(forespørsel.getBrukerID());
 
                     utClient.writeObject(new SocketRespons("Hentet tildelte saker",
                             tildelteSaker, true));

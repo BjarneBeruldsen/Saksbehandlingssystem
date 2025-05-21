@@ -7,6 +7,7 @@ package com.example.gruppe15eksamen.client.controller;
 
 import java.io.IOException;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import java.util.ArrayList;
@@ -47,8 +48,8 @@ public class SakController {
     private ArrayList<Bruker> alleBrukere;  //arraylist som kan legges til i rullgardinliste
     private ArrayList<String> alleUtviklere; //arrayList for brukernavn til rullgardinliste i Leder
     private ObservableList<Sak> alleSaker; //arrayList som tar bare på alle saker
+    private ObservableList<Sak> sakerTildeltUtvikler; //holder på saker som er tildelt utvikler
 
-    private ArrayList<Sak> tildelteSaker; //skal inneholde alle saker som er tildelt enn utvikler
 
     private BorderPane hovedPanel;
     private Stage hovedStage;
@@ -62,15 +63,6 @@ public class SakController {
     public SakController(Stage stage) {
         hentBrukere();
         hentSaker(); 
-        //Kaller opprettsak etter brukere er hentet (Dette er test og den skal egt kalles når-
-        //tester på send inn knapp)
-        if(alleBrukere != null && !alleBrukere.isEmpty() ) {
-           tildelteSaker = hentTilDelteSaker();
-           //skriver ut tildelte saker for å teste FJERN
-            for(Sak sak: tildelteSaker) {
-                System.out.println(sak.toString());
-            }
-        }
 
         this.hovedStage = stage;
         this.hovedPanel = sakViewVisning.getHovedPanel();
@@ -276,12 +268,27 @@ public class SakController {
 
 
 
-    public ArrayList<Sak> hentTilDelteSaker() {
-        //harkoder data som må egt hentes fra tekstfelt FJERN
-        int brukerID = 1;
+    public void hentTilDelteSaker() {
+        if(valgtBruker == null) {
+            System.out.println("Ingen bruker logget inn");
+        }
+
+        int brukerID = valgtBruker.getBrukerID();
 
         SocketRespons respons = nettverkKlient.hentTildelteSaker(brukerID);
 
-        return respons.getSaker();
+        if(respons.isGodkjent()) {
+            sakViewVisning.setGodkjenning(respons.getStatus());
+        }
+        else {
+            sakViewVisning.setFeilmelding(respons.getStatus());
+        }
+
+        if(respons != null && respons.getSaker() != null) {
+            sakerTildeltUtvikler = FXCollections.observableArrayList(respons.getSaker());
+        }
+        else {
+            sakerTildeltUtvikler = FXCollections.observableArrayList();
+        }
     }
 }

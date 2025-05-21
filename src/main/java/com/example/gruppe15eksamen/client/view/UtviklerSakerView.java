@@ -155,4 +155,10 @@ public class UtviklerSakerView {
     // get-metode for tabell som inneholder saker tilordnet utvikler
     public Node getTilordnedeSaker() { return tilordnedeSaker; }
 
+    //retunrerer tabellen
+
+
+    public TableView<Sak> getSaksTabell() {
+        return saksTabell;
+    }
 }
