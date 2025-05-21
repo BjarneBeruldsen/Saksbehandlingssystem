@@ -14,7 +14,7 @@ public class TabellerDAO {
         String sql = """
             CREATE TABLE IF NOT EXISTS Kategori (
               kategoriId   INT AUTO_INCREMENT PRIMARY KEY,
-              kategoriNavn VARCHAR(25) NOT NULL
+              kategoriNavn VARCHAR(25) NOT NULL UNIQUE
                 CHECK (kategoriNavn IN ('UI_FEIL','BACKEND_FEIL','FUNKSJONSFORESPØRSEL'))
             );
             """;
@@ -37,7 +37,7 @@ public class TabellerDAO {
         String sql = """
             CREATE TABLE IF NOT EXISTS Prioritet (
               prioritetId   INT AUTO_INCREMENT PRIMARY KEY,
-              prioritetNavn VARCHAR(10) NOT NULL
+              prioritetNavn VARCHAR(10) NOT NULL UNIQUE
                 CHECK (prioritetNavn IN ('LAV','MIDDELS','HØY'))
             );
             """;
@@ -60,7 +60,7 @@ public class TabellerDAO {
         String sql = """
             CREATE TABLE IF NOT EXISTS Status (
               statusId   INT AUTO_INCREMENT PRIMARY KEY,
-              statusNavn VARCHAR(15) NOT NULL
+              statusNavn VARCHAR(15) NOT NULL UNIQUE
                 CHECK (statusNavn IN (
                   'INNSENDT','TILDELT','PÅGÅR','RETTET','LØST','TEST_MISLYKTES','LUKKET'
                 ))
@@ -86,7 +86,7 @@ public class TabellerDAO {
         String sql = """
             CREATE TABLE IF NOT EXISTS Rolle (
               rolleId    INT AUTO_INCREMENT PRIMARY KEY,
-              rolleNavn  VARCHAR(15) NOT NULL
+              rolleNavn  VARCHAR(15) NOT NULL UNIQUE
                 CHECK (rolleNavn IN ('LEDER','TESTER','UTVIKLER'))
             );
             """;
@@ -107,19 +107,32 @@ public class TabellerDAO {
     //Oppretter tabellen brukere
     private static void lagBrukereTabell() {
         String sqlOpprett = """
-            CREATE TABLE IF NOT EXISTS Brukere (
-              brukerId INT AUTO_INCREMENT PRIMARY KEY,
-              navn     VARCHAR(45) NOT NULL,
-              rolleId  INT NOT NULL,
-              FOREIGN KEY (rolleId) REFERENCES Rolle(rolleId)
-            );
-            """;
+        CREATE TABLE IF NOT EXISTS Brukere (
+          brukerId INT AUTO_INCREMENT PRIMARY KEY,
+          navn     VARCHAR(45) NOT NULL UNIQUE,
+          rolleId  INT NOT NULL,
+          FOREIGN KEY (rolleId) REFERENCES Rolle(rolleId)
+        );
+        """;
+
+        //legger til tre brukere med hver sin rolle for testing
+        String sqlData = """
+        INSERT IGNORE INTO Brukere (navn, rolleId) VALUES
+        ('Bruker_Leder', 1),
+        ('Bruker_Tester', 2),
+        ('Bruker_Utvikler', 3);
+        """;
+
         try (Connection conn = DatabaseUtil.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sqlOpprett);
             System.out.println("Tabellen Brukere er opprettet");
+
+            stmt.executeUpdate(sqlData);
+            System.out.println("Tre brukere er lagt til i tabellen Brukere");
+
         } catch (SQLException | IOException e) {
-            System.err.println("Kunne ikke opprette tabellen Brukere");
+            System.err.println("Kunne ikke opprette tabellen Brukere eller legge til brukere");
             e.printStackTrace();
         }
     }
