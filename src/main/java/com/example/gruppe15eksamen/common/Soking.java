@@ -11,18 +11,18 @@ public class Soking implements Serializable{
     private Integer opprettetAr;
     private Integer oppdatertAr;
     private String tittel;
-    private String reporter;
+    private String reporterNavn;
     private String beskrivelse;
 
     //konstruktør for søk
-    public Soking(Prioritet prioritet, Status status, Kategori kategori, Integer opprettetAr,Integer oppdatertAr, String tittel, String reporter, String beskrivelse) {
+    public Soking(Prioritet prioritet, Status status, Kategori kategori, Integer opprettetAr,Integer oppdatertAr, String tittel, String reporterNavn, String beskrivelse) {
         this.prioritet = prioritet;
         this.status = status;
         this.kategori = kategori;
         this.opprettetAr = opprettetAr;
         this.oppdatertAr = oppdatertAr;
         this.tittel = tittel;
-        this.reporter = reporter;
+        this.reporterNavn = reporterNavn;
         this.beskrivelse = beskrivelse;
     }
 
@@ -75,11 +75,11 @@ public class Soking implements Serializable{
     public void setTittel(String tittel) {
         this.tittel = tittel;
     }
-    public String getReporter() {
-        return reporter;
+    public String getReporterNavn() {
+        return reporterNavn;
     }
-    public void setReporter(String reporter) {
-        this.reporter = reporter;
+    public void setReporterNavn(String reporterNavn) {
+        this.reporterNavn = reporterNavn;
     }
     public String getBeskrivelse() {
         return beskrivelse;
