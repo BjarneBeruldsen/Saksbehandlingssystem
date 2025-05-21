@@ -24,6 +24,7 @@ public class SakDAO {
 
     //metode for å opprette sak
     
+    
 
     //metode som tildeler sak til utvikler
 
@@ -35,9 +36,9 @@ public class SakDAO {
     //og legger til i en liste
 
 
+
     //metode som sletter en sak basert på sakId
 
-    //metode som søker etter saker basert på kriterier
 
 
     public List<Sak> sokSaker(Soking soking) {
