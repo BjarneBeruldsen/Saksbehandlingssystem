@@ -45,4 +45,8 @@ public class Bruker implements Serializable {
     public Rolle getRolle() {
         return rolle;
     }
+
+    public int getBrukerID() {
+        return brukerID;
+    }
 }

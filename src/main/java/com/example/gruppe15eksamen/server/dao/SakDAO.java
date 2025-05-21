@@ -22,8 +22,22 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 public class SakDAO {
 
 
-    //metode for å opprette sak
-    
+//    //metode for å opprette sak
+//    public static void insertStudent(Sak sak) {
+//        String query = """
+//                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
+//                kategoriId, tidsstempel, oppdatertTidspunkt)
+//                VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+//                """;
+//        try(Connection conn = DatabaseUtil.getConnection()) {
+//            PreparedStatement pstmt = conn.prepareStatement(query);
+//            pstmt.setString(1, sak.getTittel());
+//            pstmt.setString(2, sak.getBeskrivelse());
+//        } catch (SQLException | IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
     
 
     //metode som tildeler sak til utvikler
@@ -119,6 +133,7 @@ public class SakDAO {
 
     return resultater;
 }
+
 
 }
 

@@ -113,7 +113,7 @@ public class SakServer {
                             Prioritet.HØY,
                             Kategori.BACKEND_FEIL,
                             Status.INNSENDT,
-                            "Ola Nordmann",
+                            "Knut",
                             "Kari Nordmann",
                             LocalDateTime.of(2025, 5, 1, 10, 30),
                             LocalDateTime.of(2025, 5, 2, 14, 15)
