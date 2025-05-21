@@ -118,9 +118,9 @@ public class TabellerDAO {
         //legger til tre brukere med hver sin rolle for testing
         String sqlData = """
         INSERT IGNORE INTO Brukere (navn, rolleId) VALUES
-        ('Bruker_Tester', 1),
-        ('Bruker_Utvikler', 2),
-        ('Bruker_Leder', 3);
+        ('Bruker_Leder', 1),
+        ('Bruker_Tester', 2),
+        ('Bruker_Utvikler', 3);
         """;
 
         try (Connection conn = DatabaseUtil.getConnection();
