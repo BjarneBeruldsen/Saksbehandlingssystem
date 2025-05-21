@@ -6,6 +6,7 @@ import com.example.gruppe15eksamen.common.*;
 
 import static com.example.gruppe15eksamen.server.dao.TabellerDAO.opprettAlleTabeller;
 
+import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
 import java.io.IOException;
@@ -74,10 +75,11 @@ public class SakServer {
             switch(handling){
                 case "HENT BRUKERE":
                     //hent alle brukere fra DAO her (midlertidig harkodet test under)
-                    ArrayList<Bruker> brukere = new ArrayList<>();
-                    brukere.add(new Bruker(2, "HovedLeder", Rolle.LEDER));
-                    brukere.add(new Bruker(3, "HovedTester", Rolle.TESTER));
-                    brukere.add(new Bruker(4, "HovedUtvikler", Rolle.UTVIKLER));
+//                    ArrayList<Bruker> brukere = new ArrayList<>();
+//                    brukere.add(new Bruker(2, "HovedLeder", Rolle.LEDER));
+//                    brukere.add(new Bruker(3, "HovedTester", Rolle.TESTER));
+//                    brukere.add(new Bruker(4, "HovedUtvikler", Rolle.UTVIKLER));
+                    ArrayList<Bruker> brukere = (ArrayList<Bruker>) BrukerDAO.hentAlleBrukere();
 
                     //sender liste med alle brukere tilbake til klient
                     utClient.writeObject(brukere);
@@ -126,7 +128,7 @@ public class SakServer {
                     break;
             }
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
