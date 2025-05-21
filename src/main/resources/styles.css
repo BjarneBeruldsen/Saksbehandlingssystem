@@ -1,0 +1,110 @@
+/* styles.css */
+
+/* Author: Severin Waller Sørensen */
+
+
+
+/* Styling tilhørende LoggInn-siden */
+.logginn-menyboks {
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(2,2,2,0.4), 12, 0.2, 0, 4);
+    -fx-padding: 10 10 10 10;
+    -fx-spacing: 8;
+}
+
+.bekreft-bruker-btn {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 6px;
+    -fx-max-width: 400px;
+}
+
+.bekreft-bruker-btn:hover {
+    -fx-background-color: #267b29;
+}
+
+
+
+/* Styling tilhørende venstre-menyen */
+.venstre-meny-knapp {
+    -fx-background-color: rgb(210, 210, 210);
+    -fx-text-fill: #050505;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 8;
+    -fx-alignment: center;
+    -fx-pref-width: 140px;
+    -fx-min-width: 140px;
+    -fx-max-width: 140px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0.1, 2, 0);
+}
+
+.venstre-meny-knapp:hover {
+    -fx-background-color: rgb(198, 198, 198);
+}
+
+.bruker-info-boks {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #bdbdbd;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12 16 12 16;
+    -fx-spacing: 4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 6, 0, 0, 2);
+    -fx-alignment: center-left;
+    -fx-max-width: 160px;
+    -fx-min-width: 120px;
+    -fx-translate-y: 4px;
+}
+
+.brukerinfo-tittel {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #222;
+    -fx-padding: 0 0 2 0;
+}
+
+.brukerinfo-detaljer {
+    -fx-font-size: 10px;
+    -fx-text-fill: #222;
+}
+
+
+
+/* Styling tilhørende "opprett ny sak"-skjema */
+.saksskjema-rapportor {
+    -fx-background-color: white;
+    -fx-text-fill: rgb(148, 148, 148);
+    -fx-border-color: rgb(132, 132, 132);
+}
+
+.knapp-opprett {
+    -fx-background-color: rgb(36, 147, 65);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+}
+
+.knapp-opprett:hover {
+    -fx-background-color: rgb(30, 120, 55);
+}
+
+.knapp-avbryt {
+    -fx-background-color: rgb(202, 7, 7);
+    -fx-text-fill: rgb(246, 246, 246);
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+}
+
+.knapp-avbryt:hover {
+    -fx-background-color: rgb(140, 0, 0);
+}

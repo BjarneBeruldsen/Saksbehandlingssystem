@@ -22,7 +22,9 @@ public class Main extends Application {
         SakController sakController = new SakController(stage);
 
         // Sett scene, tittel og show()
-        stage.setScene(sakController.getStartScene());
+        Scene scene = sakController.getStartScene();
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+        stage.setScene(scene);
         stage.setTitle("Saksbehandling");
         stage.show();
     }

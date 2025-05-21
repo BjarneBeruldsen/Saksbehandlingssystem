@@ -25,6 +25,7 @@ public class SaksSkjema {
     TextArea beskrivelsesfelt;
     ComboBox<Prioritet> prioritet;
     ComboBox<Kategori> kategori;
+    GridPane knappPanel = new GridPane();
 
     // Knapper
     Button btnOpprett, btnAvbryt;
@@ -34,22 +35,36 @@ public class SaksSkjema {
     // Konstruktør
     public SaksSkjema() {
         hovedPanel = new GridPane();
-        hovedPanel.setHgap(10);
-        hovedPanel.setVgap(10);
-        hovedPanel.setPadding(new Insets(20));
+        hovedPanel.setHgap(5);
+        hovedPanel.setVgap(5);
+        hovedPanel.setPadding(new Insets(20,10,10,20));
+        hovedPanel.setAlignment(Pos.TOP_LEFT);
 
         tittel = new TextField();
         tittel.setPromptText("tittel");
+
         beskrivelsesfelt = new TextArea();
         beskrivelsesfelt.setPromptText("beskrivelse");
+        beskrivelsesfelt.setWrapText(true);
+        beskrivelsesfelt.setPrefRowCount(5);
+
         prioritet = new ComboBox<>();
         prioritet.getItems().addAll(Prioritet.values());
+
         kategori = new ComboBox<>();
         kategori.getItems().addAll(Kategori.values());
+
+        // Rapportør skal fylles inn automatisk
+        // (settes til innlogget sitt brukernavn)
         rapportør = new TextField();
+        rapportør.setEditable(false);
+        rapportør.getStyleClass().add("saksskjema-rapportor");
 
         btnOpprett = new Button("Opprett");
+        btnOpprett.getStyleClass().add("knapp-opprett");
+
         btnAvbryt = new Button("Avbryt");
+        btnAvbryt.getStyleClass().add("knapp-avbryt");
 
         hovedPanel.add(new Label("Tittel"), 0, 0);
         hovedPanel.add(tittel, 0, 1);
@@ -61,9 +76,13 @@ public class SaksSkjema {
         hovedPanel.add(kategori, 0, 7);
         hovedPanel.add(new Label("Rapportør"), 0, 8);
         hovedPanel.add(rapportør, 0, 9);
-        hovedPanel.add(btnAvbryt, 0, 10);
-        hovedPanel.add(btnOpprett, 1, 10);
 
+        // Legge til knappene i GridPane(s). (+ styling)
+        // Litt "rotete" måte, bør endres!
+        knappPanel.setHgap(10);
+        knappPanel.add(btnAvbryt,0, 0);
+        knappPanel.add(btnOpprett, 1,0);
+        hovedPanel.add(knappPanel, 0, 10);
     }
     
     // get-metode for hovedPanel (skjema)
@@ -84,5 +103,8 @@ public class SaksSkjema {
     // get-metode for "Opprett"-knapp og "avbryt"-knapp
     public Button getBtnOpprett() { return btnOpprett; }
     public Button getBtnAngre() { return btnAvbryt; }
+
+    // set-metode for Rapportør (skal fylles inn automatisk)
+    public void setRapportør(String navn) { rapportør.setText(navn); }
 
 }

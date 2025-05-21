@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,32 +14,27 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <javafx.version>21</javafx.version>
+        <javafx.version>21.0.2</javafx.version>
+        <javafx.platform>win</javafx.platform>
     </properties>
 
     <profiles>
         <profile>
             <id>windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <properties>
-                <javafx.platform>win</javafx.platform>
-            </properties>
+            <activation><os><family>windows</family></os></activation>
+            <properties><javafx.platform>win</javafx.platform></properties>
         </profile>
         <profile>
             <id>mac-aarch64</id>
             <activation>
-                <os>
-                    <family>mac</family>
-                    <arch>aarch64</arch>
-                </os>
+                <os><family>mac</family><arch>aarch64</arch></os>
             </activation>
-            <properties>
-                <javafx.platform>mac-aarch64</javafx.platform>
-            </properties>
+            <properties><javafx.platform>mac-aarch64</javafx.platform></properties>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation><os><family>linux</family></os></activation>
+            <properties><javafx.platform>linux</javafx.platform></properties>
         </profile>
     </profiles>
 
@@ -53,12 +48,6 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>${javafx.version}</version>
-            <classifier>${javafx.platform}</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
             <version>${javafx.version}</version>
             <classifier>${javafx.platform}</classifier>
         </dependency>
@@ -91,9 +80,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
-                <configuration>
-                    <release>21</release>
-                </configuration>
+                <configuration><release>21</release></configuration>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
@@ -102,6 +89,10 @@
                 <configuration>
                     <mainClass>com.example.gruppe15eksamen.client/com.example.gruppe15eksamen.client.Main</mainClass>
                     <runtimePathOption>CLASSPATH</runtimePathOption>
+                    <options>
+                        <option>--add-opens</option>
+                        <option>java.base/java.lang=ALL-UNNAMED</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>

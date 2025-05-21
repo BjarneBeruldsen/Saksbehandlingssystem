@@ -99,18 +99,7 @@ public class SakView {
        
         // Innholdet/selve loggInn-menyen
         VBox menyBoks = new VBox();
-        menyBoks.setPadding(new Insets(30));
-        menyBoks.setAlignment(Pos.CENTER);
-        menyBoks.setPadding(new Insets(10, 10, 10, 10));
-        menyBoks.setSpacing(8);
-        menyBoks.setStyle(
-            "-fx-background-color: white;" +
-            "-fx-border-color: #cccccc;" +
-            "-fx-border-width: 1px;" +
-            "-fx-border-radius: 12px;" +
-            "-fx-background-radius: 12px;" +
-            "-fx-effect: dropshadow(three-pass-box, rgba(2,2,2,0.4), 12, 0.2, 0, 4);"
-        );
+        menyBoks.getStyleClass().add("logginn-menyboks");
 
         // Styling for "header"/tittel (Login)
         Label lblLogin = new Label("Login");
@@ -130,13 +119,7 @@ public class SakView {
         brukerlisteStyleBoks.setAlignment(Pos.CENTER);
 
         // Styling for "Bekreft"-button
-        bekreftBrukerBtn.setMaxWidth(VINDU_BREDDE);
-        bekreftBrukerBtn.setStyle(
-            "-fx-background-color: #4CAF50;" +
-            "-fx-text-fill: white;" +
-            "-fx-font-size: 14px;" +
-            "-fx-background-radius: 6px;"
-        );
+        bekreftBrukerBtn.getStyleClass().add("bekreft-bruker-btn");
 
         // Plassere elementene i menyBoks
         menyBoks.getChildren().addAll(labelStyleBoks, brukerlisteStyleBoks, bekreftBrukerBtn);
@@ -152,10 +135,12 @@ public class SakView {
     private Node lagTopPanel() {
         // Opprette panel og legge til styling
         HBox topPanel = new HBox();
-        topPanel.setStyle("-fx-background-color: #d3d3d3; -fx-border-width: 2px; -fx-border-color: black");
+        topPanel.setStyle("-fx-background-color: rgb(87, 87, 87); -fx-border-width: 2px; -fx-border-color: black");
         topPanel.setSpacing(10);
         topPanel.setPadding(new Insets(1, 1, 1, 1));
         topPanel.setAlignment(Pos.CENTER);
+        topPanel.setMinHeight(50);
+        topPanel.setPrefHeight(50);
 
         // Endrer størrelse på label og legger til status (ikke gjort/ferdig enda)
         Font fonten = Font.font("ARIAL, 24");

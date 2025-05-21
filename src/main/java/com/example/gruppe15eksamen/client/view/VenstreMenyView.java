@@ -39,42 +39,35 @@ public class VenstreMenyView {
     // Konstruktør
     public VenstreMenyView() {
         venstreMeny = new VBox();
+        venstreMeny.setAlignment(Pos.TOP_CENTER);
         venstreMeny.setPadding(new Insets(10 ,10, 10, 10));
         venstreMeny.setSpacing(15);
         venstreMeny.setStyle("-fx-background-color:rgb(46, 133, 91)");
         btnHjem = new Button("Hovedside");
-        btnHjem.setStyle(
-            "-fx-background-color:rgb(210, 210, 210);" +
-            "-fx-text-fill: #050505;" +
-            "-fx-font-size: 14px;" +
-            "-fx-font-weigh: bold" +
-            "-fx-background-radius: 6px;" +
-            "-fx-padding: 8;" +
-            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0.1, 2, 0);"
-        );
+        btnHjem.getStyleClass().add("venstre-meny-knapp");
         leggTilBrukerInfoBoks();
         venstreMeny.getChildren().add(btnHjem);
     }
 
     // Informasjon om InnloggetBruker
     public void leggTilBrukerInfoBoks() {
+   
+        // Fjerne bruukerInfoBoksen om den er der (for at det ikke skal komme dobbelt)
+        if (brukerInfoBoks != null && venstreMeny.getChildren().contains(brukerInfoBoks)) {
+            venstreMeny.getChildren().remove(brukerInfoBoks);
+        }
+
+        // Initiere BrukerInfoBoks (+ legge til/kalle på StyleClass)
         brukerInfoBoks = new VBox(2);
-        brukerInfoBoks.setPadding(new Insets(6));
-        brukerInfoBoks.setStyle(
-            "-fx-background-color: white;" +
-            "-fx-border-color: #cccccc;" +
-            "-fx-border-radius: 4px;" +
-            "-fx-background-radius: 4px;" +
-            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 2, 2);"
-        );
+        brukerInfoBoks.getStyleClass().add("bruker-info-boks");
 
         // Opprette labels og legge til Style
-        Label lblBrukerInfo = new Label("Logget inn som: ");
-        lblBrukerInfo.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill:rgb(0, 0, 0);");
-        Label lblId = new Label("- _ID: " + loggetInnBrukerId); 
-        lblId.setStyle("-fx-font-size: 12px; -fx-text-fill:rgb(0, 0, 0);");
-        Label lblBrukernavn = new Label("- Brukernavn: " + loggetInnBrukernavn);
-        lblBrukernavn.setStyle("-fx-font-size: 12px; -fx-text-fill:rgb(0, 0, 0);");
+        Label lblBrukerInfo = new Label("Bruker: ");
+        lblBrukerInfo.getStyleClass().add("brukerinfo-tittel");
+        Label lblId = new Label("_ID: " + loggetInnBrukerId);
+        lblId.getStyleClass().add("brukerinfo-detaljer");
+        Label lblBrukernavn = new Label("Brukernavn: " + loggetInnBrukernavn);
+        lblBrukernavn.getStyleClass().add("brukerinfo-detaljer");
 
         brukerInfoBoks.getChildren().addAll(lblBrukerInfo, lblId, lblBrukernavn);
         venstreMeny.getChildren().add(0, brukerInfoBoks); // legg til øverst (index: 0)
@@ -86,24 +79,8 @@ public class VenstreMenyView {
         btnTesterInnsendteSaker = new Button("Mine saker");
 
         // Styling for knappene
-        btnTesterOpprettSak.setStyle(
-            "-fx-background-color:rgb(210, 210, 210);" +
-            "-fx-text-fill: #050505;" +
-            "-fx-font-size: 14px;" +
-            "-fx-font-weigh: bold" +
-            "-fx-background-radius: 6px;" +
-            "-fx-padding: 8;" +
-            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0.1, 2, 0);"
-        );
-        btnTesterInnsendteSaker.setStyle(
-            "-fx-background-color:rgb(210, 210, 210);" +
-            "-fx-text-fill: #050505;" +
-            "-fx-font-size: 14px;" +
-            "-fx-font-weigh: bold" +
-            "-fx-background-radius: 6px;" +
-            "-fx-padding: 8;" +
-            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0.1, 2, 0);"
-        );
+        btnTesterOpprettSak.getStyleClass().add("venstre-meny-knapp");
+        btnTesterInnsendteSaker.getStyleClass().add("venstre-meny-knapp");
 
         // Legge til knappene i panelet
         venstreMeny.getChildren().addAll(btnTesterOpprettSak, btnTesterInnsendteSaker);
@@ -113,15 +90,7 @@ public class VenstreMenyView {
     // Metode for å legge til UTVIKLER-knapper
     public Node leggTilUtviklerKnapper() {
         btnUtviklerMineSaker = new Button("Mine saker");
-        btnUtviklerMineSaker.setStyle(
-            "-fx-background-color:rgb(210, 210, 210);" +
-            "-fx-text-fill: #050505;" +
-            "-fx-font-size: 14px;" +
-            "-fx-font-weigh: bold" +
-            "-fx-background-radius: 6px;" +
-            "-fx-padding: 8;" +
-            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0.1, 2, 0);"
-        );
+        btnUtviklerMineSaker.getStyleClass().add("venstre-meny-knapp");
 
         venstreMeny.getChildren().add(btnUtviklerMineSaker);
         return venstreMeny;
@@ -130,18 +99,17 @@ public class VenstreMenyView {
     // Metode for å legge til LEDER-knapper
     public Node leggTilLederKnapper() {
         btnLederSeAlleSaker = new Button("Se alle saker");
-        btnLederSeAlleSaker.setStyle(
-            "-fx-background-color:rgb(210, 210, 210);" +
-            "-fx-text-fill: #050505;" +
-            "-fx-font-size: 14px;" +
-            "-fx-font-weigh: bold" +
-            "-fx-background-radius: 6px;" +
-            "-fx-padding: 8;" +
-            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0.1, 2, 0);"
-        );
+        btnLederSeAlleSaker.getStyleClass().add("venstre-meny-knapp");
 
         venstreMeny.getChildren().add(btnLederSeAlleSaker);
         return venstreMeny;
+    }
+
+    // Metode for å oppdatere brukerinfo:
+    public void oppdaterBrukerInfo(int id, String brukernavn) {
+        this.loggetInnBrukerId = id;
+        this.loggetInnBrukernavn = brukernavn;
+        leggTilBrukerInfoBoks();
     }
 
     // Metode for å fjerne/nullstille knapper

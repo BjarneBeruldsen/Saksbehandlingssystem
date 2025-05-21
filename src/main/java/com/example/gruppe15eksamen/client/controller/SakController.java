@@ -24,9 +24,6 @@ import com.example.gruppe15eksamen.client.view.LederSakerView;
 import com.example.gruppe15eksamen.client.view.LederView;
 import com.example.gruppe15eksamen.client.view.VenstreMenyView;
 import com.example.gruppe15eksamen.client.view.SaksSkjema;
-import com.example.gruppe15eksamen.common.Bruker;
-import com.example.gruppe15eksamen.common.Rolle;
-import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 
 public class SakController {
@@ -163,6 +160,8 @@ public class SakController {
             // Sikre at bruker må ha valgt rolle før en trykker bekreft
             // Med andre ord: 'Bekreft' gjør ikke noe om en ikke har valgt bruker
             if (valgtBruker != null) {
+                // NB! må kalle på oppdaterBrukerInfo, hvis ikke blir første innlogging alltid lik 0 / null.
+                venstreMenyVisning.oppdaterBrukerInfo(valgtBruker.getBrukerID(), valgtBruker.getBrukernavn());
                 sakViewVisning.visVenstreMeny(venstreMenyVisning.getVenstreMeny());
                 leggTilLyttere();
             }
@@ -177,6 +176,7 @@ public class SakController {
             rolleView = "";     // Nullstill rolleView
         }
         if (e.getSource() == venstreMenyVisning.getBtnTesterOpprettSak()) {
+            saksSkjema.setRapportør(valgtBruker.getBrukernavn());
             saksSkjema.getRapportørFelt().setPromptText(valgtBruker.getBrukernavn());
             sakViewVisning.visPanel(saksSkjema.getSaksSkjema());
         }
@@ -204,7 +204,7 @@ public class SakController {
     private void hentUtviklere() {
         alleUtviklere = nettverkKlient.hentUtviklere();
     }
- 
+
     // get-metode for å hente hovedPanel
     public Scene getStartScene() {
         return new Scene(hovedPanel);

@@ -18,10 +18,11 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 //Opprette metoder for saker og diverse
 public class SakDAO {
 
-    //metode for å opprette sak
+    //Metode for å oppdatere status til sak
 
-    //metode som henter alle saker basert på rolle og bruker-
-    //og legger til i en liste
+
+
+
 
     //metode som tildeler sak til utvikler
     public static int tildelSak(int sakId, String brukernavn) {
