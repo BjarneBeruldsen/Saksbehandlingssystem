@@ -63,7 +63,6 @@ public class SakController {
         //Kaller opprettsak etter brukere er hentet (Dette er test og den skal egt kalles når-
         //tester på send inn knapp)
         if(alleBrukere != null && !alleBrukere.isEmpty() ) {
-           opprettSak();
            tildelSak();
            tildelteSaker = hentTilDelteSaker();
            //skriver ut tildelte saker for å teste FJERN
@@ -108,6 +107,7 @@ public class SakController {
         // Legger til lytter for brukerListe (ComboBox)
         sakViewVisning.getBrukerListe().setOnAction(e -> behandleKlikk(e));
         sakViewVisning.getBekreftBrukerBtn().setOnAction(e -> behandleKlikk(e));
+        saksSkjema.getBtnOpprett().setOnAction(e -> behandleKlikk(e));
 
         // Legge til lyttere for knapper i venstremenyen
         venstreMenyVisning.getBtnHjem().setOnAction(e -> behandleKlikk(e));
@@ -195,6 +195,9 @@ public class SakController {
         if (e.getSource() == venstreMenyVisning.getBtnLederSeAlleSaker()) {
             sakViewVisning.visPanel(alleSakerLeder.getAlleSaker());
         }
+        if(e.getSource() == saksSkjema.getBtnOpprett()) {
+            opprettSak();
+        }
 
     }
  
@@ -211,25 +214,22 @@ public class SakController {
     //Metode for å opprette sak(Tester) og sende til db
     //Kalles når tester trykker "opprett sak knapp"
     public void opprettSak() {
-        //Harkoder data som egt. hentes fra textfelt her
-        Bruker bruker = alleBrukere.get(0); //henter random fra brukerliste
-        System.out.println("Bruker: " + bruker.toString() + "er hentet");
-        String tittel = "SakTittel";
-        String beskrivelse = "Dette er en beskrivelse";
-        Prioritet prioritet = Prioritet.HØY;
-        Kategori kategori = Kategori.BACKEND_FEIL;
-        String rapportør = bruker.getBrukernavn();
+        //Henter data fra sakskjema-form og legger til objekt
+        String tittel = saksSkjema.getTittel();
+        String beskrivelse = saksSkjema.getBeskrivelse();
+        Prioritet prioritet = saksSkjema.getPrioritet();
+        Kategori kategori = saksSkjema.getKategori();
+        String rapportør = saksSkjema.getRapportør();
 
         Sak sak = new Sak(tittel, beskrivelse, prioritet, kategori, rapportør);
 
         SocketRespons respons = NetworkClient.sendSak(sak);
-        System.out.println("respons hentet: " + respons);
 
         if(respons.isGodkjent()) {
-            System.out.println("Sak er lagt til");
+            sakViewVisning.setGodkjenning("Sak er lagt til i database");
         }
         else {
-            System.out.println("Innsetting av sak feilet" + respons.getStatus());
+            sakViewVisning.setFeilmelding("Innsetting av sak feilet: " + respons.getStatus());
         }
     }
 

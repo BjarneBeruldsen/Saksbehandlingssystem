@@ -7,10 +7,10 @@ import com.example.gruppe15eksamen.common.*;
 import static com.example.gruppe15eksamen.server.dao.TabellerDAO.opprettAlleTabeller;
 
 import com.example.gruppe15eksamen.server.dao.BrukerDAO;
+import com.example.gruppe15eksamen.server.dao.SakDAO;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -63,10 +63,11 @@ public class SakServer {
     }
 
     //behandler brukerdata
-    private static void handleClient(Socket socket) {
+    private static SocketRespons handleClient(Socket socket) {
         //I/O Stream til klienten
-        try (ObjectInputStream inClient = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream utClient = new ObjectOutputStream(socket.getOutputStream());) {
+        try (ObjectOutputStream utClient = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream inClient = new ObjectInputStream(socket.getInputStream());)
+        {
 
             SocketRequest forespørsel = (SocketRequest)inClient.readObject();
             String handling = forespørsel.getHandling().toUpperCase();
@@ -74,11 +75,6 @@ public class SakServer {
             //switch setning som utfører operasjoner mot datbasen basert på socketrequest sin handling
             switch(handling){
                 case "HENT BRUKERE":
-                    //hent alle brukere fra DAO her (midlertidig harkodet test under)
-//                    ArrayList<Bruker> brukere = new ArrayList<>();
-//                    brukere.add(new Bruker(2, "HovedLeder", Rolle.LEDER));
-//                    brukere.add(new Bruker(3, "HovedTester", Rolle.TESTER));
-//                    brukere.add(new Bruker(4, "HovedUtvikler", Rolle.UTVIKLER));
                     ArrayList<Bruker> brukere = (ArrayList<Bruker>) BrukerDAO.hentAlleBrukere();
 
                     //sender liste med alle brukere tilbake til klient
@@ -87,11 +83,16 @@ public class SakServer {
                     break;
 
                 case "LAGSAK" :
-                    //kaller på DAO her for å legge til sak
+                    //oppretter sakobjekt fra foespørsel
+                    Sak sak = forespørsel.getSak();
                     System.out.println("Sak som legges til: " + forespørsel.getSak().toString() );
+                    int resultat = SakDAO.insertSak(sak);
                     //sender melding til klienten om det er godkjent
-                    utClient.writeObject(new SocketRespons(true, "Saken er lagt til: " +
-                            forespørsel.getSak().toString()));
+                    if(resultat > 0) {
+                        utClient.writeObject(new SocketRespons(true, "Saken er lagt til: "));
+                    } else {
+                        utClient.writeObject(new SocketRespons(false, "Saken kunne ikke lagres i databasen"));
+                    }
                     break;
 
                 case "ADD_MOTTAKER":
@@ -130,7 +131,9 @@ public class SakServer {
 
         } catch (IOException | ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+            return new SocketRespons(false, e.getMessage());
         }
+        return null;
     }
 
     private static void logg(String melding) {

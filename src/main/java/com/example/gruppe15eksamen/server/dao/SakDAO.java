@@ -3,10 +3,7 @@ package com.example.gruppe15eksamen.server.dao;
 * gjelder sak-håndtering*/
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,22 +19,39 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 public class SakDAO {
 
 
-//    //metode for å opprette sak
-//    public static void insertStudent(Sak sak) {
-//        String query = """
-//                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
-//                kategoriId, tidsstempel, oppdatertTidspunkt)
-//                VALUES(?, ?, ?, ?, ?, ?, ?, ?)
-//                """;
-//        try(Connection conn = DatabaseUtil.getConnection()) {
-//            PreparedStatement pstmt = conn.prepareStatement(query);
-//            pstmt.setString(1, sak.getTittel());
-//            pstmt.setString(2, sak.getBeskrivelse());
-//        } catch (SQLException | IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+    //metode for å opprette sak
+    public static int insertSak(Sak sak) throws SQLException, IOException{
+        String query = """
+                INSERT INTO sak (tittel, beskrivelse, rapportorBrukerId, prioritetId, statusId,
+                kategoriId, tidsstempel, oppdatertTidspunkt)
+                VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+                """;
+        try(Connection conn = DatabaseUtil.getConnection()) {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+
+            //henter rapportørens id basert på brukernavn
+
+            int rapportørId = BrukerDAO.hentBrukerIdFraNavn(sak.getRapportør());
+
+            pstmt.setString(1, sak.getTittel());
+            pstmt.setString(2, sak.getBeskrivelse());
+            pstmt.setInt(3, rapportørId);
+            pstmt.setInt(4, sak.getPrioritet().getId());
+            pstmt.setInt(5, sak.getStatus().getId());
+            pstmt.setInt(6, sak.getKategori().getId());
+            pstmt.setTimestamp(7, Timestamp.valueOf(sak.getTidsstempel()));
+            pstmt.setTimestamp(8, Timestamp.valueOf(sak.getOppdatertTidspunkt()));
+
+            //antall rader som er oppdatert
+            return pstmt.executeUpdate();
+
+
+        } catch (SQLException | IOException e) {
+           e.printStackTrace();
+           return 0;
+        }
+
+    }
     
 
     //metode som tildeler sak til utvikler

@@ -36,4 +36,20 @@ public class BrukerDAO {
         return alleBrukere;
     }
     //Metode for å hente en spesifikk bruker basert på brukernavn
+
+
+    //Metode som henter brukerID basert på brukernavn
+    public static int hentBrukerIdFraNavn(String navn) throws SQLException, IOException {
+        String query = "SELECT brukerId FROM Brukere WHERE navn = ?";
+        try(Connection conn = DatabaseUtil.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, navn);
+                ResultSet rs = pstmt.executeQuery();
+                if(rs.next()) {
+                    return rs.getInt("brukerId");
+                } else {
+                    throw new SQLException("Fant ikke bruker medd navn: " + navn);
+                }
+        }
+    }
 }
