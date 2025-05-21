@@ -22,19 +22,18 @@ public class Sak implements Serializable {
 
     //Konstruktør
     public Sak(int sakID, String tittel, String beskrivelse, Prioritet prioritet, Kategori kategori, Status status,
-               String rapportør, String mottaker,  LocalDateTime tidsstempel, LocalDateTime oppdatertTidspunkt)
+               String rapportør, String mottaker, LocalDateTime tidsstempel, LocalDateTime oppdatertTidspunkt)
     {
-        //MÅ LEGGE TIL VALIDERING HER ETTERHVERT
-        this.sakID       = sakID;
-        this.tittel      = tittel;
-        this.beskrivelse = beskrivelse;
-        this.prioritet   = prioritet;
-        this.kategori    = kategori;
-        this.status      = status;
-        this.rapportør   = rapportør;
-        this.mottaker    = mottaker;
-        this.tidsstempel = tidsstempel;
-        this.oppdatertTidspunkt = oppdatertTidspunkt;
+        setSakID(sakID);
+        setTittel(tittel);
+        setBeskrivelse(beskrivelse);
+        setPrioritet(prioritet);
+        setKategori(kategori);
+        setStatus(status);
+        setRapportør(rapportør);
+        setMottaker(mottaker);
+        setTidsstempel(tidsstempel);
+        setOppdatertTidspunkt(oppdatertTidspunkt);
     }
 
     //Konstruktør for tester som oppretter sak

@@ -54,7 +54,6 @@ public class SakDAO {
             PreparedStatement pstmt = conn.prepareStatement(query);
 
             //henter rapportørens id basert på brukernavn
-
             int rapportørId = BrukerDAO.hentBrukerIdFraNavn(sak.getRapportør());
 
             pstmt.setString(1, sak.getTittel());
@@ -128,6 +127,59 @@ public class SakDAO {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //metode som henter alle saker
+    public static ArrayList<Sak> hentAlleSaker() {
+
+        ArrayList<Sak> saker = new ArrayList<>();
+
+        String sql = """
+        SELECT s.sakId, s.tittel, s.beskrivelse, s.tidsstempel, s.oppdatertTidspunkt,
+               rapportor.navn AS rapportorNavn,
+               mottaker.navn AS mottakerNavn,
+               p.prioritetNavn, st.statusNavn, k.kategoriNavn
+        FROM Sak s
+        JOIN Brukere rapportor ON s.rapportørBrukerId = rapportor.brukerId
+        LEFT JOIN Brukere mottaker ON s.mottakerBrukerId = mottaker.brukerId
+        JOIN Prioritet p ON s.prioritetId = p.prioritetId
+        JOIN Status st ON s.statusId = st.statusId
+        JOIN Kategori k ON s.kategoriId = k.kategoriId
+        """;
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Sak sak = new Sak();
+
+                sak.setSakID(rs.getInt("sakId"));
+                sak.setTittel(rs.getString("tittel"));
+                sak.setBeskrivelse(rs.getString("beskrivelse"));
+                sak.setTidsstempel(rs.getTimestamp("tidsstempel").toLocalDateTime());
+                sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatertTidspunkt").toLocalDateTime());
+
+                sak.setRapportør(rs.getString("rapportorNavn"));
+
+                String mottakerNavn = rs.getString("mottakerNavn");
+                if (mottakerNavn != null) {
+                    sak.setMottaker(mottakerNavn);
+                }
+
+                // Anta at du har enum-lignende klasser for disse
+                sak.setPrioritet(Prioritet.valueOf(rs.getString("prioritetNavn")));
+                sak.setStatus(Status.valueOf(rs.getString("statusNavn")));
+                sak.setKategori(Kategori.valueOf(rs.getString("kategoriNavn")));
+
+                saker.add(sak);
+            }
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return saker;
     }
 
 
