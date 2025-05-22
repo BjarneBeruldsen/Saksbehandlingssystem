@@ -1,4 +1,7 @@
-// Author: Severin Waller Sørensen
+/**
+ * @Author Severin Waller Sørensen
+ */
+
 
 package com.example.gruppe15eksamen.client.view;
 

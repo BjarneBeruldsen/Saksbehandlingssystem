@@ -1,4 +1,6 @@
-// Author: Severin Waller Sørensen
+/**
+ * @Author Severin Waller Sørensen
+ */
 
 /* Inneholder UI/GUI i javax for visning av brukergrensesnitt
  * for de ulike brukerne.. En metode får egenspesifiserte GUI for

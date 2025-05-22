@@ -1,6 +1,8 @@
-// Author: Bjarne Beruldsen & Severin Waller Sørensen
+/**
+ * @Author Bjarne Beruldsen & Severin Waller Sørensen
+ */
 
-/*Denne filen kobler sammen SakView med sak og rolle fra common
+/* Denne filen kobler sammen SakView med sak og rolle fra common
  * mappen. Denne filen fungerer på samme måte som main */
 
 package com.example.gruppe15eksamen.client.controller;
