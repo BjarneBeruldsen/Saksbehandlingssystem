@@ -10,12 +10,20 @@ public class SocketRequest implements Serializable {
     private int sakID;
     private Status status;
     private String kommentar;
+    private String type;
+    private Object data;
+    
+    
 
     public SocketRequest(String handling, Status status, int sakID, String kommentar) {
         this.handling = handling;
         this.status = status;
         this.sakID = sakID;
         this.kommentar = kommentar;
+    }
+    public SocketRequest(String type, Soking soking) {
+        this.type = type;
+        this.data = soking;
     }
 
     public SocketRequest(String handling, Sak sak) {
@@ -34,11 +42,11 @@ public class SocketRequest implements Serializable {
         this.handling = handling;
     }
 
-    //for requests uten sak
     public SocketRequest(String handling) {
-        this(handling, null);
-    }
-
+    this.handling = handling;
+    this.data = null; 
+}
+   
     public SocketRequest(String handling, Status status, int sakID) {
         this.handling = handling;
         this.status = status;
@@ -88,4 +96,21 @@ public class SocketRequest implements Serializable {
     public String getKommentar() {
         return kommentar;
     }
+     public SocketRequest(String type, Object data) {
+        this.type = type;
+        this.data = data;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+  
 }

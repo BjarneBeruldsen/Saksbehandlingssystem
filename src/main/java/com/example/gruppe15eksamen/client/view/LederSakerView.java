@@ -16,6 +16,9 @@
 
 package com.example.gruppe15eksamen.client.view;
 
+import com.example.gruppe15eksamen.common.Sak;
+import com.example.gruppe15eksamen.common.Status;
+
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -27,9 +30,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
-import com.example.gruppe15eksamen.common.Sak;
-import com.example.gruppe15eksamen.common.Status;
 
 public class LederSakerView {
 
@@ -191,5 +191,12 @@ public class LederSakerView {
         return btOppdaterStatus;
     }
 
+    public TextField getSearchField() {
+        return searchField;
+    }
+
+    public Button getSearchBtn() {
+        return searchBtn;
+    }
 
 }

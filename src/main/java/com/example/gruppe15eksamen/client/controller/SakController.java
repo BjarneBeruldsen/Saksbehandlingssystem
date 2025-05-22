@@ -8,29 +8,34 @@
 package com.example.gruppe15eksamen.client.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import com.example.gruppe15eksamen.client.network.NetworkClient;
+import com.example.gruppe15eksamen.client.view.InnsendteSakerView;
+import com.example.gruppe15eksamen.client.view.LederSakerView;
+import com.example.gruppe15eksamen.client.view.LederView;
+import com.example.gruppe15eksamen.client.view.SakView;
+import com.example.gruppe15eksamen.client.view.SaksSkjema;
+import com.example.gruppe15eksamen.client.view.TesterView;
+import com.example.gruppe15eksamen.client.view.UtviklerSakerView;
+import com.example.gruppe15eksamen.client.view.UtviklerView;
+import com.example.gruppe15eksamen.client.view.VenstreMenyView;
+import com.example.gruppe15eksamen.common.Bruker;
+import com.example.gruppe15eksamen.common.Kategori;
+import com.example.gruppe15eksamen.common.Prioritet;
+import com.example.gruppe15eksamen.common.Rolle;
+import com.example.gruppe15eksamen.common.Sak;
+import com.example.gruppe15eksamen.common.SocketRespons;
+import com.example.gruppe15eksamen.common.Soking;
+import com.example.gruppe15eksamen.common.Status;
+import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import java.util.ArrayList;
-
-import com.example.gruppe15eksamen.common.*;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import com.example.gruppe15eksamen.client.network.NetworkClient;
-import com.example.gruppe15eksamen.client.view.SakView;
-import com.example.gruppe15eksamen.client.view.TesterView;
-import com.example.gruppe15eksamen.client.view.UtviklerSakerView;
-import com.example.gruppe15eksamen.client.view.UtviklerView;
-import com.example.gruppe15eksamen.client.view.InnsendteSakerView;
-import com.example.gruppe15eksamen.client.view.LederSakerView;
-import com.example.gruppe15eksamen.client.view.LederView;
-import com.example.gruppe15eksamen.client.view.VenstreMenyView;
-import com.example.gruppe15eksamen.client.view.SaksSkjema;
-import com.example.gruppe15eksamen.server.dao.BrukerDAO;
-import jdk.net.Sockets;
 
 public class SakController {
     
@@ -52,7 +57,7 @@ public class SakController {
     private ObservableList<Sak> alleSaker; //arrayList som tar bare på alle saker
     private ObservableList<Sak> sakerTildeltUtvikler; //holder på saker som er tildelt utvikler
     private ObservableList<Sak> rettetSaker; //holdet på saker som har status: "RETTET"
-
+    private ObservableList<Sak> sokteSaker; //holder på saker som er funnet i søk
 
     private BorderPane hovedPanel;
     private Stage hovedStage;
@@ -127,9 +132,36 @@ public class SakController {
         if(innsendteSakerTabell.getBtnSetStatus() != null) {
             innsendteSakerTabell.getBtnSetStatus().setOnAction(e -> behandleKlikk(e));
         }
+        
+        // Legg til lytter for søkeknappen
+        if (alleSakerLeder.getSearchBtn() != null) {
+            alleSakerLeder.getSearchBtn().setOnAction(e -> {
+                String søkeTekst = alleSakerLeder.getSearchField().getText();
+                Soking soking = new Soking();
+                
+                // Sjekk om søketeksten er et år (4 siffer)
+                if (søkeTekst.matches("\\d{4}")) {
+                    int år = Integer.parseInt(søkeTekst);
+                    soking.setOpprettetAr(år);
+                    soking.setOppdatertAr(år);
+                } else {
+                    soking.setTittel(søkeTekst);
+                }
+                
+                sokSaker(soking);
+            });
+        }
     }
-
-
+    
+    public void sokSaker(Soking soking) {
+        sokteSaker = nettverkKlient.sokSaker(soking);
+        if (sokteSaker != null && !sokteSaker.isEmpty()) {
+            alleSakerLeder.getSaksTabell().setItems(sokteSaker);
+            sakViewVisning.setGodkjenning("Søk fullført. Fant " + sokteSaker.size() + " saker.");
+        } else {
+            sakViewVisning.setFeilmelding("Ingen saker funnet som matcher søkekriteriene.");
+        }
+    }
 
     // variabel som tar vare på rollen til valgt bruker.
     // Brukes til å endre/oppdatere view
