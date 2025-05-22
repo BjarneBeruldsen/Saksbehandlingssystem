@@ -16,6 +16,7 @@
 
 package com.example.gruppe15eksamen.client.view;
 
+import com.example.gruppe15eksamen.common.Prioritet;
 import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.common.Status;
 
@@ -50,6 +51,8 @@ public class LederSakerView {
     Button btOppdaterStatus;
     //combobox for valg av status
     ComboBox<Status> cbStatus = new ComboBox<>();
+    ComboBox<Status> searchStatusComboBox;
+    ComboBox<Prioritet> searchPrioritetComboBox;
 
     /** Konstruktør som setter opp GUI-komponenter for alle-saker (for Leder) */
     public LederSakerView() {
@@ -116,10 +119,29 @@ public class LederSakerView {
         // Panel som inneholder nødvendige element for å søke
         searchPane = new GridPane();
         searchField = new TextField();
-        searchField.setPromptText("oppgi informasjon ");
+        searchField.setPromptText("Søk etter saker...");
+        searchField.setPrefWidth(200);
+        
+        // ComboBox for å filtrere på status
+        searchStatusComboBox = new ComboBox<>();
+        searchStatusComboBox.getItems().addAll(Status.values());
+        searchStatusComboBox.setPromptText("Filter Status");
+        searchStatusComboBox.setPrefWidth(150);
+        
+        // ComboBox for å filtrere på prioritet
+        searchPrioritetComboBox = new ComboBox<>();
+        searchPrioritetComboBox.getItems().addAll(Prioritet.values());
+        searchPrioritetComboBox.setPromptText("Filter Prioritet");
+        searchPrioritetComboBox.setPrefWidth(150);
+        
         searchBtn = new Button("Søk");
-        searchPane.add(searchField, 1, 0);
-        searchPane.add(searchBtn, 2, 0);
+        
+        // Legger til elementene i søkepanelet
+        searchPane.add(searchStatusComboBox, 0, 0);
+        searchPane.add(searchPrioritetComboBox, 1, 0);
+        searchPane.add(searchField, 2, 0);
+        searchPane.add(searchBtn, 3, 0);
+        searchPane.setHgap(10);
         searchPane.setAlignment(Pos.CENTER_RIGHT);
 
         // Panel som inneholder nødvendig element for å endre Status til sak
@@ -197,6 +219,14 @@ public class LederSakerView {
 
     public Button getSearchBtn() {
         return searchBtn;
+    }
+
+    public ComboBox<Status> getSearchStatusComboBox() {
+        return searchStatusComboBox;
+    }
+
+    public ComboBox<Prioritet> getSearchPrioritetComboBox() {
+        return searchPrioritetComboBox;
     }
 
 }

@@ -139,13 +139,25 @@ public class SakController {
                 String søkeTekst = alleSakerLeder.getSearchField().getText();
                 Soking soking = new Soking();
                 
+                // Legg til valgt status hvis en er valgt
+                Status valgtStatus = alleSakerLeder.getSearchStatusComboBox().getValue();
+                if (valgtStatus != null) {
+                    soking.setStatus(valgtStatus);
+                }
+                
+                // Legg til valgt prioritet hvis en er valgt
+                Prioritet valgtPrioritet = alleSakerLeder.getSearchPrioritetComboBox().getValue();
+                if (valgtPrioritet != null) {
+                    soking.setPrioritet(valgtPrioritet);
+                }
+                
                 // Sjekk om søketeksten er et år (4 siffer)
                 if (søkeTekst.matches("\\d{4}")) {
                     int år = Integer.parseInt(søkeTekst);
                     soking.setOpprettetAr(år);
                     soking.setOppdatertAr(år);
                 } else {
-                    // Søk i tittel, beskrivelse, rapportør, OpprettetAr og oppdatertAr
+                    // Søk i tittel, beskrivelse og rapportør
                     soking.setTittel(søkeTekst);
                     soking.setBeskrivelse(søkeTekst);
                     soking.setReporterNavn(søkeTekst);
