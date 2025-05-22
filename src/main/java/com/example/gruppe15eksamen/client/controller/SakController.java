@@ -145,7 +145,11 @@ public class SakController {
                     soking.setOpprettetAr(år);
                     soking.setOppdatertAr(år);
                 } else {
+                    // Søk i tittel, beskrivelse, rapportør, OpprettetAr og oppdatertAr
                     soking.setTittel(søkeTekst);
+                    soking.setBeskrivelse(søkeTekst);
+                    soking.setReporterNavn(søkeTekst);
+                    soking.setPrioritet(Prioritet.valueOf(søkeTekst.toUpperCase()));
                 }
                 
                 sokSaker(soking);

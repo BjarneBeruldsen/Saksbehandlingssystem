@@ -437,14 +437,35 @@ public class SakDAO {
             parametere.add(soking.getKategori().name());
         }
 
-        if (soking.getTittel() != null && !soking.getTittel().isEmpty()) {
-            sql.append(" AND s.tittel LIKE ?");
-            parametere.add("%" + soking.getTittel() + "%");
-        }
 
-        if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
-            sql.append(" AND s.beskrivelse LIKE ?");
+        if (soking.getTittel() != null && !soking.getTittel().isEmpty()) {
+            sql.append(" AND (LOWER(s.tittel) LIKE LOWER(?)");
+            parametere.add("%" + soking.getTittel() + "%");
+            
+            if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
+                sql.append(" OR LOWER(s.beskrivelse) LIKE LOWER(?)");
+                parametere.add("%" + soking.getBeskrivelse() + "%");
+            }
+            
+            if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+                sql.append(" OR LOWER(br.navn) LIKE LOWER(?)");
+                parametere.add("%" + soking.getReporterNavn() + "%");
+            }
+            
+            sql.append(")");
+        } else if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
+            sql.append(" AND (LOWER(s.beskrivelse) LIKE LOWER(?)");
             parametere.add("%" + soking.getBeskrivelse() + "%");
+            
+            if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+                sql.append(" OR LOWER(br.navn) LIKE LOWER(?)");
+                parametere.add("%" + soking.getReporterNavn() + "%");
+            }
+            
+            sql.append(")");
+        } else if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+            sql.append(" AND LOWER(br.navn) LIKE LOWER(?)");
+            parametere.add("%" + soking.getReporterNavn() + "%");
         }
 
         if (soking.getOpprettetAr() != null) {
@@ -455,11 +476,6 @@ public class SakDAO {
         if (soking.getOppdatertAr() != null) {
             sql.append(" AND YEAR(s.oppdatertTidspunkt) = ?");
             parametere.add(soking.getOppdatertAr());
-        }
-
-        if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
-            sql.append(" AND br.navn LIKE ?");
-            parametere.add("%" + soking.getReporterNavn() + "%");
         }
 
         try (Connection conn = DatabaseUtil.getConnection();
