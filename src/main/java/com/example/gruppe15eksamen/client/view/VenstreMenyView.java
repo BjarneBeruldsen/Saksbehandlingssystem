@@ -2,21 +2,12 @@
 
 package com.example.gruppe15eksamen.client.view;
 
-import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-
-import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
-import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_HØYDE;
 
 public class VenstreMenyView {
     
@@ -28,12 +19,13 @@ public class VenstreMenyView {
 
     // Globale knapper (FELLES/ALLE)
     Button btnHjem;
+    Button btnRefresh;
     // Unike/rolle-spesifikke knapper (for TESTER)
     Button btnTesterOpprettSak, btnTesterInnsendteSaker;
     // Unike/rolle-spesifikke knapper (for UTVIKLER)
     Button btnUtviklerMineSaker;
     // Unike/rolle-spesifikke knapper (for LEDER)
-    Button btnLederSeAlleSaker;
+    Button btnLederOpprettSak, btnLederSeAlleSaker;
 
 
     // Konstruktør
@@ -45,8 +37,10 @@ public class VenstreMenyView {
         venstreMeny.setStyle("-fx-background-color:rgb(46, 133, 91)");
         btnHjem = new Button("Hovedside");
         btnHjem.getStyleClass().add("venstre-meny-knapp");
+        btnRefresh = new Button("Oppdater"); 
+        btnRefresh.getStyleClass().add("venstre-meny-knapp");
         leggTilBrukerInfoBoks();
-        venstreMeny.getChildren().add(btnHjem);
+        venstreMeny.getChildren().addAll(btnHjem, btnRefresh);
     }
 
     // Informasjon om InnloggetBruker
@@ -90,18 +84,26 @@ public class VenstreMenyView {
     // Metode for å legge til UTVIKLER-knapper
     public Node leggTilUtviklerKnapper() {
         btnUtviklerMineSaker = new Button("Mine saker");
+
+        // Styling for knappen(e)
         btnUtviklerMineSaker.getStyleClass().add("venstre-meny-knapp");
 
+        // Legge til knappen(e) i panelet
         venstreMeny.getChildren().add(btnUtviklerMineSaker);
         return venstreMeny;
     }
 
     // Metode for å legge til LEDER-knapper
     public Node leggTilLederKnapper() {
+        btnLederOpprettSak = new Button("Opprett sak");
         btnLederSeAlleSaker = new Button("Se alle saker");
+
+        // Styling for knappene
+        btnLederOpprettSak.getStyleClass().add("venstre-meny-knapp");
         btnLederSeAlleSaker.getStyleClass().add("venstre-meny-knapp");
 
-        venstreMeny.getChildren().add(btnLederSeAlleSaker);
+        // legg til knappene i panelet
+        venstreMeny.getChildren().addAll(btnLederOpprettSak, btnLederSeAlleSaker);
         return venstreMeny;
     }
 
@@ -114,11 +116,12 @@ public class VenstreMenyView {
 
     // Metode for å fjerne/nullstille knapper
     // fjerner alle Rolle-knapper, men beholder/legger til
-    // "Hjem" knappen igjen (og kaller på leggTilBrukerInfo)
+    // "Hjem" og "Oppdater" knappene igjen
+    //  (samt kaller på leggTilBrukerInfo)
     public void nullstillKnapper() {
         venstreMeny.getChildren().clear();
         leggTilBrukerInfoBoks();
-        venstreMeny.getChildren().add(btnHjem);
+        venstreMeny.getChildren().addAll(btnHjem, btnRefresh);
     }
 
     // get-metode for venstre meny
@@ -126,9 +129,11 @@ public class VenstreMenyView {
 
     // get-metoder for Buttons
     public Button getBtnHjem() { return btnHjem; }
+    public Button getBtnRefresh() { return btnRefresh; }
     public Button getBtnTesterOpprettSak() { return btnTesterOpprettSak; }
     public Button getBtnTesterInnsendteSaker() { return btnTesterInnsendteSaker; }
     public Button getBtnUtviklerMineSaker() { return btnUtviklerMineSaker; }
+    public Button getBtnLederOpprettSak() { return btnLederOpprettSak; }
     public Button getBtnLederSeAlleSaker() { return btnLederSeAlleSaker; }
 
     // set-metoder for info om innlogget bruker

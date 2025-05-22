@@ -99,6 +99,7 @@ public class SakController {
 
         // Legge til lyttere for knapper i venstremenyen
         venstreMenyVisning.getBtnHjem().setOnAction(e -> behandleKlikk(e));
+        venstreMenyVisning.getBtnRefresh().setOnAction(e -> behandleKlikk(e));
         if (venstreMenyVisning.getBtnTesterOpprettSak() != null) {
             venstreMenyVisning.getBtnTesterOpprettSak().setOnAction(e -> behandleKlikk(e));
         }
@@ -108,6 +109,9 @@ public class SakController {
         if (venstreMenyVisning.getBtnUtviklerMineSaker() != null) {
             venstreMenyVisning.getBtnUtviklerMineSaker().setOnAction(e -> behandleKlikk(e));
         }
+        if (venstreMenyVisning.getBtnLederOpprettSak() != null) {
+            venstreMenyVisning.getBtnLederOpprettSak().setOnAction(e -> behandleKlikk(e));
+        }      
         if (venstreMenyVisning.getBtnLederSeAlleSaker() != null) {
             venstreMenyVisning.getBtnLederSeAlleSaker().setOnAction(e -> behandleKlikk(e));
         }
@@ -183,6 +187,26 @@ public class SakController {
             valgtBruker = null; // Nullstill valgtBruker
             rolleView = "";     // Nullstill rolleView
         }
+        if (e.getSource() == venstreMenyVisning.getBtnRefresh()) {
+
+            // Oppdater tabell basert på rolle
+            if ("TESTER".equals(rolleView)) {
+                // Oppdaterer rettetSaker
+                hentRettetSaker();
+                innsendteSakerTabell.getSaksTabell().setItems(rettetSaker);
+            } else if ("UTVIKLER".equals(rolleView)) {
+                // Oppdaterer sakerTildeltUtvikler
+                hentTilDelteSaker();
+                tilordnedeSaker.getSaksTabell().setItems(sakerTildeltUtvikler);
+            } else if ("LEDER".equals(rolleView)) {
+                // Oppdaterer alleUtviklere
+                hentUtviklere(); 
+                alleSakerLeder.getCbUtviklere().getItems().clear();
+                alleSakerLeder.getCbUtviklere().getItems().addAll(alleUtviklere);
+                alleSakerLeder.getCbUtviklere().setPromptText("Velg");
+                alleSakerLeder.getSaksTabell().setItems(alleSaker);
+            }
+        }
         if (e.getSource() == venstreMenyVisning.getBtnTesterOpprettSak()) {
             saksSkjema.setRapportør(valgtBruker.getBrukernavn());
             saksSkjema.getRapportørFelt().setPromptText(valgtBruker.getBrukernavn());
@@ -199,7 +223,11 @@ public class SakController {
             hentTilDelteSaker();
             tilordnedeSaker.getSaksTabell().setItems(sakerTildeltUtvikler);
             sakViewVisning.visPanel(tilordnedeSaker.getTilordnedeSaker());
-
+        }
+        if (e.getSource() == venstreMenyVisning.getBtnLederOpprettSak()) {
+            saksSkjema.setRapportør(valgtBruker.getBrukernavn());
+            saksSkjema.getRapportørFelt().setPromptText(valgtBruker.getBrukernavn());
+            sakViewVisning.visPanel(saksSkjema.getSaksSkjema());
         }
         if (e.getSource() == venstreMenyVisning.getBtnLederSeAlleSaker()) {
             //Kall på hentUtviklere her

@@ -96,7 +96,7 @@ public class UtviklerSakerView {
         tidsstempelKolonne.setCellValueFactory(new PropertyValueFactory<>("tidsstempel"));
 
         // tidsstempel-kolonne (sist endret)
-        TableColumn<Sak, String> tidsEndringKolonne = new TableColumn<>("sist endret");
+        TableColumn<Sak, String> tidsEndringKolonne = new TableColumn<>("Sist endret");
         tidsEndringKolonne.setMinWidth(150);
         tidsEndringKolonne.setCellValueFactory(new PropertyValueFactory<>("oppdatertTidspunkt"));
 
