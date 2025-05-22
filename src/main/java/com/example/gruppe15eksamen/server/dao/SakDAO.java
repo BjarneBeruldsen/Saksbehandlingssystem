@@ -24,27 +24,29 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 public class SakDAO {
 
     /**
-    * Oppdaterer status for en gitt sak.
-    * @param sakId    ID til saken som skal oppdateres
-    * @param nyStatus Ny status som skal settes
-    * @return Antall rader oppdatert (1 hvis suksess, 0 ellers)
-    */
-    // Metode for å oppdatere status til sak
-    public static int oppdaterStatus(int sakId, Status nyStatus, String kommentar) {
+     * Oppdaterer status og utviklerkommentar for en gitt sak.
+     * @param sakId            ID til saken som skal oppdateres
+     * @param nyStatus         Ny status som skal settes
+     * @param utviklerKommentar Kommentar fra utvikler som skal lagres
+     * @return Antall rader oppdatert (1 hvis suksess, 0 ellers)
+     */
+    public static int oppdaterStatus(int sakId, Status nyStatus, String utviklerKommentar) {
         String sql = """
         UPDATE sak
         SET statusId = (
             SELECT statusId FROM status WHERE statusNavn = ?
-        )
+        ),
+        utviklerKommentar = ?
         WHERE sakID = ?
     """;
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, nyStatus.name()); // Bruker statusNavn (enum-name matcher database)
-            pstmt.setInt(2, sakId);
+            pstmt.setString(1, nyStatus.name()); // Bruker statusNavn fra enum
+            pstmt.setString(2, utviklerKommentar); // Setter utviklerKommentar
+            pstmt.setInt(3, sakId); // Setter sakID
             return pstmt.executeUpdate();
         } catch (SQLException | IOException e) {
-            System.err.println("Kunne ikke oppdatere status på sak " + sakId + ": " + e.getMessage());
+            System.err.println("Kunne ikke oppdatere status og utviklerkommentar på sak " + sakId + ": " + e.getMessage());
             e.printStackTrace();
             return 0;
         }

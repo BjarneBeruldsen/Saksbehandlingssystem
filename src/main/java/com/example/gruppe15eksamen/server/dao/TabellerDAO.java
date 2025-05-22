@@ -158,7 +158,7 @@ public class TabellerDAO {
     }
 
     /**
-     * Oppretter tabellen Sak med foreign keys.
+     * Oppretter tabellen Sak med foreign keys og legger til kolonnene utviklerKommentar og testerTilbakemelding.
      */
     private static void lagSakTabell() {
         String sql = """
@@ -171,6 +171,8 @@ public class TabellerDAO {
               prioritetId        INT NOT NULL,
               statusId           INT NOT NULL,
               kategoriId         INT NOT NULL,
+              utviklerKommentar  VARCHAR(255),
+              testerTilbakemelding VARCHAR(255),
               tidsstempel        DATETIME DEFAULT CURRENT_TIMESTAMP,
               oppdatertTidspunkt DATETIME
                 DEFAULT CURRENT_TIMESTAMP
@@ -185,9 +187,9 @@ public class TabellerDAO {
         try (Connection conn = DatabaseUtil.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
-            System.out.println("Tabellen Sak er opprettet");
+            System.out.println("Tabellen Sak er opprettet med kolonnene utviklerKommentar og testerTilbakemelding.");
         } catch (SQLException | IOException e) {
-            System.err.println("Kunne ikke opprette tabellen Sak");
+            System.err.println("Kunne ikke opprette tabellen Sak.");
             e.printStackTrace();
         }
     }
