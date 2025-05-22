@@ -1,5 +1,6 @@
 /**
- * Author: Abdinasir Ali
+ * Klasse for søkefunksjonalitet.
+ * @author Abdinasir Ali
  */
 
 package com.example.gruppe15eksamen.common;
@@ -31,6 +32,11 @@ public class Soking implements Serializable{
 
     }
     public Soking() {
+    }
+
+    // Søking med tittel
+    public Soking(String tittel) {
+        this.tittel = tittel;
     }
 
     //Gettere og settere

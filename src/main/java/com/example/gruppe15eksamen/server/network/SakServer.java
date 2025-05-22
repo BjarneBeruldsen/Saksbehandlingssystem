@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,6 +22,7 @@ import com.example.gruppe15eksamen.common.Prioritet;
 import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.common.SocketRequest;
 import com.example.gruppe15eksamen.common.SocketRespons;
+import com.example.gruppe15eksamen.common.Soking;
 import com.example.gruppe15eksamen.common.Status;
 import com.example.gruppe15eksamen.server.dao.BrukerDAO;
 import com.example.gruppe15eksamen.server.dao.SakDAO;
@@ -32,6 +34,7 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 * flere klienter samtidig ved bruk av thread */
 public class SakServer {
     private static final int PORT = 8000;
+    private static final SakDAO sakDAO = new SakDAO();
 
     public static void main(String[] args) {
         try (Connection conn = DatabaseUtil.getConnection()) {
@@ -181,6 +184,17 @@ public class SakServer {
 
                     utClient.writeObject(new SocketRespons("Hentet tildelte saker",
                             tildelteSaker, true));
+                    break;
+
+                case "SOK_SAKER":
+                    System.out.println("Mottok søkeforespørsel");
+                    Soking soking = (Soking) forespørsel.getData();
+                    System.out.println("Søkeobjekt: " + soking);
+                    List<Sak> sokteSaker = sakDAO.sokSaker(soking);
+                    System.out.println("Antall saker funnet: " + sokteSaker.size());
+                    utClient.writeObject(new SocketRespons("Søkeresultater", new ArrayList<>(sokteSaker), true));
+                    utClient.flush();
+                    break;
 
                 default : utClient.writeObject(new SocketRespons(false,
                         "finner ikke handling" + handling));

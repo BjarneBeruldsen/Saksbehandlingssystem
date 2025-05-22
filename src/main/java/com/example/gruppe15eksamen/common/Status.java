@@ -1,3 +1,7 @@
+/**
+ * Enum klasse
+ * @author Bjarne Beruldsen
+ */
 package com.example.gruppe15eksamen.common;
 
 public enum Status {

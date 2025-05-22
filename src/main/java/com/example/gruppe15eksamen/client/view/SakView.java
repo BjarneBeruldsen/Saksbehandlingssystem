@@ -22,8 +22,15 @@
 package com.example.gruppe15eksamen.client.view;
 
 import java.util.ArrayList;
-import javafx.geometry.Pos;
+
+import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
+import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_HØYDE;
+import com.example.gruppe15eksamen.common.Bruker;
+import com.example.gruppe15eksamen.common.Sak;
+
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -31,15 +38,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-
-import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_BREDDE;
-import static com.example.gruppe15eksamen.client.view.ViewKonstanter.VINDU_HØYDE;
-import com.example.gruppe15eksamen.common.Bruker;
 
 public class SakView {
     // Globale variabler
@@ -51,6 +54,7 @@ public class SakView {
     Label lblOverskrift = new Label("");
     Label lblStatus = new Label("");
     Button bekreftBrukerBtn = new Button("Bekreft");
+    LederSakerView alleSakerLeder;
 
     // Konstruktør
     public SakView() {
@@ -59,6 +63,9 @@ public class SakView {
         hovedPanel.setBottom(lagBunnPanel());
         hovedPanel.setPrefHeight(VINDU_HØYDE);
         hovedPanel.setPrefWidth(VINDU_BREDDE);
+
+        
+        alleSakerLeder = new LederSakerView();
 
         // Default/start (CENTER = Innloggingspanel)
         visPanel(visLoggInnPanel());
@@ -237,5 +244,11 @@ public class SakView {
 
     public Label getLblStatus() {
         return lblStatus;
+    }
+
+    public void oppdaterSakListe(ObservableList<Sak> saker) {
+        if (alleSakerLeder != null) {
+            alleSakerLeder.getSaksTabell().setItems(saker);
+        }
     }
 }
