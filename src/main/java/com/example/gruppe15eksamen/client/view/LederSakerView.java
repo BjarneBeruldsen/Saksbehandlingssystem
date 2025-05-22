@@ -47,6 +47,9 @@ public class LederSakerView {
     Sak valgtSak;
     GridPane searchPane;
     GridPane velgUtviklerPane;
+    Button btOppdaterStatus;
+    //combobox for valg av status
+    ComboBox<Status> cbStatus = new ComboBox<>();
 
     public LederSakerView() {
 
@@ -100,6 +103,8 @@ public class LederSakerView {
         tidsEndringKolonne.setMinWidth(150);
         tidsEndringKolonne.setCellValueFactory(new PropertyValueFactory<>("oppdatertTidspunkt"));
 
+
+
         saksTabell = new TableView<>();
 //        saksTabell.setItems(getSaker());
         saksTabell.getColumns().addAll(idKolonne, tittelKolonne, beskrivelseKolonne,
@@ -122,10 +127,15 @@ public class LederSakerView {
         lblSakIdOverskrift.getStyleClass().add("valgtSak-tabell");
         lblSakIdValg = new Label("");
         btnSetUtvikler = new Button("Bekreft");
+        cbStatus.setPromptText("Velg");
+        cbStatus.getItems().addAll(Status.LUKKET);
+        btOppdaterStatus = new Button("Oppdater Status");
         velgUtviklerPane.add(lblSakIdOverskrift, 0, 0);
         velgUtviklerPane.add(lblSakIdValg, 0, 1);
         velgUtviklerPane.add(cbUtviklere, 1, 0);
         velgUtviklerPane.add(btnSetUtvikler, 2, 0);
+        velgUtviklerPane.add(cbStatus, 3, 0);
+        velgUtviklerPane.add(btOppdaterStatus, 4, 0);
 
         // Lytter for å
         // JavaFX krevde tre parameter, kunne ikke ha kun selectedSak.
@@ -171,4 +181,14 @@ public class LederSakerView {
     public Button getBtLeggTilMottaker() {
         return btLeggTilMottaker;
     }
+
+    public ComboBox<Status> getCbStatus() {
+        return cbStatus;
+    }
+
+    public Button getBtOppdaterStatus() {
+        return btOppdaterStatus;
+    }
+
+
 }

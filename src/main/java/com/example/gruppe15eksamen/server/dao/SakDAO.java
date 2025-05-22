@@ -51,6 +51,64 @@ public class SakDAO {
             return 0;
         }
     }
+
+    /**
+     * Oppdaterer status for en sak uten kommentarer (brukes av leder).
+     * @param sakId ID til saken som skal oppdateres
+     * @param nyStatus Ny status som skal settes
+     * @return Antall rader oppdatert (1 hvis suksess, 0 ellers)
+     */
+    public static int oppdaterStatusLeder(int sakId, Status nyStatus) {
+        String sql = """
+        UPDATE sak
+        SET statusId = (
+            SELECT statusId FROM status WHERE statusNavn = ?
+        )
+        WHERE sakID = ?
+    """;
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nyStatus.name()); // Setter status
+            pstmt.setInt(2, sakId); // Setter sakID
+            return pstmt.executeUpdate();
+        } catch (SQLException | IOException e) {
+            System.err.println("Kunne ikke oppdatere status på sak " + sakId + ": " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * Oppdaterer status og testerTilbakemelding for en gitt sak.
+     * @param sakId               ID til saken som skal oppdateres
+     * @param nyStatus            Ny status som skal settes
+     * @param testerTilbakemelding Tilbakemelding fra tester som skal lagres
+     * @return Antall rader oppdatert (1 hvis suksess, 0 ellers)
+     */
+    public static int oppdaterStatusMedTesterTilbakemelding(int sakId, Status nyStatus, String testerTilbakemelding) {
+        String sql = """
+        UPDATE sak
+        SET statusId = (
+            SELECT statusId FROM status WHERE statusNavn = ?
+        ),
+        testerTilbakemelding = ?
+        WHERE sakID = ?
+    """;
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nyStatus.name()); // Bruker statusNavn fra enum
+            pstmt.setString(2, testerTilbakemelding); // Setter testerTilbakemelding
+            pstmt.setInt(3, sakId); // Setter sakID
+            return pstmt.executeUpdate();
+        } catch (SQLException | IOException e) {
+            System.err.println("Kunne ikke oppdatere status og testerTilbakemelding på sak " + sakId + ": " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+
+
     /**
      * Tildeler en sak til en gitt utvikler (brukernavn).
      * @param sakId      ID til saken som skal tildeles
@@ -231,18 +289,18 @@ public class SakDAO {
         ArrayList<Sak> saker = new ArrayList<>();
 
         String sql = """
-    SELECT s.sakId, s.tittel, s.beskrivelse, s.tidsstempel, s.oppdatertTidspunkt,
-           rapportor.navn AS rapportorNavn,
-           mottaker.navn AS mottakerNavn,
-           p.prioritetNavn, st.statusNavn, k.kategoriNavn
-    FROM Sak s
-    JOIN Brukere rapportor ON s.rapportørBrukerId = rapportor.brukerId
-    LEFT JOIN Brukere mottaker ON s.mottakerBrukerId = mottaker.brukerId
-    JOIN Prioritet p ON s.prioritetId = p.prioritetId
-    JOIN Status st ON s.statusId = st.statusId
-    JOIN Kategori k ON s.kategoriId = k.kategoriId
-    WHERE s.mottakerBrukerId = ?
-    """;
+            SELECT s.sakId, s.tittel, s.beskrivelse, s.tidsstempel, s.oppdatertTidspunkt,
+                   rapportor.navn AS rapportorNavn,
+                   mottaker.navn AS mottakerNavn,
+                   p.prioritetNavn, st.statusNavn, k.kategoriNavn
+            FROM Sak s
+            JOIN Brukere rapportor ON s.rapportørBrukerId = rapportor.brukerId
+            LEFT JOIN Brukere mottaker ON s.mottakerBrukerId = mottaker.brukerId
+            JOIN Prioritet p ON s.prioritetId = p.prioritetId
+            JOIN Status st ON s.statusId = st.statusId
+            JOIN Kategori k ON s.kategoriId = k.kategoriId
+            WHERE s.mottakerBrukerId = ?
+        """;
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -279,6 +337,68 @@ public class SakDAO {
         }
         return saker;
     }
+
+    /**
+     * Henter alle saker i databasen med en spesifikk status.
+     * @param status Statusen som skal filtreres på
+     * @return ArrayList med saker som har den spesifiserte statusen
+     */
+    public static ArrayList<Sak> hentSakerMedStatus(Status status) {
+        ArrayList<Sak> saker = new ArrayList<>();
+        String sql = """
+        SELECT s.sakId, s.tittel, s.beskrivelse, s.tidsstempel, s.oppdatertTidspunkt,
+               rapportor.navn AS rapportorNavn,
+               mottaker.navn AS mottakerNavn,
+               p.prioritetNavn, st.statusNavn, k.kategoriNavn
+        FROM Sak s
+        JOIN Brukere rapportor ON s.rapportørBrukerId = rapportor.brukerId
+        LEFT JOIN Brukere mottaker ON s.mottakerBrukerId = mottaker.brukerId
+        JOIN Prioritet p ON s.prioritetId = p.prioritetId
+        JOIN Status st ON s.statusId = st.statusId
+        JOIN Kategori k ON s.kategoriId = k.kategoriId
+        WHERE st.statusNavn = ?
+    """;
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status.name()); // Setter status basert på enum-verdi
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Sak sak = new Sak();
+
+                    sak.setSakID(rs.getInt("sakId"));
+                    sak.setTittel(rs.getString("tittel"));
+                    sak.setBeskrivelse(rs.getString("beskrivelse"));
+                    sak.setTidsstempel(rs.getTimestamp("tidsstempel").toLocalDateTime());
+                    sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatertTidspunkt").toLocalDateTime());
+
+                    sak.setRapportør(rs.getString("rapportorNavn"));
+
+                    String mottakerNavn = rs.getString("mottakerNavn");
+                    if (mottakerNavn != null) {
+                        sak.setMottaker(mottakerNavn);
+                    }
+
+                    sak.setPrioritet(Prioritet.valueOf(rs.getString("prioritetNavn")));
+                    sak.setStatus(Status.valueOf(rs.getString("statusNavn")));
+                    sak.setKategori(Kategori.valueOf(rs.getString("kategoriNavn")));
+
+                    saker.add(sak);
+                }
+            }
+        } catch (SQLException | IOException e) {
+            System.err.println("Kunne ikke hente saker med status " + status + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return saker;
+    }
+
+
+
+
+
     /**
      * Søker etter saker i databasen basert på ulike søkekriterier.
      * @param soking Soking-objekt som inneholder søkekriteriene

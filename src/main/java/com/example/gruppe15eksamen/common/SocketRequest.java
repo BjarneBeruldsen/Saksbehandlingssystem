@@ -39,6 +39,12 @@ public class SocketRequest implements Serializable {
         this(handling, null);
     }
 
+    public SocketRequest(String handling, Status status, int sakID) {
+        this.handling = handling;
+        this.status = status;
+        this.sakID = sakID;
+    }
+
     public String getHandling() {
         return handling;
     }

@@ -58,6 +58,7 @@ public class InnsendteSakerView {
     Label lblSakIdValg;
     ComboBox<Status> status;
     TextField searchField;
+    TextField tfKommentar = new TextField();
     Button searchBtn;
     Button btnSetStatus;
     Sak valgtSak;
@@ -117,7 +118,6 @@ public class InnsendteSakerView {
         tidsEndringKolonne.setCellValueFactory(new PropertyValueFactory<>("oppdatertTidspunkt"));
 
         saksTabell = new TableView<>();
-        saksTabell.setItems(getSaker());
         saksTabell.getColumns().addAll(idKolonne, tittelKolonne, beskrivelseKolonne,
                                        prioritetKolonne, kategoriKolonne, statusKolonne, 
                                        rapportørKolonne, mottakerKolonne, tidsstempelKolonne, 
@@ -133,17 +133,20 @@ public class InnsendteSakerView {
         searchPane.setAlignment(Pos.CENTER_RIGHT);
 
         // Panel som inneholder nødvendig element for å endre Status til sak
+        tfKommentar.setPromptText("Kommentar");
         statusPane = new GridPane();
         lblSakIdOverskrift = new Label("Sak: ");
         lblSakIdOverskrift.getStyleClass().add("valgtSak-tabell");
         lblSakIdValg = new Label("");
         status = new ComboBox<>();
-        status.getItems().addAll(Status.values());
+        status.setPromptText("Velg");
+        status.getItems().addAll(Status.LØST, Status.TEST_MISLYKTES);
         btnSetStatus = new Button("Oppdater status");
         statusPane.add(lblSakIdOverskrift, 0, 0);
         statusPane.add(lblSakIdValg, 0, 1);
         statusPane.add(status, 1, 0);
-        statusPane.add(btnSetStatus, 2, 0);
+        statusPane.add(tfKommentar, 2, 0);
+        statusPane.add(btnSetStatus, 3, 0);
 
         // Lytter for å 
         // JavaFX krevde tre parameter, kunne ikke ha kun selectedSak.
@@ -161,17 +164,22 @@ public class InnsendteSakerView {
     }
 
 
-    // HARDKODET TEMP-liste med saker
-    public ObservableList<Sak> getSaker() {
-        ObservableList<Sak> saker = FXCollections.observableArrayList();
-        saker.add(new Sak("sak1", "Beskrivelse1", Prioritet.HØY, Kategori.UI_FEIL,  ""));
-        saker.add(new Sak ("sak2", "beskrivelse2", Prioritet.HØY, Kategori.UI_FEIL, ""));
-        saker.add(new Sak ("sak3", "beskrivelse3", Prioritet.HØY, Kategori.UI_FEIL, ""));
-        
-        return saker;
-    }
-
     // get-metode for tabell over innsendte saker ("hovedpanel")
     public Node getInnsendteSaker() { return innsendteSaker; }
-    
+
+    public TableView<Sak> getSaksTabell() {
+        return saksTabell;
+    }
+
+    public ComboBox<Status> getStatus() {
+        return status;
+    }
+
+    public Button getBtnSetStatus() {
+        return btnSetStatus;
+    }
+
+    public TextField getTfKommentar() {
+        return tfKommentar;
+    }
 }

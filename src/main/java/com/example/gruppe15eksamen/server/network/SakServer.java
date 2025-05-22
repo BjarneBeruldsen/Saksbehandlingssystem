@@ -110,6 +110,20 @@ public class SakServer {
                     utClient.flush();
                     break;
 
+                case "HENT_RETTET":
+                    // Henter alle saker med status "RETTET" via DAO
+                    ArrayList<Sak> rettedeSaker = SakDAO.hentSakerMedStatus(Status.RETTET);
+
+                    if (rettedeSaker != null && !rettedeSaker.isEmpty()) {
+                        // Sender lista over rettede saker tilbake til klienten
+                        utClient.writeObject(new SocketRespons("Hentet rettede saker", rettedeSaker, true));
+                    } else {
+                        // Sender tom respons hvis ingen rettede saker finnes
+                        utClient.writeObject(new SocketRespons(false, "Ingen rettede saker funnet"));
+                    }
+                    utClient.flush();
+                    break;
+
                 case "HENT_SAKER" :
                     //henter alle saker via DAO
                     ArrayList<Sak> saker = SakDAO.hentAlleSaker();
@@ -136,12 +150,27 @@ public class SakServer {
                     String kommentar = forespørsel.getKommentar();
 
                     // Kaller DAO for å oppdatere statusen
-                    int oppdaterteRader = SakDAO.oppdaterStatus(sakID, nyStatus, kommentar);
+                    int oppdaterteRader = SakDAO.oppdaterStatusMedTesterTilbakemelding(sakID, nyStatus, kommentar);
 
                     if (oppdaterteRader > 0) {
                         utClient.writeObject(new SocketRespons(true, "Status oppdatert for sak med ID " + sakID));
                     } else {
                         utClient.writeObject(new SocketRespons(false, "Kunne ikke oppdatere status for sak med ID " + sakID));
+                    }
+                    utClient.flush();
+                    break;
+                case "OPPDATER_STATUS_LEDER":
+                    // Henter sakID og valgt status fra forespørselen
+                    int sakIDLeder = forespørsel.getSakID();
+                    Status nyStatusLeder = forespørsel.getStatus();
+
+                    // Kaller DAO for å oppdatere statusen
+                    int oppdaterteRaderLeder = SakDAO.oppdaterStatusLeder(sakIDLeder, nyStatusLeder);
+
+                    if (oppdaterteRaderLeder > 0) {
+                        utClient.writeObject(new SocketRespons(true, "Status oppdatert for sak med ID " + sakIDLeder));
+                    } else {
+                        utClient.writeObject(new SocketRespons(false, "Kunne ikke oppdatere status for sak med ID " + sakIDLeder));
                     }
                     utClient.flush();
                     break;

@@ -49,6 +49,7 @@ public class SakController {
     private ArrayList<String> alleUtviklere; //arrayList for brukernavn til rullgardinliste i Leder
     private ObservableList<Sak> alleSaker; //arrayList som tar bare på alle saker
     private ObservableList<Sak> sakerTildeltUtvikler; //holder på saker som er tildelt utvikler
+    private ObservableList<Sak> rettetSaker; //holdet på saker som har status: "RETTET"
 
 
     private BorderPane hovedPanel;
@@ -112,9 +113,13 @@ public class SakController {
         }
         if(alleSakerLeder.getBtLeggTilMottaker() != null) {
             alleSakerLeder.getBtLeggTilMottaker().setOnAction(e -> behandleKlikk(e));
+            alleSakerLeder.getBtOppdaterStatus().setOnAction(e -> behandleKlikk(e));
         }
         if(tilordnedeSaker.getBtnSetStatus() != null) {
             tilordnedeSaker.getBtnSetStatus().setOnAction(e -> behandleKlikk(e));
+        }
+        if(innsendteSakerTabell.getBtnSetStatus() != null) {
+            innsendteSakerTabell.getBtnSetStatus().setOnAction(e -> behandleKlikk(e));
         }
     }
 
@@ -184,6 +189,9 @@ public class SakController {
             sakViewVisning.visPanel(saksSkjema.getSaksSkjema());
         }
         if (e.getSource() == venstreMenyVisning.getBtnTesterInnsendteSaker()) {
+            //henter saker som er rettet her
+            hentRettetSaker();
+            innsendteSakerTabell.getSaksTabell().setItems(rettetSaker);
             sakViewVisning.visPanel(innsendteSakerTabell.getInnsendteSaker());
         }
         if (e.getSource() == venstreMenyVisning.getBtnUtviklerMineSaker()) {
@@ -218,6 +226,60 @@ public class SakController {
             oppdaterStatusUtvikler();
         }
 
+        if(e.getSource() == innsendteSakerTabell.getBtnSetStatus()) {
+            oppdaterStatusTester();
+        }
+
+        if(e.getSource() == alleSakerLeder.getBtOppdaterStatus()) {
+            System.out.println("slår til");
+            oppdaterStatusLeder();
+        }
+
+    }
+
+    private void oppdaterStatusLeder() {
+        // Henter valgt sak og status
+        Sak valgtSak = alleSakerLeder.getSaksTabell().getSelectionModel().getSelectedItem();
+        Status valgtStatus = alleSakerLeder.getCbStatus().getValue();
+
+        if (valgtSak != null && valgtStatus != null) {
+            int sakID = valgtSak.getSakID();
+
+            // Sender forespørsel til server via nettverkKlient
+            SocketRespons respons = nettverkKlient.oppdaterStatusLeder(valgtStatus, sakID);
+
+            if (respons.isGodkjent()) {
+                sakViewVisning.setGodkjenning(respons.getStatus());
+            } else {
+                sakViewVisning.setFeilmelding("Ingen saker tilgjengelig");
+            }
+        } else {
+            sakViewVisning.setFeilmelding("Du må velge sak ved trykk på rad i tabellen og en gyldig status.");
+        }
+    }
+
+    private void oppdaterStatusTester() {
+        //henter valgt status og sak
+        Sak valgtSak = innsendteSakerTabell.getSaksTabell().getSelectionModel().getSelectedItem();
+        Status valgtStatus = innsendteSakerTabell.getStatus().getValue();
+        String kommentar = innsendteSakerTabell.getTfKommentar().getText();
+
+        if(valgtSak != null && valgtStatus != null) {
+            int sakID = valgtSak.getSakID();
+
+            //sender til server
+            SocketRespons respons = nettverkKlient.oppdaterStatus(valgtStatus, sakID, kommentar);
+
+            if(respons.isGodkjent()) {
+                sakViewVisning.setGodkjenning(respons.getStatus());
+            }
+            else {
+                sakViewVisning.setFeilmelding("Ingen saker tilgjengelig");
+            }
+
+        } else {
+            sakViewVisning.setFeilmelding("Du må velge sak ved trykk på rad i tabell og mottaker fra listen");
+        }
     }
 
     private void oppdaterStatusUtvikler() {
@@ -236,11 +298,11 @@ public class SakController {
                 sakViewVisning.setGodkjenning(respons.getStatus());
             }
             else {
-                sakViewVisning.setFeilmelding(respons.getStatus());
+                sakViewVisning.setFeilmelding("Ingen saker tilgjengelig");
             }
 
         } else {
-            sakViewVisning.setFeilmelding("Du må velge sak og mottaker");
+            sakViewVisning.setFeilmelding("Du må velge sak ved trykk på rad i tabell og mottaker fra listen");;
         }
     }
 
@@ -263,7 +325,7 @@ public class SakController {
             }
 
         } else {
-            sakViewVisning.setFeilmelding("Du må velge sak og mottaker");
+            sakViewVisning.setFeilmelding("Du må velge sak ved trykk på rad i tabell og mottaker fra listen");
         }
     }
 
@@ -304,7 +366,23 @@ public class SakController {
         }
     }
 
+    private void hentRettetSaker() {
+        SocketRespons respons = nettverkKlient.hentRettetSaker();
 
+        if(respons.isGodkjent()) {
+            sakViewVisning.setGodkjenning(respons.getStatus());
+        }
+        else {
+            sakViewVisning.setFeilmelding(respons.getStatus());
+        }
+
+        if(respons != null && respons.getSaker() != null) {
+            rettetSaker = FXCollections.observableArrayList(respons.getSaker());
+        }
+        else {
+            rettetSaker = FXCollections.observableArrayList();
+        }
+    }
 
     public void hentTilDelteSaker() {
         if(valgtBruker == null) {
