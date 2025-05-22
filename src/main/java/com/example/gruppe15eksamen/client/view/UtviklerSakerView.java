@@ -40,6 +40,7 @@ public class UtviklerSakerView {
     Label lblSakIdValg;
     ComboBox<Status> status;
     TextField searchField;
+    TextField tfKommentar = new TextField();
     Button searchBtn;
     Button btnSetStatus;
     VBox tilordnedeSaker;
@@ -116,17 +117,20 @@ public class UtviklerSakerView {
         searchPane.setAlignment(Pos.CENTER_RIGHT);
 
         // Panel som inneholder nødvendig element for å endre Status til sak
+        tfKommentar.setPromptText("Kommentar");
         statusPane = new GridPane();
         lblSakIdOverskrift = new Label("Sak: ");
         lblSakIdOverskrift.getStyleClass().add("valgtSak-tabell");
         lblSakIdValg = new Label("");
         status = new ComboBox<>();
-        status.getItems().addAll(Status.values());
+        status.setPromptText("Velg");
+        status.getItems().addAll(Status.PÅGÅR, Status.RETTET);
         btnSetStatus = new Button("Oppdater status");
         statusPane.add(lblSakIdOverskrift, 0, 0);
         statusPane.add(lblSakIdValg, 0, 1);
         statusPane.add(status, 1, 0);
-        statusPane.add(btnSetStatus, 2, 0);
+        statusPane.add(tfKommentar, 2, 0);
+        statusPane.add(btnSetStatus, 3, 0);
 
         // Lytter for å 
         // JavaFX krevde tre parameter, kunne ikke ha kun selectedSak.
@@ -160,5 +164,17 @@ public class UtviklerSakerView {
 
     public TableView<Sak> getSaksTabell() {
         return saksTabell;
+    }
+
+    public Button getBtnSetStatus() {
+        return btnSetStatus;
+    }
+
+    public ComboBox<Status> getStatus() {
+        return status;
+    }
+
+    public TextField getTfKommentar() {
+        return tfKommentar;
     }
 }

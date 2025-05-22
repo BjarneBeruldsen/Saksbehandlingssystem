@@ -167,4 +167,31 @@ public class NetworkClient {
         }
         return null;
     }
+
+    public SocketRespons oppdaterStatus(Status valgtStatus, int sakID, String kommentar) {
+        // Lager en forespørsel med operasjon, status og sakID
+        SocketRequest forespørsel = new SocketRequest("OPPDATER_STATUS", valgtStatus, sakID, kommentar);
+
+        try (Socket socket = new Socket("localhost", PORT);
+             ObjectOutputStream ut = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+        ) {
+            // Sender forespørselen til serveren
+            ut.writeObject(forespørsel);
+            ut.flush();
+
+            // Leser respons fra serveren
+            SocketRespons respons = (SocketRespons) inn.readObject();
+
+            // Returnerer responsen hvis den er godkjent, ellers returnerer feilmelding
+            if (respons.isGodkjent()) {
+                return respons;
+            } else {
+                return new SocketRespons(false, "Kunne ikke oppdatere status for sak");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return new SocketRespons(false, "Feil med kommunikasjon ved oppdatering av status");
+        }
+    }
 }

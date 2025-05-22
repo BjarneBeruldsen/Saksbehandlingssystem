@@ -122,6 +122,23 @@ public class SakServer {
                     }
                     break;
 
+                case "OPPDATER_STATUS":
+                    // Henter sakID og valgt status fra forespørselen
+                    int sakID = forespørsel.getSakID();
+                    Status nyStatus = forespørsel.getStatus();
+                    String kommentar = forespørsel.getKommentar();
+
+                    // Kaller DAO for å oppdatere statusen
+                    int oppdaterteRader = SakDAO.oppdaterStatus(sakID, nyStatus, kommentar);
+
+                    if (oppdaterteRader > 0) {
+                        utClient.writeObject(new SocketRespons(true, "Status oppdatert for sak med ID " + sakID));
+                    } else {
+                        utClient.writeObject(new SocketRespons(false, "Kunne ikke oppdatere status for sak med ID " + sakID));
+                    }
+                    utClient.flush();
+                    break;
+
                 case "HENT_TILDELTE":
                     //harkoder saker for testdata FJERN
                     ArrayList<Sak> tildelteSaker = SakDAO.hentSakerTildeltUtvikler(forespørsel.getBrukerID());

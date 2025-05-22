@@ -24,18 +24,20 @@ import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 //Opprette metoder for saker og diverse
 public class SakDAO {
 
-   //Metode for å oppdatere status til sak
-    public static int oppdaterStatus(int sakId, Status nyStatus) {
+    // Metode for å oppdatere status til sak
+    public static int oppdaterStatus(int sakId, Status nyStatus, String kommentar) {
         String sql = """
         UPDATE sak
-        SET statusId = ?
+        SET statusId = (
+            SELECT statusId FROM status WHERE statusNavn = ?
+        )
         WHERE sakID = ?
-        """;
+    """;
         try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, nyStatus.getId());
-            ps.setInt(2, sakId);
-            return ps.executeUpdate();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nyStatus.name()); // Bruker statusNavn (enum-name matcher database)
+            pstmt.setInt(2, sakId);
+            return pstmt.executeUpdate();
         } catch (SQLException | IOException e) {
             System.err.println("Kunne ikke oppdatere status på sak " + sakId + ": " + e.getMessage());
             e.printStackTrace();
@@ -248,7 +250,7 @@ public class SakDAO {
                     sak.setTidsstempel(rs.getTimestamp("tidsstempel").toLocalDateTime());
                     sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatertTidspunkt").toLocalDateTime());
 
-                    sak.setRapportør(rs.getString("rapportørNavn"));
+                    sak.setRapportør(rs.getString("rapportorNavn"));
 
                     String mottakerNavn = rs.getString("mottakerNavn");
                     if (mottakerNavn != null) {

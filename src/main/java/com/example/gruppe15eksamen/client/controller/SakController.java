@@ -113,6 +113,9 @@ public class SakController {
         if(alleSakerLeder.getBtLeggTilMottaker() != null) {
             alleSakerLeder.getBtLeggTilMottaker().setOnAction(e -> behandleKlikk(e));
         }
+        if(tilordnedeSaker.getBtnSetStatus() != null) {
+            tilordnedeSaker.getBtnSetStatus().setOnAction(e -> behandleKlikk(e));
+        }
     }
 
 
@@ -184,7 +187,11 @@ public class SakController {
             sakViewVisning.visPanel(innsendteSakerTabell.getInnsendteSaker());
         }
         if (e.getSource() == venstreMenyVisning.getBtnUtviklerMineSaker()) {
+            //henter saker som er tildelt utvikler her
+            hentTilDelteSaker();
+            tilordnedeSaker.getSaksTabell().setItems(sakerTildeltUtvikler);
             sakViewVisning.visPanel(tilordnedeSaker.getTilordnedeSaker());
+
         }
         if (e.getSource() == venstreMenyVisning.getBtnLederSeAlleSaker()) {
             //Kall på hentUtviklere her
@@ -193,9 +200,12 @@ public class SakController {
             alleSakerLeder.getCbUtviklere().getItems().clear();
             alleSakerLeder.getCbUtviklere().getItems().addAll(alleUtviklere);
             alleSakerLeder.getCbUtviklere().setPromptText("Velg");
+            //legger saker til tabell
             alleSakerLeder.getSaksTabell().setItems(alleSaker);
             sakViewVisning.visPanel(alleSakerLeder.getAlleSaker());
         }
+
+
         if(e.getSource() == saksSkjema.getBtnOpprett()) {
             opprettSak();
         }
@@ -204,6 +214,34 @@ public class SakController {
             leggTilMottaker();
         }
 
+        if(e.getSource() == tilordnedeSaker.getBtnSetStatus()) {
+            oppdaterStatusUtvikler();
+        }
+
+    }
+
+    private void oppdaterStatusUtvikler() {
+        //henter valgt satus og sak
+        Sak valgtSak = tilordnedeSaker.getSaksTabell().getSelectionModel().getSelectedItem();
+        Status valgtStatus = tilordnedeSaker.getStatus().getValue();
+        String kommentar = tilordnedeSaker.getTfKommentar().getText();
+
+        if(valgtSak != null && valgtStatus != null) {
+            int sakID = valgtSak.getSakID();
+
+            //sender til server
+            SocketRespons respons = nettverkKlient.oppdaterStatus(valgtStatus, sakID, kommentar);
+
+            if(respons.isGodkjent()) {
+                sakViewVisning.setGodkjenning(respons.getStatus());
+            }
+            else {
+                sakViewVisning.setFeilmelding(respons.getStatus());
+            }
+
+        } else {
+            sakViewVisning.setFeilmelding("Du må velge sak og mottaker");
+        }
     }
 
     private void leggTilMottaker() {

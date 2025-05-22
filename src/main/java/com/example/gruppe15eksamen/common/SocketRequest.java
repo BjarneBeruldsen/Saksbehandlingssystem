@@ -8,6 +8,15 @@ public class SocketRequest implements Serializable {
     private int brukerID;
     private String brukernavn;
     private int sakID;
+    private Status status;
+    private String kommentar;
+
+    public SocketRequest(String handling, Status status, int sakID, String kommentar) {
+        this.handling = handling;
+        this.status = status;
+        this.sakID = sakID;
+        this.kommentar = kommentar;
+    }
 
     public SocketRequest(String handling, Sak sak) {
         this.handling = handling;
@@ -64,5 +73,13 @@ public class SocketRequest implements Serializable {
 
     public void setSakID(int sakID) {
         this.sakID = sakID;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public String getKommentar() {
+        return kommentar;
     }
 }

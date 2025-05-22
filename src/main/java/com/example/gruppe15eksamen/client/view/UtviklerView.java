@@ -38,4 +38,5 @@ public class UtviklerView {
         return utviklerPanel();
     }
 
+
 }
