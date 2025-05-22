@@ -149,7 +149,6 @@ public class SakController {
                     soking.setTittel(søkeTekst);
                     soking.setBeskrivelse(søkeTekst);
                     soking.setReporterNavn(søkeTekst);
-                    soking.setPrioritet(Prioritet.valueOf(søkeTekst.toUpperCase()));
                 }
                 
                 sokSaker(soking);
