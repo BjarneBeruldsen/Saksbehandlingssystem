@@ -1,18 +1,25 @@
 /**
- * Author: Laurent Zogaj
+ * @author: Laurent Zogaj
+ * En DAO-klasse som oppretter tabeller i databasen for saksbehandlingssystemet vårt.
+ * Klassen oppretter tabellene: Kategori, Prioritet, Status, Rolle, Brukere og Sak.
+ * Hver tabell har egne metoder for opprettelse og innsetting av enum-verdier som data(Kategori, prioritet, status, rolle).
+ * Tabellene kobles sammen med foreign keys. 
+ * Klassen har en metode som oppretter alle tabellene i riktig rekkefølge.
+ * Vi har også validering med CHECK constraint på enum-verdiene i tabellene Kategori, Prioritet, Status og Rolle, for ekstra sikkerhet i tillegg til at vi bruker enum-verdier.
  */
 package com.example.gruppe15eksamen.server.dao;
-
-import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 public class TabellerDAO {
 
-    //En metode for å opprette tabellen kategori og sette inn data (ENUMS) i form av varchar
+    /**
+     * Oppretter tabellen Kategori og setter inn enum-verdier som data.
+     */
     private static void lagKategoriTabell() {
         String sql = """
             CREATE TABLE IF NOT EXISTS Kategori (
@@ -35,7 +42,10 @@ public class TabellerDAO {
             e.printStackTrace();
         }
     }
-    //En metode for å opprette tabellen prioritet og sette inn data (ENUMS) i form av varchar
+
+    /**
+     * Oppretter tabellen Prioritet og setter inn enum-verdier som data.
+     */
     private static void lagPrioritetTabell() {
         String sql = """
             CREATE TABLE IF NOT EXISTS Prioritet (
@@ -58,7 +68,10 @@ public class TabellerDAO {
             e.printStackTrace();
         }
     }
-    //En metode for å opprette tabellen status og sette inn data (ENUMS) i form av varchar
+
+    /**
+     * Oppretter tabellen Status og setter inn enum-verdier som data.
+     */
     private static void lagStatusTabell() {
         String sql = """
             CREATE TABLE IF NOT EXISTS Status (
@@ -84,7 +97,10 @@ public class TabellerDAO {
             e.printStackTrace();
         }
     }
-    //En metode for å opprette tabellen rolle og sette inn data (ENUMS) i form av varchar
+
+    /**
+     * Oppretter tabellen Rolle og setter inn enum-verdier som data.
+     */
     private static void lagRolleTabell() {
         String sql = """
             CREATE TABLE IF NOT EXISTS Rolle (
@@ -107,7 +123,10 @@ public class TabellerDAO {
             e.printStackTrace();
         }
     }
-    //Oppretter tabellen brukere
+
+    /**
+     * Oppretter tabellen Brukere og legger inn eksempelbrukere for hver rolle.
+     */
     private static void lagBrukereTabell() {
         String sqlOpprett = """
         CREATE TABLE IF NOT EXISTS Brukere (
@@ -118,7 +137,7 @@ public class TabellerDAO {
         );
         """;
 
-        //legger til tre brukere med hver sin rolle for testing
+        //Eksempelbrukere med roller for test
         String sqlData = """
         INSERT IGNORE INTO Brukere (navn, rolleId) VALUES
         ('Bruker_Leder', 1),
@@ -130,16 +149,17 @@ public class TabellerDAO {
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sqlOpprett);
             System.out.println("Tabellen Brukere er opprettet");
-
             stmt.executeUpdate(sqlData);
             System.out.println("Tre brukere er lagt til i tabellen Brukere");
-
         } catch (SQLException | IOException e) {
             System.err.println("Kunne ikke opprette tabellen Brukere eller legge til brukere");
             e.printStackTrace();
         }
     }
-    //Oppretter tabellen sak
+
+    /**
+     * Oppretter tabellen Sak med foreign keys.
+     */
     private static void lagSakTabell() {
         String sql = """
             CREATE TABLE IF NOT EXISTS Sak (
@@ -171,7 +191,10 @@ public class TabellerDAO {
             e.printStackTrace();
         }
     }
-    //Samler alle tabellene i en metode
+
+    /**
+     * Legger til alle tabeller til en metode, da trenger vi ikke å kalle på hver enkelt tabell.
+     */
     public static void opprettAlleTabeller() {
         lagKategoriTabell();
         lagPrioritetTabell();
