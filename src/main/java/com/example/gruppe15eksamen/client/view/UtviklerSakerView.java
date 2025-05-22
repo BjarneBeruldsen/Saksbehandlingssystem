@@ -1,9 +1,12 @@
-// Author: Severin Waller Sørensen
+/**
+ * GUI-komponent for å se InnsendteSaker. 
+ * Gir funksjonalitet for å oppdatere Status
+ * Tilhører rolle: TESTER)
+ * 
+ * @Author Severin Waller Sørensen
+ */
 
-/* Denne filen ...
- * 
- * 
- * -- NB! lagde InnsendteSakerView.java først! --
+/* -- NB! lagde InnsendteSakerView.java først! --
  * Den er basert på kilder som er linket i den klassen.
  * Denne filen (UtviklerSakerView.java) og LederSakerView.java
  * er begge basert på InnsendteSakerView.java.
@@ -35,6 +38,7 @@ import com.example.gruppe15eksamen.common.Status;
 
 public class UtviklerSakerView {
     
+    /** Globale variabler */
     TableView<Sak> saksTabell;
     Label lblSakIdOverskrift;
     Label lblSakIdValg;
@@ -48,6 +52,7 @@ public class UtviklerSakerView {
     GridPane searchPane;
     GridPane statusPane;
 
+    /** Konstruktør som setter opp GUI-komponenter for utvikler-saker */
     public UtviklerSakerView() {
 
          // ID-kolonne

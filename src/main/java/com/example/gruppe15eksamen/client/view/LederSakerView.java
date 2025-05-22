@@ -1,9 +1,12 @@
-// Author: Severin Waller Sørensen
+/**
+ * GUI-komponent for å se InnsendteSaker. 
+ * Gir funksjonalitet for å oppdatere Status
+ * Tilhører rolle: TESTER)
+ * 
+ * @Author Severin Waller Sørensen
+ */
 
-/* Denne filen ...
- * 
- * 
- * -- NB! lagde InnsendteSakerView.java først! --
+/* -- NB! lagde InnsendteSakerView.java først! --
  * Den er basert på kilder som er linket i den klassen.
  * Denne filen (LederSakerView.java) og UtviklerSakerView.java
  * er begge basert på InnsendteSakerView.java.
@@ -13,8 +16,9 @@
 
 package com.example.gruppe15eksamen.client.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.example.gruppe15eksamen.common.Sak;
+import com.example.gruppe15eksamen.common.Status;
+
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -27,13 +31,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-import com.example.gruppe15eksamen.common.Kategori;
-import com.example.gruppe15eksamen.common.Prioritet;
-import com.example.gruppe15eksamen.common.Sak;
-import com.example.gruppe15eksamen.common.Status;
-
 public class LederSakerView {
 
+    /** Globale variabler */
     TableView<Sak> saksTabell;
     VBox alleSaker;
     Label lblSakIdOverskrift;
@@ -51,6 +51,7 @@ public class LederSakerView {
     //combobox for valg av status
     ComboBox<Status> cbStatus = new ComboBox<>();
 
+    /** Konstruktør som setter opp GUI-komponenter for alle-saker (for Leder) */
     public LederSakerView() {
 
          // ID-kolonne
@@ -190,5 +191,12 @@ public class LederSakerView {
         return btOppdaterStatus;
     }
 
+    public TextField getSearchField() {
+        return searchField;
+    }
+
+    public Button getSearchBtn() {
+        return searchBtn;
+    }
 
 }

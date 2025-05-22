@@ -1,14 +1,20 @@
 package com.example.gruppe15eksamen.client.network;
 
-import com.example.gruppe15eksamen.common.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import com.example.gruppe15eksamen.common.Bruker;
+import com.example.gruppe15eksamen.common.Sak;
+import com.example.gruppe15eksamen.common.SocketRequest;
+import com.example.gruppe15eksamen.common.SocketRespons;
+import com.example.gruppe15eksamen.common.Soking;
+import com.example.gruppe15eksamen.common.Status;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /*Denne filen inneholde kode for å koble til server
 * og sende data til/fra serveren */
@@ -194,6 +200,31 @@ public class NetworkClient {
             return new SocketRespons(false, "Feil med kommunikasjon ved oppdatering av status");
         }
     }
+
+    public ObservableList<Sak> sokSaker(Soking soking) {
+        SocketRequest forespørsel = new SocketRequest("SOK_SAKER");
+        forespørsel.setData(soking);
+
+        try (Socket socket = new Socket("localhost", PORT);
+             ObjectOutputStream ut = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream inn = new ObjectInputStream(socket.getInputStream());
+        ) {
+
+            ut.writeObject(forespørsel);
+            ut.flush();
+            SocketRespons respons = (SocketRespons) inn.readObject();
+            
+            if (respons.isGodkjent() && respons.getSaker() != null) {
+                return FXCollections.observableArrayList(respons.getSaker());
+            }
+            return FXCollections.observableArrayList();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Feil ved søk: " + e.getMessage());
+            e.printStackTrace();
+            return FXCollections.observableArrayList();
+        }
+    }
+
 
     /**
      * Henter alle saker med status "RETTET" fra serveren.

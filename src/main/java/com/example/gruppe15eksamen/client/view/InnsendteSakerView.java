@@ -1,9 +1,10 @@
-// Author: Severin Waller Sørensen
-
-/* Denne filen
+/**
+ * GUI-komponent for å se InnsendteSaker. 
+ * Gir funksjonalitet for å oppdatere Status
+ * Tilhører rolle: TESTER)
  * 
+ * @Author Severin Waller Sørensen
  */
-
 
 /* --------------------------------------------------------------
  * KILDE1: (YouTube: thenewboston)
@@ -28,9 +29,6 @@
 
 package com.example.gruppe15eksamen.client.view;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -38,20 +36,17 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import java.time.LocalDateTime;
 
-import com.example.gruppe15eksamen.common.Kategori;
-import com.example.gruppe15eksamen.common.Prioritet;
 import com.example.gruppe15eksamen.common.Sak;
 import com.example.gruppe15eksamen.common.Status;
 
 public class InnsendteSakerView {
 
+    /** Globale variabler */
     TableView<Sak> saksTabell;
     VBox innsendteSaker;
     Label lblSakIdOverskrift;
@@ -65,6 +60,8 @@ public class InnsendteSakerView {
     GridPane searchPane;
     GridPane statusPane;
 
+
+    /** Konstruktør som setter opp GUI-komponenter for innsendte-saker */
     public InnsendteSakerView() {
     
         // ID-kolonne

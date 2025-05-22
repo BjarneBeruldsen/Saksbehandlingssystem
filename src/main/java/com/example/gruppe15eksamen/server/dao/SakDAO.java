@@ -404,81 +404,111 @@ public class SakDAO {
      * @param soking Soking-objekt som inneholder søkekriteriene
      * @return Liste med saker som matcher søkekriteriene
      */
-
-    //Metode for søking
     public List<Sak> sokSaker(Soking soking) {
-    List<Sak> resultater = new ArrayList<>();
+        List<Sak> resultater = new ArrayList<>();
+      
+        StringBuilder sql = new StringBuilder("""
+            SELECT s.sakId, s.tittel, s.beskrivelse, s.tidsstempel, s.oppdatertTidspunkt,
+                   br.navn AS rapportørNavn,
+                   mo.navn AS mottakerNavn,
+                   p.prioritetNavn, st.statusNavn, k.kategoriNavn
+            FROM sak s
+            JOIN brukere br ON s.rapportørBrukerId = br.brukerId
+            LEFT JOIN brukere mo ON s.mottakerBrukerId = mo.brukerId
+            JOIN prioritet p ON s.prioritetId = p.prioritetId
+            JOIN kategori k ON s.kategoriId = k.kategoriId
+            JOIN status st ON s.statusId = st.statusId
+            WHERE 1=1
+            """);
+        List<Object> parametere = new ArrayList<>();
 
-    StringBuilder sql = new StringBuilder("SELECT * FROM sak WHERE 1=1");
-    List<Object> parametere = new ArrayList<>();
-
-    if (soking.getPrioritet() != null) {
-        sql.append(" AND prioritet = ?");
-        parametere.add(soking.getPrioritet().name());
-    }
-
-    if (soking.getStatus() != null) {
-        sql.append(" AND status = ?");
-        parametere.add(soking.getStatus());
-    }
-
-    if (soking.getKategori() != null) {
-        sql.append(" AND kategori = ?");
-        parametere.add(soking.getKategori());
-    }
-
-    if (soking.getTittel() != null && !soking.getTittel().isEmpty()) {
-        sql.append(" AND tittel LIKE ?");
-        parametere.add("%" + soking.getTittel() + "%");
-    }
-
-    if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
-        sql.append(" AND beskrivelse LIKE ?");
-        parametere.add("%" + soking.getBeskrivelse() + "%");
-    }
-    
-
-    if (soking.getOpprettetAr() != null) {
-        sql.append(" AND YEAR(opprettet_tidspunkt) = ?");
-        parametere.add(soking.getOpprettetAr());
-    }
-
-    if (soking.getOppdatertAr() != null) {
-        sql.append(" AND YEAR(oppdatert_tidspunkt) = ?");
-        parametere.add(soking.getOppdatertAr());
-    }
-   
-    if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
-        sql.append(" AND rapportorBrukerid IN (SELECT brukerid FROM brukere WHERE navn LIKE ?)");
-        parametere.add("%" + soking.getReporterNavn() + "%");
-    }
-    try (Connection conn = DatabaseUtil.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
-
-        for (int i = 0; i < parametere.size(); i++) {
-            stmt.setObject(i + 1, parametere.get(i));
+        if (soking.getPrioritet() != null) {
+            sql.append(" AND p.prioritetNavn = ?");
+            parametere.add(soking.getPrioritet().name());
         }
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Sak sak = new Sak();
-            sak.setSakID(rs.getInt("sakID"));
-            sak.setTittel(rs.getString("tittel"));
-            sak.setBeskrivelse(rs.getString("beskrivelse"));
-            sak.setPrioritet(Prioritet.valueOf(rs.getString("prioritet")));
-            sak.setKategori(Kategori.valueOf(rs.getString("kategori")));
-            sak.setStatus(Status.valueOf(rs.getString("status")));
-            sak.setRapportør(rs.getString("rapportør"));
-            sak.setMottaker(rs.getString("mottaker"));
-            sak.setTidsstempel(rs.getTimestamp("opprettet_tidspunkt").toLocalDateTime());
-            sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatert_tidspunkt").toLocalDateTime());
+
+        if (soking.getStatus() != null) {
+            sql.append(" AND st.statusNavn = ?");
+            parametere.add(soking.getStatus().name());
+        }
+
+        if (soking.getKategori() != null) {
+            sql.append(" AND k.kategoriNavn = ?");
+            parametere.add(soking.getKategori().name());
+        }
+
+
+        if (soking.getTittel() != null && !soking.getTittel().isEmpty()) {
+            sql.append(" AND (LOWER(s.tittel) LIKE LOWER(?)");
+            parametere.add("%" + soking.getTittel() + "%");
             
-            resultater.add(sak);
+            if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
+                sql.append(" OR LOWER(s.beskrivelse) LIKE LOWER(?)");
+                parametere.add("%" + soking.getBeskrivelse() + "%");
+            }
+            
+            if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+                sql.append(" OR LOWER(br.navn) LIKE LOWER(?)");
+                parametere.add("%" + soking.getReporterNavn() + "%");
+            }
+            
+            sql.append(")");
+        } else if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
+            sql.append(" AND (LOWER(s.beskrivelse) LIKE LOWER(?)");
+            parametere.add("%" + soking.getBeskrivelse() + "%");
+            
+            if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+                sql.append(" OR LOWER(br.navn) LIKE LOWER(?)");
+                parametere.add("%" + soking.getReporterNavn() + "%");
+            }
+            
+            sql.append(")");
+        } else if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+            sql.append(" AND LOWER(br.navn) LIKE LOWER(?)");
+            parametere.add("%" + soking.getReporterNavn() + "%");
         }
 
-    } catch (SQLException | IOException e) {
-        e.printStackTrace();
-    }
-    return resultater;
+        if (soking.getOpprettetAr() != null) {
+            sql.append(" AND YEAR(s.tidsstempel) = ?");
+            parametere.add(soking.getOpprettetAr());
+        }
+
+        if (soking.getOppdatertAr() != null) {
+            sql.append(" AND YEAR(s.oppdatertTidspunkt) = ?");
+            parametere.add(soking.getOppdatertAr());
+        }
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            
+            for (int i = 0; i < parametere.size(); i++) {
+                stmt.setObject(i + 1, parametere.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                int antallResultater = 0;
+                while (rs.next()) {
+                    antallResultater++;
+                    Sak sak = new Sak();
+                    sak.setSakID(rs.getInt("sakId"));
+                    sak.setTittel(rs.getString("tittel"));
+                    sak.setBeskrivelse(rs.getString("beskrivelse"));
+                    sak.setTidsstempel(rs.getTimestamp("tidsstempel").toLocalDateTime());
+                    sak.setOppdatertTidspunkt(rs.getTimestamp("oppdatertTidspunkt").toLocalDateTime());
+                    sak.setRapportør(rs.getString("rapportørNavn"));
+                    sak.setMottaker(rs.getString("mottakerNavn"));
+                    sak.setPrioritet(Prioritet.valueOf(rs.getString("prioritetNavn")));
+                    sak.setStatus(Status.valueOf(rs.getString("statusNavn")));
+                    sak.setKategori(Kategori.valueOf(rs.getString("kategoriNavn")));
+                    resultater.add(sak);
+                }
+                
+            }
+        } catch (SQLException | IOException e) {
+            System.err.println("Feil ved søk: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return resultater;
     }
 }
 

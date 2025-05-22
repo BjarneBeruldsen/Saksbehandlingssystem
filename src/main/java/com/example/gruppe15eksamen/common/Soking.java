@@ -33,6 +33,11 @@ public class Soking implements Serializable{
     public Soking() {
     }
 
+    // Søking med tittel
+    public Soking(String tittel) {
+        this.tittel = tittel;
+    }
+
     //Gettere og settere
     public Prioritet getPrioritet() {
         return prioritet;
