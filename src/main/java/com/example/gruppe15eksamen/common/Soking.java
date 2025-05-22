@@ -1,5 +1,6 @@
 /**
- * Author: Abdinasir Ali
+ * Klasse for søkefunksjonalitet.
+ * @author Abdinasir Ali
  */
 
 package com.example.gruppe15eksamen.common;

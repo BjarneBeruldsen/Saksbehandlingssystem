@@ -1,8 +1,8 @@
 /**
  * @author: Laurent Zogaj
  * En databaseUtil klasse som kan bli sett på som en konfig klasse for å opprette en kobling til databasen og opprette databasen hvis den ikke finnes.
- * Vi bruker mysql-connector-driveren for å opprette en kobling til databasen.
- * Samt at vi hener inn verdier fra properties filen 
+ * Vi bruker mysql-connector-driveren for å opprette en kobling til databasen, maven håndterer dette også.
+ * Samt at vi henter inn verdier fra properties filen 
  * Vi returnerer en kobling til databasen som kan brukes i de forskjellige DAO klassene og andre klasser som trenger å koble seg til databasen.
  * @return En Connection-objekt til tilkobling til databasen, som kan hentes i DAO-klassene for eks.
  * @throws SQLException Hvis det oppstår SQL-feil ved kobling eller oppretting av databasen

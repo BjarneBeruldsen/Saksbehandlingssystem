@@ -1,3 +1,7 @@
+/**
+ * Klasse for socket funksjonalitet.
+ * @author Bjarne Beruldsen
+ */
 package com.example.gruppe15eksamen.common;
 
 import java.io.Serializable;

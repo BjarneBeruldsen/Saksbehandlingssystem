@@ -77,25 +77,43 @@ public class Sak implements Serializable {
     public Sak() {
     }
 
-    // Gettere og settere for utviklerKommentar
+    /**
+     * Henter utviklerKommentar
+     * @return utviklerKommentar
+     */
     public String getUtviklerKommentar() {
         return utviklerKommentar;
     }
 
+    /**
+     * Setter utviklerKommentar
+     * @param utviklerKommentar Kommentar fra utvikler
+     */
     public void setUtviklerKommentar(String utviklerKommentar) {
         this.utviklerKommentar = utviklerKommentar;
     }
 
-    // Gettere og settere for testerTilbakemelding
+    /**
+     * Henter testerTilbakemelding
+     * @return testerTilbakemelding
+     */
     public String getTesterTilbakemelding() {
         return testerTilbakemelding;
     }
 
+    /**
+     * Setter testerTilbakemelding
+     * @param testerTilbakemelding Tilbakemelding fra tester
+     */
     public void setTesterTilbakemelding(String testerTilbakemelding) {
         this.testerTilbakemelding = testerTilbakemelding;
     }
 
-    // Gettere og settere for andre attributter (uendret)
+    /**
+     * Henter sakID
+     * Validering, sakID kan ikke være negativ.
+     * @return sakID
+     */
     public int getSakID() { return sakID; }
     public void setSakID(int sakID) {
         if (sakID < 0) {
@@ -103,8 +121,18 @@ public class Sak implements Serializable {
         }
         this.sakID = sakID;
     }
-
+    
+    /**
+     * Henter tittel
+     * @return tittel
+     */
     public String getTittel() { return tittel; }
+
+    /**
+     * Setter for tittel
+     * Validering, tittel kan ikke være null eller tom.
+     * @param tittel Tittel på saken
+     */
     public void setTittel(String tittel) {
         if (tittel == null || tittel.trim().isEmpty()) {
             throw new IllegalArgumentException("Tittel kan ikke være tom.");
@@ -115,7 +143,16 @@ public class Sak implements Serializable {
         this.tittel = tittel.trim();
     }
 
+    /**
+     * Henter beskrivelse
+     * @return beskrivelse
+     */
     public String getBeskrivelse() { return beskrivelse; }
+
+    /**
+     * Setter for beskrivelse
+     * @param beskrivelse Beskrivelse av saken
+     */
     public void setBeskrivelse(String beskrivelse) {
         if (beskrivelse == null || beskrivelse.trim().isEmpty()) {
             throw new IllegalArgumentException("Beskrivelse kan ikke være tom.");
@@ -123,7 +160,17 @@ public class Sak implements Serializable {
         this.beskrivelse = beskrivelse.trim();
     }
 
+    /**
+     * Henter prioritet
+     * @return prioritet
+     */
     public Prioritet getPrioritet() { return prioritet; }
+
+    /**
+     * Setter for prioritet
+     * Validering, prioritet kan ikke være null.
+     * @param prioritet Prioritet på saken
+     */
     public void setPrioritet(Prioritet prioritet) {
         if (prioritet == null) {
             throw new IllegalArgumentException("Prioritet må settes.");
@@ -131,10 +178,29 @@ public class Sak implements Serializable {
         this.prioritet = prioritet;
     }
 
+    /**
+     * Henter kategori
+     * @return kategori
+     */
     public Kategori getKategori() { return kategori; }
+
+    /**
+     * Setter for kategori
+     * @param kategori Kategori for saken
+     */
     public void setKategori(Kategori kategori) { this.kategori = kategori; }
 
+    /**
+     * Henter status
+     * @return status
+     */
     public Status getStatus() { return status; }
+
+    /**
+     * Setter status for saken
+     * @param status Status for saken
+     * Validering, status kan ikke være null.
+     */
     public void setStatus(Status status) {
         if (status == null) {
             throw new IllegalArgumentException("Status kan ikke være null.");
@@ -142,18 +208,54 @@ public class Sak implements Serializable {
         this.status = status;
     }
 
+    /**
+     * Henter rapportør
+     * @return rapportør
+     */
     public String getRapportør() { return rapportør; }
+
+    /**
+     * Setter for rapportør
+     * @param rapportør Navn på rapportør
+     */
     public void setRapportør(String rapportør) {
         this.rapportør = rapportør;
     }
 
+    /**
+     * Henter mottaker
+     * @return mottaker
+     */
     public String getMottaker() { return mottaker; }
+
+    /**
+     * Setter for mottaker
+     * @param mottaker Navn på mottaker
+     */
     public void setMottaker(String mottaker) { this.mottaker = mottaker; }
 
+    /**
+     * Henter dato og tid for sak
+     * @return tidsstempel
+     */
     public LocalDateTime getTidsstempel() { return tidsstempel; }
+
+    /**
+     * Setter dato og tid for sak
+     * @param tidsstempel Dato og tid for sak
+     */
     public void setTidsstempel(LocalDateTime tidsstempel) { this.tidsstempel = tidsstempel; }
 
+    /**
+     * Henter oppdatert dato og tid
+     * @return oppdatertTidspunkt
+     */
     public LocalDateTime getOppdatertTidspunkt() { return oppdatertTidspunkt; }
+
+    /**
+     * Setter oppdatert dato og tid
+     * @param oppdatertTidspunkt Dato og tid for oppdatering
+     */
     public void setOppdatertTidspunkt(LocalDateTime oppdatertTidspunkt) { this.oppdatertTidspunkt = oppdatertTidspunkt; }
 
     /**
