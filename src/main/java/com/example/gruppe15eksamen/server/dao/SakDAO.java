@@ -38,7 +38,7 @@ public class SakDAO {
         ),
         utviklerKommentar = ?
         WHERE sakID = ?
-        """;
+    """;
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nyStatus.name()); // Bruker statusNavn fra enum
@@ -65,7 +65,7 @@ public class SakDAO {
             SELECT statusId FROM status WHERE statusNavn = ?
         )
         WHERE sakID = ?
-        """;
+    """;
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nyStatus.name()); // Setter status
@@ -93,7 +93,7 @@ public class SakDAO {
         ),
         testerTilbakemelding = ?
         WHERE sakID = ?
-        """;
+    """;
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nyStatus.name()); // Bruker statusNavn fra enum
@@ -300,7 +300,7 @@ public class SakDAO {
             JOIN Status st ON s.statusId = st.statusId
             JOIN Kategori k ON s.kategoriId = k.kategoriId
             WHERE s.mottakerBrukerId = ?
-            """;
+        """;
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -357,7 +357,7 @@ public class SakDAO {
         JOIN Status st ON s.statusId = st.statusId
         JOIN Kategori k ON s.kategoriId = k.kategoriId
         WHERE st.statusNavn = ?
-        """;
+    """;
 
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -394,6 +394,10 @@ public class SakDAO {
 
         return saker;
     }
+
+
+
+
 
     /**
      * Søker etter saker i databasen basert på ulike søkekriterier.
@@ -433,14 +437,35 @@ public class SakDAO {
             parametere.add(soking.getKategori().name());
         }
 
-        if (soking.getTittel() != null && !soking.getTittel().isEmpty()) {
-            sql.append(" AND s.tittel LIKE ?");
-            parametere.add("%" + soking.getTittel() + "%");
-        }
 
-        if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
-            sql.append(" AND s.beskrivelse LIKE ?");
+        if (soking.getTittel() != null && !soking.getTittel().isEmpty()) {
+            sql.append(" AND (LOWER(s.tittel) LIKE LOWER(?)");
+            parametere.add("%" + soking.getTittel() + "%");
+            
+            if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
+                sql.append(" OR LOWER(s.beskrivelse) LIKE LOWER(?)");
+                parametere.add("%" + soking.getBeskrivelse() + "%");
+            }
+            
+            if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+                sql.append(" OR LOWER(br.navn) LIKE LOWER(?)");
+                parametere.add("%" + soking.getReporterNavn() + "%");
+            }
+            
+            sql.append(")");
+        } else if (soking.getBeskrivelse() != null && !soking.getBeskrivelse().isEmpty()) {
+            sql.append(" AND (LOWER(s.beskrivelse) LIKE LOWER(?)");
             parametere.add("%" + soking.getBeskrivelse() + "%");
+            
+            if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+                sql.append(" OR LOWER(br.navn) LIKE LOWER(?)");
+                parametere.add("%" + soking.getReporterNavn() + "%");
+            }
+            
+            sql.append(")");
+        } else if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
+            sql.append(" AND LOWER(br.navn) LIKE LOWER(?)");
+            parametere.add("%" + soking.getReporterNavn() + "%");
         }
 
         if (soking.getOpprettetAr() != null) {
@@ -451,11 +476,6 @@ public class SakDAO {
         if (soking.getOppdatertAr() != null) {
             sql.append(" AND YEAR(s.oppdatertTidspunkt) = ?");
             parametere.add(soking.getOppdatertAr());
-        }
-
-        if (soking.getReporterNavn() != null && !soking.getReporterNavn().isEmpty()) {
-            sql.append(" AND br.navn LIKE ?");
-            parametere.add("%" + soking.getReporterNavn() + "%");
         }
 
         try (Connection conn = DatabaseUtil.getConnection();
