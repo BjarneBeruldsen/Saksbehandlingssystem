@@ -1,15 +1,7 @@
-// Author: Severin Waller Sørensen
-
+/**
+ * @author: Bjarne Beruldsen
+ */
 package com.example.gruppe15eksamen.server.network;
-
-import com.example.gruppe15eksamen.common.*;
-
-import static com.example.gruppe15eksamen.server.dao.TabellerDAO.opprettAlleTabeller;
-
-import com.example.gruppe15eksamen.server.dao.BrukerDAO;
-import com.example.gruppe15eksamen.server.dao.SakDAO;
-import com.example.gruppe15eksamen.server.util.DatabaseUtil;
-import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,6 +14,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import com.example.gruppe15eksamen.common.Bruker;
+import com.example.gruppe15eksamen.common.Kategori;
+import com.example.gruppe15eksamen.common.Prioritet;
+import com.example.gruppe15eksamen.common.Sak;
+import com.example.gruppe15eksamen.common.SocketRequest;
+import com.example.gruppe15eksamen.common.SocketRespons;
+import com.example.gruppe15eksamen.common.Status;
+import com.example.gruppe15eksamen.server.dao.BrukerDAO;
+import com.example.gruppe15eksamen.server.dao.SakDAO;
+import static com.example.gruppe15eksamen.server.dao.TabellerDAO.opprettAlleTabeller;
+import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
 /*Kjører for seg selv, lytter kontinuerlig etter klienter
 * håndterer kommunikasjon fra/til klienter og kan håndtere
@@ -62,8 +66,11 @@ public class SakServer {
             e.printStackTrace();
         }
     }
-
-    //behandler brukerdata
+    /**
+     * Håndterer kommunikasjon og behandler data med en klient.
+     * @param socket Klientens socket
+     * @return SocketRespons med resultatet av forespørselen
+     */
     private static SocketRespons handleClient(Socket socket) {
         //I/O Stream til klienten
         try (ObjectOutputStream utClient = new ObjectOutputStream(socket.getOutputStream());

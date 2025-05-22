@@ -1,6 +1,6 @@
-/* Authors: Bjarne Beruldsen, Laurent Zogaj, Severin Waller Sørensen & Abdinasir Ali
- * 
- */
+/**
+ * @author: Bjarne Beruldsen, Laurent Zogaj, Severin Waller Sørensen, Abdinasir Ali, Ylli Ujkani
+ **/
 
 package com.example.gruppe15eksamen.client;
 

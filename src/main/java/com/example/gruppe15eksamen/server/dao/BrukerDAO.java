@@ -1,5 +1,6 @@
 /**
- * Author: Laurent Zogaj og Bjarne Beruldsen
+ * @author: Laurent Zogaj og Bjarne Beruldsen
+ * BrukerDAO gir metoder for å utføre operasjoner mot databasen for brukere.
  */
 package com.example.gruppe15eksamen.server.dao;
 
@@ -15,10 +16,10 @@ import com.example.gruppe15eksamen.common.Bruker;
 import com.example.gruppe15eksamen.common.Rolle;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
-/*Inneholder metoder for å utføre operasjoner mot
- * databasen for bruker. F.eks. hent brukere, lagbruker osv.  */
-
-//Metode for å hente alle brukere
+/**
+* Henter alle brukere fra databasen.
+* @return en liste med alle brukere
+*/
 public class BrukerDAO {
     public static List<Bruker> hentAlleBrukere() {
         String sql = """
@@ -45,7 +46,15 @@ public class BrukerDAO {
         }
         return alleBrukere;
     }
-    //Metode som henter brukerID basert på brukernavn
+
+    /**
+     * En metode som henter ut brukerId fra brukernavn.
+     * Henter brukerId basert på brukernavn.
+     * @param navn brukernavnet til brukeren
+     * @return brukerId for brukeren
+     * @throws SQLException hvis brukeren ikke finnes eller ved databasefeil
+     * @throws IOException hvis det oppstår IO-feil
+     */
     public static int hentBrukerIdFraNavn(String navn) throws SQLException, IOException {
         String query = "SELECT brukerId FROM Brukere WHERE navn = ?";
         try(Connection conn = DatabaseUtil.getConnection();
@@ -59,7 +68,12 @@ public class BrukerDAO {
                 }
         }
     }
-    //Metode for å hente en spesifikk bruker basert på brukernavn
+
+    /**
+     * En metode en spesifikk bruker basert på brukernavn.
+     * @param brukernavn navnet på brukeren som skal hentes
+     * @return Bruker-objektet hvis funnet, ellers null
+     */
     public static Bruker hentBruker(String brukernavn) {
         String sql = """
             SELECT b.brukerId,
@@ -88,7 +102,10 @@ public class BrukerDAO {
         return null;
     }
 
-    //metode som henter ut alle utviklere
+    /**
+     * Henter alle brukere som har rollen "UTVIKLER".
+     * @return en liste med navn på alle utviklere
+     */
     public static ArrayList<String> hentAlleUtviklere() {
         String query = """
             SELECT b.navn 
@@ -97,8 +114,6 @@ public class BrukerDAO {
             WHERE r.rolleNavn = 'UTVIKLER'
             """;
         ArrayList<String> alleUtviklere = new ArrayList<>();
-
-
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {

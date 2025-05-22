@@ -1,15 +1,12 @@
 /**
- * Author: Bjarne Beruldsen og Laurent Zogaj
+ * Bruker klassen som inneholder felles instansvariabler
+ * og abstrakte metoder som hver enkelt bruker må ha
+ * @author: Laurent Zogaj og Bjarne Beruldsen
  */
-
 package com.example.gruppe15eksamen.common;
 
 import java.io.Serializable;
 
-/**
-* Superklasse som inneholder felles instansvariabler
- * og abstrakte metoder som hver enkelt bruker må ha
- */
 public class Bruker implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,7 +16,10 @@ public class Bruker implements Serializable {
     private Rolle rolle;
 
     /**
-     * Konstruktør metode for bruker
+     * Konstruktør for Bruker
+     * @param brukerID    Unik ID for brukeren, må være positiv.
+     * @param brukernavn  Brukerens navn. Kan ikke være tom eller inneholde ugyldige tegn.
+     * @param rolle       Brukerens rolle (kan ikke være null).
      */
     public Bruker(int brukerID, String brukernavn, Rolle rolle) {
         setBrukernavn(brukernavn);
@@ -28,9 +28,10 @@ public class Bruker implements Serializable {
     }
 
     /**
-     * Validering
      * Setter brukerens brukernavn etter validering.
-     * Bruker regex for å unngå andre tegn
+     * Kan kun bestå av bokstaver, tall og vanlig norske bokstaver samt _ understrek (2-30 tegn).
+     * @param brukernavn Brukernavn
+     * @throws IllegalArgumentException hvis brukernavn er ugyldig eller tomt
      */
     public void setBrukernavn(String brukernavn) {
         if (brukernavn == null || brukernavn.trim().isEmpty()) {
@@ -43,8 +44,10 @@ public class Bruker implements Serializable {
     }
 
     /**
-     * Setter brukerens ID
-     * Sjekker også om brukerID er positivt
+     * Setter brukerens ID. 
+     * Validering: Må være et positivt tall.
+     * @param brukerID Bruker-ID
+     * @throws IllegalArgumentException hvis brukerID er mindre enn 1
      */
     public void setBrukerID(int brukerID) {
         if (brukerID < 1) {
@@ -54,8 +57,10 @@ public class Bruker implements Serializable {
     }
 
     /**
-     * Avgir rolle
-     * Sjekker også om rolle er NULL
+     * Setter brukerens rolle. 
+     * Validering: Kan ikke være null.
+     * @param rolle Rolle-objektet som settes
+     * @throws IllegalArgumentException hvis rolle er null
      */
     public void setRolle(Rolle rolle) {
         if(rolle == null) {
@@ -65,21 +70,37 @@ public class Bruker implements Serializable {
     }
 
     /**
-     * toString metode
+     * Returnerer brukernavnet.
+     * @return brukernavn
      */
     @Override
-    // Viser kun brukernavn, pga. da vises kun brukernavn i ComboBox (velg Bruker)
     public String toString() {
         return brukernavn;
     }
+
+    /**
+     * Returnerer alle brukerens data i tekstformat.
+     * @return streng med brukerens ID, brukernavn og rolle
+     */
     public String toStringAll() {
-        return "bruker:"+brukerID+";"+brukernavn+";"+rolle;
+        return "bruker:" + brukerID + ";" + brukernavn + ";" + rolle;
     }
 
     /**
-     * Ulike get metoder
+     * Returnerer brukerens ID.
+     * @return brukerID
      */
     public int getBrukerID() { return brukerID; }
+
+    /**
+     * Returnerer brukerens brukernavn.
+     * @return brukernavn
+     */
     public String getBrukernavn() { return brukernavn; }
+
+    /**
+     * Returnerer brukerens rolle.
+     * @return rolle
+     */
     public Rolle getRolle() { return rolle; }
 }

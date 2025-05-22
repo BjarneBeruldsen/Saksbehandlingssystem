@@ -1,9 +1,9 @@
 /**
- * Author: Bjarne Beruldsen, Laurent Zogaj & Abdinasir Ali
+ * Dette er DAO-klassen for Sak
+ * som håndterer databaseoperasjoner relatert til sakene.
+ * @author: Laurent Zogaj, Bjarne Beruldsen & Abdinasir Ali
  */
 package com.example.gruppe15eksamen.server.dao;
-/* inneholder metode for operasjoner mot databasen som
-* gjelder sak-håndtering*/
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,10 +21,14 @@ import com.example.gruppe15eksamen.common.Soking;
 import com.example.gruppe15eksamen.common.Status;
 import com.example.gruppe15eksamen.server.util.DatabaseUtil;
 
-//Opprette metoder for saker og diverse
 public class SakDAO {
 
-   //Metode for å oppdatere status til sak
+    /**
+    * Oppdaterer status for en gitt sak.
+    * @param sakId    ID til saken som skal oppdateres
+    * @param nyStatus Ny status som skal settes
+    * @return Antall rader oppdatert (1 hvis suksess, 0 ellers)
+    */
     public static int oppdaterStatus(int sakId, Status nyStatus) {
         String sql = """
         UPDATE sak
@@ -42,7 +46,12 @@ public class SakDAO {
             return 0;
         }
     }
-        //metode som tildeler sak til utvikler
+    /**
+     * Tildeler en sak til en gitt utvikler (brukernavn).
+     * @param sakId      ID til saken som skal tildeles
+     * @param brukernavn Brukernavn til utvikler som skal motta saken
+     * @return Antall rader oppdatert (1 hvis suksess, 0 ellers)
+     */
     public static int tildelSak(int sakId, String brukernavn) {
         System.out.println("sakID:" + sakId + "brukernavn" + brukernavn);
         String sql = """
@@ -63,8 +72,13 @@ public class SakDAO {
             return 0;
         }
     }
-
-    //metode for å opprette sak
+    /**
+     * Oppretter (lager) en ny sak i databasen.
+     * @param sak Sak-objektet som skal lagres
+     * @return Antall rader oppdatert (1 hvis suksess, 0 ellers)
+     * @throws SQLException Hvis databasefeil oppstår
+     * @throws IOException  Hvis IO-feil oppstår ved tilkobling
+     */
     public static int insertSak(Sak sak) throws SQLException, IOException{
         String query = """
                 INSERT INTO sak (tittel, beskrivelse, rapportørBrukerId, prioritetId, statusId,
@@ -73,8 +87,7 @@ public class SakDAO {
                 """;
         try(Connection conn = DatabaseUtil.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(query);
-
-            //henter rapportørens id basert på brukernavn
+            //Henter rapportørens id basert på brukernavn
             int rapportørId = BrukerDAO.hentBrukerIdFraNavn(sak.getRapportør());
 
             pstmt.setString(1, sak.getTittel());
@@ -85,21 +98,21 @@ public class SakDAO {
             pstmt.setInt(6, sak.getKategori().getId());
             pstmt.setTimestamp(7, Timestamp.valueOf(sak.getTidsstempel()));
             pstmt.setTimestamp(8, Timestamp.valueOf(sak.getOppdatertTidspunkt()));
-
-            //antall rader som er oppdatert
+            //Antall rader som er oppdatert
             return pstmt.executeUpdate();
-
-
         } catch (SQLException | IOException e) {
            e.printStackTrace();
            return 0;
         }
 
     }
-    //metode som henter sak basert på id
+    /**
+     * Henter saker basert på sakID 
+     * @param sakID ID til saken
+     * @return Liste med saker som matcher ID 
+     */
     public List<Sak> hentSaker(int sakID){
         List<Sak> saker = new ArrayList<>();
-
            String sql = """
         SELECT s.*, 
             br.navn AS rapportørNavn, 
@@ -115,13 +128,10 @@ public class SakDAO {
         INNER JOIN status st ON s.statusId = st.statusId
         WHERE s.sakID = ?
         """;
-
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, sakID);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 Sak sak = new Sak();
                 sak.setSakID(rs.getInt("sakID"));
@@ -135,23 +145,21 @@ public class SakDAO {
 
                 saker.add(sak);
             }
-
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
         return saker;
-
     }
-    //Metode for slett sak
+    /**
+     * Sletter en sak fra databasen basert på sakID.
+     * @param sakID ID til saken som skal slettes
+     */
     public void slettSak(int sakID){
-
     String sql = "DELETE FROM sak WHERE sakID = ?";
-
         try (Connection conn = DatabaseUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, sakID);
             int slettetRader = stmt.executeUpdate();
-
             if (slettetRader > 0) {
                 System.out.println("Sak med ID " + sakID + " ble slettet.");
             } else {
@@ -161,12 +169,12 @@ public class SakDAO {
             e.printStackTrace();
         }
     }
-
-    //metode som henter alle saker
+    /**
+     * Henter alle saker i databasen.
+     * @return ArrayList med alle saker
+     */
     public static ArrayList<Sak> hentAlleSaker() {
-
         ArrayList<Sak> saker = new ArrayList<>();
-
         String sql = """
         SELECT s.sakId, s.tittel, s.beskrivelse, s.tidsstempel, s.oppdatertTidspunkt,
                rapportor.navn AS rapportorNavn,
@@ -179,11 +187,9 @@ public class SakDAO {
         JOIN Status st ON s.statusId = st.statusId
         JOIN Kategori k ON s.kategoriId = k.kategoriId
         """;
-
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 Sak sak = new Sak();
 
@@ -207,17 +213,16 @@ public class SakDAO {
 
                 saker.add(sak);
             }
-
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
-
         return saker;
     }
-
-
-
-    //Metode for søking
+    /**
+     * Søker etter saker i databasen basert på ulike søkekriterier.
+     * @param soking Soking-objekt som inneholder søkekriteriene
+     * @return Liste med saker som matcher søkekriteriene
+     */
     public List<Sak> sokSaker(Soking soking) {
     List<Sak> resultater = new ArrayList<>();
 
@@ -264,15 +269,12 @@ public class SakDAO {
         sql.append(" AND rapportorBrukerid IN (SELECT brukerid FROM brukere WHERE navn LIKE ?)");
         parametere.add("%" + soking.getReporterNavn() + "%");
     }
-
-    
     try (Connection conn = DatabaseUtil.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
 
         for (int i = 0; i < parametere.size(); i++) {
             stmt.setObject(i + 1, parametere.get(i));
         }
-
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             Sak sak = new Sak();
@@ -293,11 +295,8 @@ public class SakDAO {
     } catch (SQLException | IOException e) {
         e.printStackTrace();
     }
-
     return resultater;
-}
-
-
+    }
 }
 
 
