@@ -1,4 +1,6 @@
 /**
+* LederView er ansvarlig for å vise hovedpanelet for brukere med rollen "Leder".
+
  * @Author Severin Waller Sørensen
  */
 
@@ -24,6 +26,7 @@ public class LederView {
         return mainPanel;
     }
 
+    /** @return Et Node-objekt for lederens brukergrensesnitt. */
     public Node visLederPanel() {
         return lederPanel();
     }

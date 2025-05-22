@@ -1,4 +1,6 @@
 /**
+ * TesterView er ansvarlig for å vise hovedpanelet for brukere med rollen "Tester".
+ * 
  * @Author Severin Waller Sørensen
  */
 
@@ -22,6 +24,7 @@ public class TesterView {
         return mainPanel;
     }
 
+    /** @return Et Node-objekt for testerens brukergrensesnitt. */
     public Node visTesterPanel() {
         return testerPanel();
     }

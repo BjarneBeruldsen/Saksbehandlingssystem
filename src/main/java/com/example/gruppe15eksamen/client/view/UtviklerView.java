@@ -1,4 +1,6 @@
 /**
+ * UtviklerView er ansvarlig for å vise hovedpanelet for brukere med rollen "Utvikler".
+ * 
  * @Author Severin Waller Sørensen
  */
 
@@ -23,6 +25,7 @@ public class UtviklerView {
         return mainPanel;
     }
 
+    /** @return Et Node-objekt for utviklerens brukergrensesnitt. */
     public Node visUtviklerPanel() {
         return utviklerPanel();
     }

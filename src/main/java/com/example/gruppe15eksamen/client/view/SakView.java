@@ -9,12 +9,14 @@
  /* -----------------------------------------------------------------
   * NB! Bruk av inline "-fx-" hentet fra egne/private prosjekt
   * og tilpasset/modifisert for dette prosjektet. 
-  * I disse prosjektene har jeg ofte bedt copilot om å skrive
+  * I disse prosjektene har jeg ofte spurt copilot om den kan skrive
   * et "utkast"/legge til default -fx- for background, border, etc.
   * som jeg deretter endrer/modifiserer selv. (gjort for å spare tid)
   * -----------------------------------------------------------------
   * Jeg har hentet diverse styling og strukturelement fra
-  * disse prosjektene og tilpasset dem for dette.
+  * disse (egne/private) prosjekte og tilpasset dem for dette.
+  * -----------------------------------------------------------------
+  * OPPDATERING: lagt mesteparten av "-fx-" i en egen styles.css fil.
   */
 
 package com.example.gruppe15eksamen.client.view;
@@ -202,9 +204,6 @@ public class SakView {
 
     // Returnerer bekreftBrukerBtn ("Bekreft"/valg av bruker) 
     public Button getBekreftBrukerBtn() { return bekreftBrukerBtn; }
-
-    // setMetoder
-
 
     // setMetode for brukerListe (ComboBox)
     public void setBrukerListe(ArrayList<Bruker> brukere) {

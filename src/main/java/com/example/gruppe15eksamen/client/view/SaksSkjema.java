@@ -4,7 +4,6 @@
 
 package com.example.gruppe15eksamen.client.view;
 
-import java.time.LocalDateTime;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -31,8 +30,6 @@ public class SaksSkjema {
 
     // Knapper
     Button btnOpprett, btnAvbryt;
-
-
 
     // Konstruktør
     public SaksSkjema() {
@@ -79,8 +76,7 @@ public class SaksSkjema {
         hovedPanel.add(new Label("Rapportør"), 0, 8);
         hovedPanel.add(rapportør, 0, 9);
 
-        // Legge til knappene i GridPane(s). (+ styling)
-        // Litt "rotete" måte, bør endres!
+        // Legge til knappene i GridPane
         knappPanel.setHgap(10);
         knappPanel.add(btnAvbryt,0, 0);
         knappPanel.add(btnOpprett, 1,0);

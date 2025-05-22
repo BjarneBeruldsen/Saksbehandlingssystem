@@ -61,8 +61,6 @@ public class SakController {
     private NetworkClient nettverkKlient = new NetworkClient();
 
 
-
-
     public SakController(Stage stage) {
         hentBrukere();
         hentSaker(); 
@@ -92,31 +90,36 @@ public class SakController {
         }
     }
 
-    // LeggTilLyttere 
+    /** LeggTilLyttere */
     public void leggTilLyttere() {
-        // Legger til lytter for brukerListe (ComboBox)
+        /** Legger til lytter for brukerListe (ComboBox) */
         sakViewVisning.getBrukerListe().setOnAction(e -> behandleKlikk(e));
         sakViewVisning.getBekreftBrukerBtn().setOnAction(e -> behandleKlikk(e));
         saksSkjema.getBtnOpprett().setOnAction(e -> behandleKlikk(e));
 
-        // Legge til lyttere for knapper i venstremenyen
+        /** Legge til lyttere for knapper i venstremenyen */ 
+        /** Fellesknapper */
         venstreMenyVisning.getBtnHjem().setOnAction(e -> behandleKlikk(e));
         venstreMenyVisning.getBtnRefresh().setOnAction(e -> behandleKlikk(e));
+        /** Tester-knapper */
         if (venstreMenyVisning.getBtnTesterOpprettSak() != null) {
             venstreMenyVisning.getBtnTesterOpprettSak().setOnAction(e -> behandleKlikk(e));
         }
         if (venstreMenyVisning.getBtnTesterInnsendteSaker() != null) {
             venstreMenyVisning.getBtnTesterInnsendteSaker().setOnAction(e -> behandleKlikk(e));
         }
+        /** Utvikler-knapper */
         if (venstreMenyVisning.getBtnUtviklerMineSaker() != null) {
             venstreMenyVisning.getBtnUtviklerMineSaker().setOnAction(e -> behandleKlikk(e));
         }
+        /** Leder-knapper */
         if (venstreMenyVisning.getBtnLederOpprettSak() != null) {
             venstreMenyVisning.getBtnLederOpprettSak().setOnAction(e -> behandleKlikk(e));
         }      
         if (venstreMenyVisning.getBtnLederSeAlleSaker() != null) {
             venstreMenyVisning.getBtnLederSeAlleSaker().setOnAction(e -> behandleKlikk(e));
         }
+        /** Diverse/misc. knapper */
         if(alleSakerLeder.getBtLeggTilMottaker() != null) {
             alleSakerLeder.getBtLeggTilMottaker().setOnAction(e -> behandleKlikk(e));
             alleSakerLeder.getBtOppdaterStatus().setOnAction(e -> behandleKlikk(e));
@@ -131,21 +134,21 @@ public class SakController {
 
 
 
-    // variabel som tar vare på rollen til valgt bruker.
-    // Brukes til å endre/oppdatere view
+    /** variabel som tar vare på rollen til valgt bruker. */
+    /** Brukes til å endre/oppdatere view */
     String rolleView = "";
 
-    // BehandleKlikk
+    /** BehandleKlikk */
     public void behandleKlikk(ActionEvent e) {
 
-        // Behandle valg av bruker
+        /** Behandle valg av bruker */
         if (e.getSource() == sakViewVisning.getBrukerListe()) {
             valgtBruker = sakViewVisning.getBrukerListe().getValue();
             Rolle rolle = valgtBruker.getRolle();
             venstreMenyVisning.setLoggetInnBrukerId(valgtBruker.getBrukerID());
             venstreMenyVisning.setLoggetInnBrukernavn(valgtBruker.getBrukernavn());
 
-            // Sette rolleView-variabel til valgt bruker sin rolle
+            /** Sette rolleView-variabel til valgt bruker sin rolle */
             if (rolle.equals(Rolle.TESTER)) {
                 rolleView = "TESTER";
             } else if (rolle.equals(Rolle.UTVIKLER)) {
@@ -155,7 +158,7 @@ public class SakController {
             }
         }
 
-        // Behandle / oppdatere view basert på brukerens rolle
+        /** Behandle / oppdatere view basert på brukerens rolle */
         if (e.getSource() == sakViewVisning.getBekreftBrukerBtn()) {
             if (rolleView.equals("TESTER")) {
                 sakViewVisning.visPanel(testerViewVisning.visTesterPanel());
@@ -171,37 +174,37 @@ public class SakController {
                 venstreMenyVisning.leggTilLederKnapper();
             }
 
-            // Sikre at bruker må ha valgt rolle før en trykker bekreft
-            // Med andre ord: 'Bekreft' gjør ikke noe om en ikke har valgt bruker
+            /** Sikre at bruker må ha valgt rolle før en trykker bekreft */
+            /** Med andre ord: 'Bekreft' gjør ikke noe om en ikke har valgt bruker*/
             if (valgtBruker != null) {
-                // NB! må kalle på oppdaterBrukerInfo, hvis ikke blir første innlogging alltid lik 0 / null.
+                /** NB! må kalle på oppdaterBrukerInfo, hvis ikke blir første innlogging alltid lik 0 / null. */
                 venstreMenyVisning.oppdaterBrukerInfo(valgtBruker.getBrukerID(), valgtBruker.getBrukernavn());
                 sakViewVisning.visVenstreMeny(venstreMenyVisning.getVenstreMeny());
                 leggTilLyttere();
             }
         }
 
-        // Behandleklikk for venstremenyen
+        /** Behandleklikk for venstremenyen */
         if (e.getSource() == venstreMenyVisning.getBtnHjem()) {
             sakViewVisning.visPanel(sakViewVisning.visLoggInnPanel());
             sakViewVisning.skjulVenstreMeny();
             venstreMenyVisning.nullstillKnapper();
-            valgtBruker = null; // Nullstill valgtBruker
-            rolleView = "";     // Nullstill rolleView
+            valgtBruker = null; /** Nullstill valgtBruker */
+            rolleView = "";     /** Nullstill rolleView */
         }
         if (e.getSource() == venstreMenyVisning.getBtnRefresh()) {
 
-            // Oppdater tabell basert på rolle
+            /** Oppdater tabell basert på rolle */
             if ("TESTER".equals(rolleView)) {
-                // Oppdaterer rettetSaker
+                /** Oppdaterer rettetSaker */
                 hentRettetSaker();
                 innsendteSakerTabell.getSaksTabell().setItems(rettetSaker);
             } else if ("UTVIKLER".equals(rolleView)) {
-                // Oppdaterer sakerTildeltUtvikler
+                /** Oppdaterer sakerTildeltUtvikler */
                 hentTilDelteSaker();
                 tilordnedeSaker.getSaksTabell().setItems(sakerTildeltUtvikler);
             } else if ("LEDER".equals(rolleView)) {
-                // Oppdaterer alleUtviklere
+                /** Oppdaterer alleUtviklere */
                 hentUtviklere(); 
                 alleSakerLeder.getCbUtviklere().getItems().clear();
                 alleSakerLeder.getCbUtviklere().getItems().addAll(alleUtviklere);
