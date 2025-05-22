@@ -200,7 +200,8 @@ public class SakController {
                 tilordnedeSaker.getSaksTabell().setItems(sakerTildeltUtvikler);
             } else if ("LEDER".equals(rolleView)) {
                 // Oppdaterer alleUtviklere
-                hentUtviklere(); 
+                hentUtviklere();
+                hentSaker();
                 alleSakerLeder.getCbUtviklere().getItems().clear();
                 alleSakerLeder.getCbUtviklere().getItems().addAll(alleUtviklere);
                 alleSakerLeder.getCbUtviklere().setPromptText("Velg");
