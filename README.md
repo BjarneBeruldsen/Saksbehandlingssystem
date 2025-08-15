@@ -47,7 +47,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](#)
 
 Dette prosjektet er et forenklet sakshåndteringssystem utviklet som eksamensoppgave i **OBJ2100 – Objektorientert Programmering 2** våren 2025.  
 Systemet støtter rapportering, tildeling og oppfølging av saker, med et rollebasert JavaFX-grensesnitt og en flertrådserver som kommuniserer med en MySQL-database.
