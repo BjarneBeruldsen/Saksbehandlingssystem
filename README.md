@@ -47,7 +47,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-
 Dette prosjektet er et forenklet sakshåndteringssystem utviklet som eksamensoppgave i **OBJ2100 – Objektorientert Programmering 2** våren 2025.  
 Systemet støtter rapportering, tildeling og oppfølging av saker, med et rollebasert JavaFX-grensesnitt og en flertrådserver som kommuniserer med en MySQL-database.
 
@@ -61,7 +60,9 @@ Systemet støtter rapportering, tildeling og oppfølging av saker, med et rolleb
 
 ### Built With
 
+* [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 * [![JavaFX](https://img.shields.io/badge/JavaFX-blue.svg?style=for-the-badge)](https://openjfx.io/)
+* [![SQL](https://img.shields.io/badge/SQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://en.wikipedia.org/wiki/SQL)
 * [![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 * [![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
 
@@ -117,7 +118,6 @@ Når systemet er startet:
 - Refaktorering av tabellvisninger for å unngå kode-duplisering
 
 <p align="right">(<a href="#readme-top">til toppen</a>)</p>
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
