@@ -1,9 +1,6 @@
 <!-- PROJECT LOGO --> 
 <br />
 <div align="center">
-  <a href="#">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
   <h3 align="center">OBJ2100 Eksamen 2025 – Gruppe 15</h3>
 
