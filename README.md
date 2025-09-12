@@ -36,7 +36,6 @@
       </ul>
     </li>
     <li><a href="#usage">Bruk</a></li>
-    <li><a href="#roadmap">Veikart</a></li>
     <li><a href="#contributing">Bidrag</a></li>
     <li><a href="#license">Lisens</a></li>
     <li><a href="#contact">Kontakt</a></li>
@@ -114,12 +113,6 @@ Når systemet er startet:
 
 <p align="right">(<a href="#readme-top">til toppen</a>)</p>
 
-<!-- ROADMAP -->
-## Roadmap
-- Rollebasert innlogging
-- Multi-threaded server
-- Dynamisk henting av databaseverdier
-- Refaktorering av tabellvisninger for å unngå kode-duplisering
 
 <p align="right">(<a href="#readme-top">til toppen</a>)</p>
 
