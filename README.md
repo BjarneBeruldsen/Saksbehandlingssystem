@@ -129,3 +129,8 @@ Når systemet er startet:
 <p align="right">(<a href="#readme-top">til toppen</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
+
+
+
+https://github.com/user-attachments/assets/9e782ec4-b0ce-4d3a-bd05-b4c64d62e8cf
+
