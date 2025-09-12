@@ -5,7 +5,7 @@
   <h3 align="center">OBJ2100 Eksamen 2025 – Gruppe 15</h3>
 
   <p align="center">
-    Saksbehandlingssystem – JavaFX & MySQL
+    Saksbehandlingssystem – Java & MySQL
     <br />
     <a href="#about-the-project"><strong>Utforsk dokumentasjonen »</strong></a>
     <br />
