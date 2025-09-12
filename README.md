@@ -58,6 +58,10 @@ Systemet støtter rapportering, tildeling og oppfølging av saker, med et rolleb
 
 <p align="right">(<a href="#readme-top">til toppen</a>)</p>
 
+## Demo
+
+https://github.com/user-attachments/assets/9e782ec4-b0ce-4d3a-bd05-b4c64d62e8cf
+
 ### Built With
 
 * [![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
@@ -132,5 +136,5 @@ Når systemet er startet:
 
 
 
-https://github.com/user-attachments/assets/9e782ec4-b0ce-4d3a-bd05-b4c64d62e8cf
+
 
