@@ -30,11 +30,6 @@
         <li><a href="#installation">Installasjon</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Bruk</a></li>
-    <li><a href="#contributing">Bidrag</a></li>
-    <li><a href="#license">Lisens</a></li>
-    <li><a href="#contact">Kontakt</a></li>
-    <li><a href="#acknowledgments">Takk til</a></li>
   </ol>
 </details>
 
