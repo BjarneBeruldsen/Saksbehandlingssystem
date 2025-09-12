@@ -10,11 +10,6 @@
     <a href="#about-the-project"><strong>Utforsk dokumentasjonen »</strong></a>
     <br />
     <br />
-    <a href="#usage">Se bruk</a>
-    &middot;
-    <a href="#contact">Kontakt</a>
-    &middot;
-    <a href="#roadmap">Veikart</a>
   </p>
 </div>
 
